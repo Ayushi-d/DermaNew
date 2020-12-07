@@ -23,6 +23,7 @@ import DHeader from '../components/Headers/DrawerStackHeader';
 import Splash from '../components/splash';
 
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 import MyMatches from '../components/MyMatches';
 import LikesScreen from '../screens/DrawerStack/LikeScreen';
@@ -45,6 +46,10 @@ import FAQs from '../components/Setting/faqs';
 // Profile
 import MyProfile from '../components/MyProfile';
 import ManagePhotos from '../components/ManagePhotos';
+import EditProfile from '../components/EditProfile';
+import TrustScore from '../components/TrustScore';
+import VerifyEmail from '../components/VerifyEmail';
+import VerifyPhone from '../components/VerifyPhone';
 
 const Stack = createStackNavigator();
 
@@ -65,8 +70,9 @@ class RootNav extends React.Component {
     this._isMounted = true;
     let user = auth().currentUser;
     if (user) {
-      console.log(user);
+      // console.log(user);
       this.setState({user});
+      this.userRef = database().ref('Users/' + user.uid);
     }
     this.checkAuthentication();
   }
@@ -145,6 +151,110 @@ class RootNav extends React.Component {
     this._isMounted && this.setState({loginCheck: true});
   };
 
+  changeDP = async (key, url) => {
+    try {
+      let dp = await database()
+        .ref('Users/' + this.state.user_data.uid)
+        .child(key)
+        .set(url);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  _saveToFirebase = async (data) => {
+    const uid = auth().currentUser.uid;
+    let keys = Object.keys(data);
+
+    console.log(keys);
+
+    for (let index = 0; index < keys.length; index++) {
+      let key = keys[index];
+      let value = data[key];
+
+      try {
+        if (key == 'rl') {
+          let d = await this.userRef.child('rle').set(1);
+        }
+        if (key == 'ae') {
+          let ob = {};
+          ob['id'] = uid;
+          ob['text'] = value;
+          let d = await database()
+            .ref('aboutApprovals/' + uid)
+            .set(ob);
+        }
+        let c = await this.userRef.child(key).set(value);
+      } catch (error) {
+        console.log('saveToFirebase error: ', error);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  _savePPToFirebase = async (data) => {
+    let keys = Object.keys(data);
+
+    for (let index = 0; index < keys.length; index++) {
+      let key = keys[index];
+      let value = data[key];
+
+      try {
+        let c = await this.userRef.child('pp').child(key).set(value);
+      } catch (error) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  updateTSBy20 = async () => {
+    console.log('updatin ts by 20 check');
+
+    let ts = this.state.user_data.ts.ts;
+    ts += 20;
+    try {
+      let up = await this.userRef.child('ts').child('ts').set(ts);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  _verifyEmail = async (email) => {
+    try {
+      let up = await this.userRef.child('ts').child('em').set(1);
+      let em = await this.userRef.child('em').set(email);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  _verifyPhone = async (phone) => {
+    try {
+      let up = await this.userRef.child('ts').child('m').set(1);
+
+      let addMobileNumber = await this.userRef.child('cn').set(phone);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  _verifyFB = async () => {
+    try {
+      let up = await this.userRef.child('ts').child('f').set(1);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
   _loginRegisterStack = (context) => (
     <>
       <Stack.Screen name="Login">
@@ -186,7 +296,6 @@ class RootNav extends React.Component {
       <Stack.Screen name="Change Mobile Number">
         {(props) => <ChangeMobileNumber context={context} {...props} />}
       </Stack.Screen>
-      {/* <Stack.Screen name="Terms" component={TermsOfUse} /> */}
     </>
   );
 
@@ -198,17 +307,18 @@ class RootNav extends React.Component {
       <Stack.Screen name="Manage Photos">
         {(props) => <ManagePhotos context={context} {...props} />}
       </Stack.Screen>
-      {/* 
-      <Stack.Screen name="PrivacyPolicy">
-        {(props) => <PrivacyPolicy context={context} {...props} />}
+      <Stack.Screen name="Edit Profile">
+        {(props) => <EditProfile context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="TermsofUse">
-        {(props) => <TermsOfUse context={context} {...props} />}
+      <Stack.Screen name="Trust Score">
+        {(props) => <TrustScore context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="Change Mobile Number">
-        {(props) => <ChangeMobileNumber context={context} {...props} />}
-      </Stack.Screen> */}
-      {/* <Stack.Screen name="Terms" component={TermsOfUse} /> */}
+      <Stack.Screen name="Email Address">
+        {(props) => <VerifyEmail context={context} {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="Phone Number">
+        {(props) => <VerifyPhone context={context} {...props} />}
+      </Stack.Screen>
     </>
   );
 
@@ -217,6 +327,11 @@ class RootNav extends React.Component {
     let context = {
       user,
       _setLoginUser: this._setLoginUser,
+      verifyEmail: this._verifyEmail,
+      verifyPhone: this._verifyPhone,
+      verifyFB: this._verifyFB,
+      saveToFirebase: this._saveToFirebase,
+      savePPToFirebase: this._savePPToFirebase,
     };
     return (
       <Stack.Navigator
