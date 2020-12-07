@@ -53,6 +53,9 @@ import VerifyPhone from '../components/VerifyPhone';
 import DeclinedProfile from '../components/DeclinedProfile';
 import EditPreference from '../components/EditPreference';
 
+// MSGR
+import Msgr, {ChatRqsts, Chats} from '../components/msgr';
+
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -127,8 +130,10 @@ class RootNav extends React.Component {
       this.setState({user}, () => {
         CheckUser.isRegistered(userDat.uid)
           .then((res) => {
-            if (user.exists) {
-              this.setState({user: res.user});
+            if (res.exists) {
+              let userDat = {...this.state.user, ...res.user};
+              this.setState({user: userDat});
+              this._callListeners(userDat);
             }
             CheckUser.isDeleted(userDat.uid)
               .then((isDeleted) => {
@@ -151,6 +156,22 @@ class RootNav extends React.Component {
 
   _loginCheck = () => {
     this._isMounted && this.setState({loginCheck: true});
+  };
+
+  _callListeners = (user) => {
+    this._callUserListener(user);
+  };
+
+  _removeListeners = () => {
+    this.userRef.off('value');
+  };
+
+  _callUserListener = (user) => {
+    this.userRef.on('value', (snapshot) => {
+      let userDat = snapshot.val();
+      this.setState({user: userDat});
+      // console.log(userDat);
+    });
   };
 
   changeDP = async (key, url) => {
@@ -332,6 +353,20 @@ class RootNav extends React.Component {
     </>
   );
 
+  _msgrStack = (context) => (
+    <>
+      <Stack.Screen name="MessageBoard">
+        {(props) => <Chats context={context} {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="Chat Request">
+        {(props) => <ChatRqsts context={context} {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="Msgr">
+        {(props) => <Msgr context={context} {...props} />}
+      </Stack.Screen>
+    </>
+  );
+
   render() {
     let {loginCheck, isLoggedIn, user} = this.state;
     let context = {
@@ -384,6 +419,7 @@ class RootNav extends React.Component {
 
         {this._profileStack(context)}
         {this._settingsStack(context)}
+        {this._msgrStack(context)}
       </Stack.Navigator>
     );
   }
