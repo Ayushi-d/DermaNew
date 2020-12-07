@@ -7,6 +7,7 @@ import THEME from '../../config/theme';
 import PP from '../../helpers/pp';
 import {Loader} from '../modals';
 // import {NavigationActions} from 'react-navigation';
+import Header from '../Headers/SettingsHeader';
 
 class SearchResult extends React.Component {
   constructor(props) {
@@ -165,6 +166,7 @@ class SearchResult extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
+        <Header title={'SEARCH RESULTS'} {...this.props} />
         {this.renderCards()}
         {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
       </View>

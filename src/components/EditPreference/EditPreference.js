@@ -1,30 +1,32 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+
+import {getData} from '../../config/parseuser';
 import DEFAULT_BUTTON, {BUTTON_WITH_PARAM} from '../general/button';
+import EP from '../../assets/data/ep';
+import Country from '../../helpers/country';
 import {Loader} from '../modals';
-import searchData from '../../assets/data/search';
-// import {HeaderMain} from '../general/Header';
-import THEME from '../../config/theme';
-// import {MainContext} from '../../context/app';
 import Header from '../Headers/SettingsHeader';
 
-class SearchJSX extends React.Component {
+class EditPPJSX extends React.Component {
   constructor(props) {
     super(props);
+    this.data = this.props.route.params.data;
 
-    this.items = searchData;
+    this.items = EP['pp'][this.data];
 
-    this.state = {
-      values: {
-        ag: [18, 70],
-        sc: "Doesn't matter",
-        ms: "Doesn't matter",
-        rl: "Doesn't matter",
-        c: "Doesn't matter",
-      },
-      error: {},
-      loading: false,
-    };
+    let state = {};
+
+    this.items.map(
+      (item) =>
+        (state[item.name] = getData(
+          this.props.context.user,
+          item.getData,
+          true,
+        )),
+    );
+
+    this.state = {values: {...state}, error: {}, loading: false};
   }
 
   validateValue = () => {
@@ -55,6 +57,19 @@ class SearchJSX extends React.Component {
   _pushChange = (name, value) => {
     let values = {...this.state.values};
     values[name] = value;
+
+    if (name == 'c') {
+      this.setState({loading: true});
+      this.stateData(value);
+      values['s'] = '';
+    }
+
+    if (name == 's') {
+      this.setState({loading: true});
+      this.cityData(value);
+      values['ct'] = '';
+    }
+
     this.setState({values});
   };
 
@@ -62,17 +77,18 @@ class SearchJSX extends React.Component {
     let error = this.validateValue();
     this.setState({error}, () => {
       if (Object.keys(this.state.error).length == 0) {
-        // get user data from context
-        // and change the partner prefrence
-
-        let user = this.props.context ? this.props.context.user : {};
-        let search_pp = {...this.state.values};
-        search_pp['a1'] = search_pp['ag'][0];
-        search_pp['a2'] = search_pp['ag'][1];
-
-        user = user && {...user, pp: search_pp};
-
-        this.props.navigation.navigate('Search Result', {user});
+        this.setState({loading: true});
+        const obj = {
+          a1: this.state.values.ag[0],
+          a2: this.state.values.ag[1],
+          sc: this.state.values.sc,
+          ms: this.state.values.ms,
+        };
+        this.props.context.savePPToFirebase(obj).then((res) => {
+          this.setState({loading: false}, () => {
+            this.goback();
+          });
+        });
       }
     });
   };
@@ -99,34 +115,41 @@ class SearchJSX extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
-        <Header title={'SEARCH'} {...this.props} />
-        <View style={style.shadowBox} showsVerticalScrollIndicator={false}>
+      <View style={{flex: 1, padding: 20}} showsVerticalScrollIndicator={false}>
+        <Header title={'EDIT PREFERENCE'} {...this.props} />
+        <ScrollView style={style.shadowBox}>
           {this.renderItems()}
           <View
             style={{
-              justifyContent: 'center',
+              justifyContent: 'space-around',
               flexDirection: 'row',
               marginTop: 20,
             }}>
             <DEFAULT_BUTTON
-              text={'SEARCH NOW'}
-              style={{width: '50%'}}
+              text={'SAVE'}
+              style={{width: '40%'}}
               _onPress={this.saveChanges}
+            />
+            <BUTTON_WITH_PARAM
+              text={'CANCEL'}
+              style={{width: '40%'}}
+              _onPress={this.goback}
             />
           </View>
           <Loader isVisible={this.state.loading} />
-        </View>
+        </ScrollView>
       </View>
     );
   }
 }
-
-const Search = (props) => <SearchJSX {...props} />;
+const EditPreference = (props) => <EditPPJSX {...props} />;
 
 const style = StyleSheet.create({
   shadowBox: {
-    borderRadius: 2,
+    flex: 1,
+    height: 50,
+    paddingLeft: 10,
+    borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -134,13 +157,20 @@ const style = StyleSheet.create({
     },
     shadowOpacity: 0.18,
     shadowRadius: 1.0,
+
     elevation: 1,
-    padding: 20,
-    width: '90%',
-    alignSelf: 'center',
+    paddingRight: 10,
+  },
+
+  top: {
     marginTop: 20,
-    backgroundColor: THEME.WHITE,
+  },
+  topText: {
+    fontSize: 15,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+    lineHeight: 30,
   },
 });
 
-export default Search;
+export default EditPreference;

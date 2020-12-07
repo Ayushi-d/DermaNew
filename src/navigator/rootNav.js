@@ -50,6 +50,8 @@ import EditProfile from '../components/EditProfile';
 import TrustScore from '../components/TrustScore';
 import VerifyEmail from '../components/VerifyEmail';
 import VerifyPhone from '../components/VerifyPhone';
+import DeclinedProfile from '../components/DeclinedProfile';
+import EditPreference from '../components/EditPreference';
 
 const Stack = createStackNavigator();
 
@@ -318,6 +320,14 @@ class RootNav extends React.Component {
       </Stack.Screen>
       <Stack.Screen name="Phone Number">
         {(props) => <VerifyPhone context={context} {...props} />}
+      </Stack.Screen>
+
+      <Stack.Screen name="Edit Preference">
+        {(props) => <EditPreference context={context} {...props} />}
+      </Stack.Screen>
+
+      <Stack.Screen name="Declined Profile">
+        {(props) => <DeclinedProfile context={context} {...props} />}
       </Stack.Screen>
     </>
   );

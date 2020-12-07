@@ -24,6 +24,7 @@ import CountryDrop from '../general/countryCode';
 import Snackbar from 'react-native-snackbar';
 import {Loader} from '../modals';
 import LinkAccount from '../../helpers/linkAccount';
+import Header from '../Headers/SettingsHeader';
 
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
@@ -159,59 +160,64 @@ class VerifyPhoneJSX extends React.Component {
   };
 
   render() {
-    return !this.state.otpsent ? (
-      <PhoneJSX
-        _onPress={this.loginWithOtp}
-        codeChange={this.codeChange}
-        onPhoneChange={this.onPhoneChange}
-        phoneValue={this.state.phoneNumber}
-        defaultCode={this.state.code}
-        loading={this.state.loading}
-      />
-    ) : (
-      <DermaBackground style={{padding: 20}}>
-        <View
-          style={style.phoneLogin}
-          onStartShouldSetResponder={() => Keyboard.dismiss()}
-          behavior="padding">
-          <View>
-            <GradientText text={'MOBILE NUMBER'} />
-          </View>
-          <View style={style.otpContainer}>
-            <Text style={style.heading}>Verify Mobile Number</Text>
-            <Text style={style.para}>
-              Enter the 6 - digit code sent to your mobile number
-            </Text>
+    return (
+      <>
+        <Header title={'VERIFY PHONE'} {...this.props} />
+        {!this.state.otpsent ? (
+          <PhoneJSX
+            _onPress={this.loginWithOtp}
+            codeChange={this.codeChange}
+            onPhoneChange={this.onPhoneChange}
+            phoneValue={this.state.phoneNumber}
+            defaultCode={this.state.code}
+            loading={this.state.loading}
+          />
+        ) : (
+          <DermaBackground style={{padding: 20}}>
+            <View
+              style={style.phoneLogin}
+              onStartShouldSetResponder={() => Keyboard.dismiss()}
+              behavior="padding">
+              <View>
+                <GradientText text={'MOBILE NUMBER'} />
+              </View>
+              <View style={style.otpContainer}>
+                <Text style={style.heading}>Verify Mobile Number</Text>
+                <Text style={style.para}>
+                  Enter the 6 - digit code sent to your mobile number
+                </Text>
 
-            <View style={style.grid}>{this.renderOtp()}</View>
-            <View style={{alignItems: 'center', marginTop: 30}}>
-              <LinearGradient
-                colors={GRCOLOR}
-                style={style.submitOtp}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}>
-                <TouchableOpacity
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    width: '100%',
-                    alignItems: 'center',
-                  }}
-                  onPress={this.confirmOtp}>
-                  <Text style={{color: THEME.WHITE}}>SUBMIT</Text>
-                </TouchableOpacity>
-              </LinearGradient>
+                <View style={style.grid}>{this.renderOtp()}</View>
+                <View style={{alignItems: 'center', marginTop: 30}}>
+                  <LinearGradient
+                    colors={GRCOLOR}
+                    style={style.submitOtp}
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}>
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        width: '100%',
+                        alignItems: 'center',
+                      }}
+                      onPress={this.confirmOtp}>
+                      <Text style={{color: THEME.WHITE}}>SUBMIT</Text>
+                    </TouchableOpacity>
+                  </LinearGradient>
+                </View>
+                <Text style={style.links} onPress={this.loginWithOtp}>
+                  Re-send Code
+                </Text>
+                <Text style={style.links} onPress={this.changeMobileNumber}>
+                  Change Mobile Number
+                </Text>
+              </View>
             </View>
-            <Text style={style.links} onPress={this.loginWithOtp}>
-              Re-send Code
-            </Text>
-            <Text style={style.links} onPress={this.changeMobileNumber}>
-              Change Mobile Number
-            </Text>
-          </View>
-        </View>
-        <Loader isVisible={this.state.loading} />
-      </DermaBackground>
+            <Loader isVisible={this.state.loading} />
+          </DermaBackground>
+        )}
+      </>
     );
   }
 }

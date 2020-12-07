@@ -104,9 +104,7 @@ class Dashboard extends React.Component {
 
         <TouchableOpacity
           style={[userLinks.link]}
-          onPress={() =>
-            this.props.navigation.navigate('My Profile Screen', {id: 1})
-          }>
+          onPress={() => this.props.navigation.navigate('My Profile', {id: 1})}>
           <Image source={partnerLink} style={userLinks.image} />
           <Text style={[{textAlign: 'center'}, userLinks.text]}>
             {'Partner\nPreference'}

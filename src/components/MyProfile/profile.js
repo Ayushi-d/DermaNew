@@ -27,6 +27,7 @@ import EP from '../../assets/data/ep';
 import data from '../../assets/data/countryData';
 import AboutMe from '../general/AboutMe';
 import CustomBackAction from '../general/CustomBackAction';
+import Header from '../Headers/SettingsHeader';
 
 const icon = {
   sc: skin,
@@ -321,46 +322,49 @@ class MyProfileJSX extends React.Component {
 
   render() {
     return (
-      <ScrollView
-        style={{flex: 1}}
-        ref={(ref) => {
-          this.scrollView = ref;
-        }}>
-        {this.renderProfile()}
-        {this.renderTrustScore()}
-        {this.renderTab()}
-        {this.renderTabContent()}
-        {this.state.interest ? (
-          <Interest
-            isVisible={this.state.interest}
-            onCancel={() => this.hideModal('interest')}
-            saveChanges={this.saveChanges}
-            data={getData(this.props.context.user, 'Interest')}
-          />
-        ) : null}
+      <>
+        <Header title={'PROFILE'} {...this.props} />
+        <ScrollView
+          style={{flex: 1}}
+          ref={(ref) => {
+            this.scrollView = ref;
+          }}>
+          {this.renderProfile()}
+          {this.renderTrustScore()}
+          {this.renderTab()}
+          {this.renderTabContent()}
+          {this.state.interest ? (
+            <Interest
+              isVisible={this.state.interest}
+              onCancel={() => this.hideModal('interest')}
+              saveChanges={this.saveChanges}
+              data={getData(this.props.context.user, 'Interest')}
+            />
+          ) : null}
 
-        {/* Location */}
-        {this.state.location ? (
+          {/* Location */}
+          {this.state.location ? (
+            <MultiChoicePicker
+              isVisible={this.state.location}
+              data={["Doesn't matter", ...data]}
+              title={'Location'}
+              onCancelled={() => this.hideModal('location')}
+              value={getData(this.props.context.user, 'Location', true)}
+              saveChanges={(data) => this.pushChangePP('Location', data)}
+            />
+          ) : null}
+          {/* Religion */}
           <MultiChoicePicker
-            isVisible={this.state.location}
-            data={["Doesn't matter", ...data]}
-            title={'Location'}
-            onCancelled={() => this.hideModal('location')}
-            value={getData(this.props.context.user, 'Location', true)}
-            saveChanges={(data) => this.pushChangePP('Location', data)}
+            isVisible={this.state.religion}
+            data={EP['pp']['Religion']}
+            title={'Religion'}
+            onCancelled={() => this.hideModal('religion')}
+            value={getData(this.props.context.user, 'Religion', true)}
+            saveChanges={(data) => this.pushChangePP('Religion', data)}
           />
-        ) : null}
-        {/* Religion */}
-        <MultiChoicePicker
-          isVisible={this.state.religion}
-          data={EP['pp']['Religion']}
-          title={'Religion'}
-          onCancelled={() => this.hideModal('religion')}
-          value={getData(this.props.context.user, 'Religion', true)}
-          saveChanges={(data) => this.pushChangePP('Religion', data)}
-        />
-        <Loader isVisible={this.state.loading} />
-      </ScrollView>
+          <Loader isVisible={this.state.loading} />
+        </ScrollView>
+      </>
     );
   }
 }

@@ -13,6 +13,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import LinkAccount from '../../helpers/linkAccount';
 import CustomBackAction from '../general/CustomBackAction';
 
+import Header from '../Headers/SettingsHeader';
+
 const data = {
   dp: {
     0: 'Add your recent photo (20%)',
@@ -200,26 +202,31 @@ class TrustScoreJSX extends React.Component {
 
   render() {
     return (
-      <ScrollView
-        style={tsStyle.container}
-        showsVerticalScrollIndicator={false}>
-        <View style={{alignItems: 'center', padding: 20}}>
-          <View style={tsStyle.info}>
-            <Image source={ts} style={tsStyle.tsImage} />
-            <Text style={tsStyle.head}>YOUR PROFILE TRUST SCORE</Text>
-            <Text
-              style={tsStyle.perc}>{`${this.props.context.user.ts.ts}%`}</Text>
+      <>
+        <Header title={'Trust Score'} {...this.props} />
+        <ScrollView
+          style={tsStyle.container}
+          showsVerticalScrollIndicator={false}>
+          <View style={{alignItems: 'center', padding: 20}}>
+            <View style={tsStyle.info}>
+              <Image source={ts} style={tsStyle.tsImage} />
+              <Text style={tsStyle.head}>YOUR PROFILE TRUST SCORE</Text>
+              <Text
+                style={
+                  tsStyle.perc
+                }>{`${this.props.context.user.ts.ts}%`}</Text>
+            </View>
+            {this.renderTrustStatus()}
           </View>
-          {this.renderTrustStatus()}
-        </View>
-        <ImagePickerWithCrop
-          isVisible={this.state.uploadModal}
-          fromGallery={this._onFromGallery}
-          fromCamera={this._onFromCamera}
-          onTapOutSide={this._onPressUpload}
-        />
-        <Loader isVisible={this.state.loading} />
-      </ScrollView>
+          <ImagePickerWithCrop
+            isVisible={this.state.uploadModal}
+            fromGallery={this._onFromGallery}
+            fromCamera={this._onFromCamera}
+            onTapOutSide={this._onPressUpload}
+          />
+          <Loader isVisible={this.state.loading} />
+        </ScrollView>
+      </>
     );
   }
 }
