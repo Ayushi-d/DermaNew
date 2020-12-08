@@ -20,6 +20,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Loader} from '../modals';
 import CustomBackAction from '../general/CustomBackAction';
 import Photo from './Photo';
+import Header from '../Headers/SettingsHeader';
 
 const data = [
   'You can add upto 6 photos.',
@@ -73,15 +74,15 @@ class ManagePhotosJSX extends React.Component {
 
     let aop =
       this.props.context &&
-      this.props.context.user_data &&
-      this.props.context.user_data.aop &&
-      Object.keys(this.props.context.user_data.aop);
+      this.props.context.user &&
+      this.props.context.user.aop &&
+      Object.keys(this.props.context.user.aop);
 
     let op =
       this.props.context &&
-      this.props.context.user_data &&
-      this.props.context.user_data.op &&
-      Object.keys(this.props.context.user_data.op);
+      this.props.context.user &&
+      this.props.context.user.op &&
+      Object.keys(this.props.context.user.op);
 
     // console.log([...aop, ...op].length, 'length');
 
@@ -197,15 +198,15 @@ class ManagePhotosJSX extends React.Component {
   };
 
   renderPhotos = () => {
-    if (!this.props.context.user_data) return null;
+    if (!this.props.context.user) return null;
 
     const approvedObj =
-      this.props.context.user_data.op && this.props.context.user_data.op;
+      this.props.context.user.op && this.props.context.user.op;
     const unapproved =
-      this.props.context.user_data.aop && this.props.context.user_data.aop;
+      this.props.context.user.aop && this.props.context.user.aop;
 
-    const dp = this.props.context.user_data.dp;
-    const ndp = this.props.context.user_data.ndp;
+    const dp = this.props.context.user.dp;
+    const ndp = this.props.context.user.ndp;
 
     if (!approvedObj && !unapproved) return null;
 
@@ -262,22 +263,25 @@ class ManagePhotosJSX extends React.Component {
   };
   render() {
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-        }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 60}}>
-        {this.renderHeader()}
-        {this.renderPhotos()}
-        <ImagePickerWithCrop
-          isVisible={this.state.uploadModal}
-          fromGallery={this._onFromGallery}
-          fromCamera={this._onFromCamera}
-          onTapOutSide={this._onPressUpload}
-        />
-        <Loader isVisible={this.state.loading} />
-      </ScrollView>
+      <>
+        <Header title={'ADD PHOTOS'} {...this.props} />
+        <ScrollView
+          style={{
+            flex: 1,
+          }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: 60}}>
+          {this.renderHeader()}
+          {this.renderPhotos()}
+          <ImagePickerWithCrop
+            isVisible={this.state.uploadModal}
+            fromGallery={this._onFromGallery}
+            fromCamera={this._onFromCamera}
+            onTapOutSide={this._onPressUpload}
+          />
+          <Loader isVisible={this.state.loading} />
+        </ScrollView>
+      </>
     );
   }
 }

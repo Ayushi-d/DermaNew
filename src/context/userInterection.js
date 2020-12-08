@@ -28,6 +28,7 @@ class UserInterectionProvider extends React.Component {
   async componentDidMount() {
     if (auth().currentUser) {
       this.uid = auth().currentUser.uid;
+      // console.log(this.uid);
       this.currentUserRef = database().ref('Users/' + this.uid);
       this.userBase = database().ref('Users');
       this.getUserLikeData();
@@ -90,31 +91,40 @@ class UserInterectionProvider extends React.Component {
     let lu_data;
     let lu_filtered_data;
     let lbu_data;
-    this.ltRef.on('child_added', async (res) => {
-      if (res) {
-        this.setState({lt: {...this.state.lt, [res.key]: res.val()}});
 
-        let userData = await this.userBase.child(res.key).once('value');
+    this.ltRef.on(
+      'child_added',
+      async (res) => {
+        if (res) {
+          this.setState({lt: {...this.state.lt, [res.key]: res.val()}});
 
-        if (this.state.lbu_data) {
-          lbu_data = {...this.state.lbu_data};
-        } else {
-          lbu_data = {};
+          let userData = await this.userBase.child(res.key).once('value');
+
+          if (this.state.lbu_data) {
+            lbu_data = {...this.state.lbu_data};
+          } else {
+            lbu_data = {};
+          }
+
+          lbu_data[res.key] = userData.val();
+          let lt = {...this.state.lt};
+          lt[res.key] = res;
+          this.setState({lbu_data, lt});
         }
-
-        lbu_data[res.key] = userData.val();
-        let lt = {...this.state.lt};
-        lt[res.key] = res;
-        this.setState({lbu_data, lt});
-      }
-    });
+      },
+      (error) => console.log('getUSerLikeData error: ', error),
+    );
 
     this.lfRef = this.currentUserRef.child('lf');
+
+    // this.lfRef.once('value', (res) => {
+    //   console.log(res);
+    // });
 
     this.lfRef.on('child_added', async (res) => {
       if (res && res.key != 'c') {
         let userData = await this.userBase.child(res.key).once('value');
-
+        // console.log(userData);
         let isMyType = this.isMyType(
           this.props.mainContext.user,
           userData.val(),

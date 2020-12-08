@@ -55,6 +55,7 @@ import EditPreference from '../components/EditPreference';
 
 // MSGR
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
+import ChatScreen from '../screens/ChatScreen';
 
 const Stack = createStackNavigator();
 
@@ -156,6 +157,11 @@ class RootNav extends React.Component {
 
   _loginCheck = () => {
     this._isMounted && this.setState({loginCheck: true});
+  };
+
+  _logout = () => {
+    this._isMounted && this.setState({isLoggedIn: false, user: {}});
+    this._removeListeners();
   };
 
   _callListeners = (user) => {
@@ -359,9 +365,9 @@ class RootNav extends React.Component {
         {(props) => <Chats context={context} {...props} />}
       </Stack.Screen>
       <Stack.Screen name="Chat Request">
-        {(props) => <ChatRqsts context={context} {...props} />}
+        {(props) => <ChatScreen context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="Msgr">
+      <Stack.Screen name="Message">
         {(props) => <Msgr context={context} {...props} />}
       </Stack.Screen>
     </>

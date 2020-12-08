@@ -197,22 +197,9 @@ function DefaultItem(props) {
 }
 
 function RenderExpanded(props) {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {};
-  // }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (nextProps.pState === this.props.pState) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-
-  // render() {
   let {text, route, context, pState, _navigateTo, _setExpanded} = props;
-  let likesCount = context && context.user && context.user.lf && user.lf.c;
+  let likesCount =
+    context && context.user && context.user.lf && context.user.lf.c;
 
   let chatRequestCount =
     context && context.user && context.user.con && context.user.con.rc;

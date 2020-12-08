@@ -64,7 +64,7 @@ class Cards extends React.Component {
       data: {
         data,
         refKey: cUID < oUID ? cUID + oUID : oUID + cUID,
-        from: this.props.navigation.state.routeName,
+        from: '',
         member: this.props.data,
       },
       fromPage: this.props.fromPage,
@@ -79,14 +79,12 @@ class Cards extends React.Component {
           alignSelf: 'center',
           marginTop: 20,
           marginBottom: 20,
-        }}
-      >
+        }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-          }}
-        >
+          }}>
           <Text style={[style.text, style.name]}>{this.props.data['sn']}</Text>
           <Text style={[style.text]}>
             {`${DateHelpers.getAge(this.props.data.dob)}   ${
@@ -95,9 +93,7 @@ class Cards extends React.Component {
           </Text>
         </View>
         <Text style={[style.text]}>
-          {`${this.props.data.sc}   ${this.props.data.ms}   ${
-            this.props.data.rl
-          }`}
+          {`${this.props.data.sc}   ${this.props.data.ms}   ${this.props.data.rl}`}
         </Text>
         <Text style={[style.text]}>
           {`${this.props.data.ct}   ${this.props.data.c}`}
@@ -114,8 +110,7 @@ class Cards extends React.Component {
           alignSelf: 'center',
           flexDirection: 'row',
           justifyContent: 'space-around',
-        }}
-      >
+        }}>
         <TouchableOpacity style={style.buttonLike} onPress={this.onPressLike}>
           <Image
             source={this.state.likedMe ? liked : like}
@@ -124,8 +119,7 @@ class Cards extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           style={style.buttonLike}
-          onPress={this.showMessageModal}
-        >
+          onPress={this.showMessageModal}>
           <Image source={message} style={style.image} />
         </TouchableOpacity>
       </View>
@@ -154,11 +148,12 @@ class Cards extends React.Component {
             marginBottom: 10,
             paddingVertical: 10,
             borderColor: THEME.WHITE,
-          }}
-        >
-          <Text style={{color: THEME.WHITE, fontStyle: 'italic'}} onPress={this.replyToMessage}>{`Message - ${
-            this.props.message
-          }`}</Text>
+          }}>
+          <Text
+            style={{color: THEME.WHITE, fontStyle: 'italic'}}
+            onPress={
+              this.replyToMessage
+            }>{`Message - ${this.props.message}`}</Text>
         </View>
 
         <View
@@ -168,15 +163,12 @@ class Cards extends React.Component {
             marginBottom: 15,
             flexDirection: 'row',
             justifyContent: 'space-around',
-          }}
-        >
+          }}>
           <TouchableOpacity
             style={[style.button, style.reply]}
-            onPress={this.replyToMessage}
-          >
+            onPress={this.replyToMessage}>
             <Text
-              style={{color: THEME.GRADIENT_BG.END_COLOR, fontWeight: 'bold'}}
-            >
+              style={{color: THEME.GRADIENT_BG.END_COLOR, fontWeight: 'bold'}}>
               REPLY
             </Text>
           </TouchableOpacity>
@@ -184,8 +176,7 @@ class Cards extends React.Component {
           {!this.props.fromDeclined ? (
             <TouchableOpacity
               style={[style.button, style.decline]}
-              onPress={this.declineMessage}
-            >
+              onPress={this.declineMessage}>
               <Text style={{color: THEME.WHITE, fontWeight: 'bold'}}>
                 DECLINE
               </Text>
@@ -208,7 +199,7 @@ class Cards extends React.Component {
       data: {
         data,
         refKey: cUID < oUID ? cUID + oUID : oUID + cUID,
-        from: this.props.navigation.state.routeName,
+        from: '',
         member: this.props.data,
       },
       fromPage: this.props.fromPage,
@@ -249,7 +240,7 @@ class Cards extends React.Component {
       .set(1);
   };
 
-  navigateToMember = data => {
+  navigateToMember = (data) => {
     if (!this.props.navigation) {
       return null;
     }
@@ -270,8 +261,7 @@ class Cards extends React.Component {
             likesMe: this.props.likesMe,
             fromPage: this.props.fromPage,
           })
-        }
-      >
+        }>
         <View style={style.cardsContainer}>
           <PhotoSwiper
             data={this.props.data}
@@ -288,6 +278,7 @@ class Cards extends React.Component {
               })
             }
             fromMember={this.props.fromMember}
+            {...this.props}
           />
           {this.renderAbout()}
           {this.props.fromLike ? this.renderLikeAndMessage() : null}

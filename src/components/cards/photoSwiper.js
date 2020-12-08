@@ -18,7 +18,7 @@ import chatButton from '../../assets/cards/ic_chat.png';
 import THEME from '../../config/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageFullScreen from '../modals/ImageFullScreen';
-import {withNavigation} from 'react-navigation';
+// import {withNavigation} from 'react-navigation';
 
 import ViewPager from '@react-native-community/viewpager';
 
@@ -64,14 +64,14 @@ class PhotoSwiper extends React.Component {
   componentDidMount() {
     this.willFocusSubscription = this.props.navigation.addListener(
       'willFocus',
-      payload => {
+      (payload) => {
         this.ref.setPage(0);
       },
     );
   }
 
   componentWillUnmount() {
-    if (this.willFocusSubscription) this.willFocusSubscription.remove();
+    if (this.willFocusSubscription) this.willFocusSubscription();
   }
 
   UNSAFE_componentWillReceiveProps(newprops) {
@@ -104,8 +104,7 @@ class PhotoSwiper extends React.Component {
           position: 'absolute',
           left: 20,
           alignItems: 'center',
-        }}
-      >
+        }}>
         <Text
           style={{
             alignSelf: 'center',
@@ -113,8 +112,7 @@ class PhotoSwiper extends React.Component {
             color: THEME.WHITE,
             marginTop: 5,
             fontSize: 14,
-          }}
-        >
+          }}>
           {this.props.data.ts ? this.props.data.ts.ts : 0}%
         </Text>
         <Text style={{fontSize: 14, textAlign: 'center', color: THEME.WHITE}}>
@@ -162,8 +160,7 @@ class PhotoSwiper extends React.Component {
           padding: 5,
           justifyContent: 'center',
           alignItems: 'center',
-        }}
-      >
+        }}>
         <Text style={{color: THEME.WHITE, fontSize: 12}}>
           {this.props.dateToShow}
         </Text>
@@ -183,8 +180,7 @@ class PhotoSwiper extends React.Component {
           padding: 5,
           justifyContent: 'center',
           alignItems: 'center',
-        }}
-      >
+        }}>
         <Text style={{color: THEME.WHITE, fontSize: 14}}>
           {this.state.gender == 'Male' ? 'He likes you' : 'She likes you'}
         </Text>
@@ -200,8 +196,7 @@ class PhotoSwiper extends React.Component {
           position: 'absolute',
           bottom: -26,
           right: 0,
-        }}
-      >
+        }}>
         <TouchableOpacity>
           <Image source={likeButton} style={style.floatingButton} />
         </TouchableOpacity>
@@ -231,24 +226,22 @@ class PhotoSwiper extends React.Component {
     return (
       <View style={style.container}>
         <ViewPager
-          ref={ref => (this.ref = ref)}
+          ref={(ref) => (this.ref = ref)}
           initialPage={0}
           style={{flex: 1, width: width * 0.8, borderWidth: 1}}
           showPageIndicator={true}
-          onPageScroll={evt => {
+          onPageScroll={(evt) => {
             this.setState({index: evt.nativeEvent.position});
           }}
-          onPageScrollStateChanged={evt =>
+          onPageScrollStateChanged={(evt) =>
             this.setState({dragging: evt.nativeEvent.pageScrollState})
-          }
-        >
+          }>
           {this.state.urls.map((url, i) => (
             <TouchableWithoutFeedback
               key={i}
               onPress={() => {
                 if (this.state.dragging == 'idle') this.showImageFullScreen();
-              }}
-            >
+              }}>
               <Image
                 source={{uri: url}}
                 style={{
@@ -308,4 +301,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default withNavigation(PhotoSwiper);
+export default PhotoSwiper;

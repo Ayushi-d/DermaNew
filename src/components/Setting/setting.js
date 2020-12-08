@@ -149,7 +149,8 @@ class SettingsJSX extends React.Component {
         .signOut()
         .then((res) => {
           this.setState({loading: false}, () => {
-            this.props.navigation.navigate('Login');
+            // this.props.navigation.navigate('Login');
+            this.props.context._logout();
           });
         });
     });
