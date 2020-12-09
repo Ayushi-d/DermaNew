@@ -62,7 +62,7 @@ class Cards extends React.Component {
 
     this.props.navigation.navigate('Message', {
       data: {
-        data,
+        ...data,
         refKey: cUID < oUID ? cUID + oUID : oUID + cUID,
         from: '',
         member: this.props.data,
@@ -197,7 +197,7 @@ class Cards extends React.Component {
 
     this.props.navigation.navigate('Message', {
       data: {
-        data,
+        ...data,
         refKey: cUID < oUID ? cUID + oUID : oUID + cUID,
         from: '',
         member: this.props.data,

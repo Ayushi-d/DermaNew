@@ -6,6 +6,7 @@ import THEME from '../../config/theme';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 export default class DrawerStackHeader extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ export default class DrawerStackHeader extends React.Component {
             </View>
 
             <Pressable style={styles.iconBtn} onPress={this._goToDashboard}>
-              <AntDesign name={'home'} color={THEME.WHITE} size={28} />
+              <Entypo name={'home'} color={THEME.WHITE} size={28} />
             </Pressable>
           </View>
         </DermaBg>

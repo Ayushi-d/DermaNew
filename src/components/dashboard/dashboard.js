@@ -177,6 +177,20 @@ class Dashboard extends React.Component {
   };
 
   renderUserInterection = () => {
+    let {user} = this.props.context;
+
+    let chatRequestCount = 0;
+
+    let cons = user.con;
+    if (cons) {
+      let con = Object.keys(user.con);
+      con.forEach((c) => {
+        if (!cons[c].sn) {
+          chatRequestCount += 1;
+        }
+      });
+    }
+
     return (
       <View style={userLinks.container}>
         <TouchableOpacity
@@ -252,9 +266,7 @@ class Dashboard extends React.Component {
           }}>
           <View>
             <Image source={filter} style={userLinks.image} />
-            {this.props.context.user &&
-            this.props.context.user.con &&
-            this.props.context.user.con.rc ? (
+            {chatRequestCount ? (
               <View
                 style={{
                   position: 'absolute',
@@ -268,7 +280,7 @@ class Dashboard extends React.Component {
                   borderRadius: 10,
                 }}>
                 <Text style={{fontSize: 12, color: THEME.WHITE, padding: 5}}>
-                  {this.props.context.user.con.rc}
+                  {chatRequestCount}
                 </Text>
               </View>
             ) : null}

@@ -70,7 +70,6 @@ class ChatRequestContextProvider extends React.Component {
         .once('value');
 
       if (!inR && !inR.val()) return false;
-
       if (inR.val().uid != otherUID) {
         return null;
       }
@@ -122,7 +121,7 @@ class ChatRequestContextProvider extends React.Component {
     let c = preference.c.split(',');
     let ms = preference.ms.split(',');
 
-    userAge = DateHelpers.getAge(data.dob);
+    let userAge = DateHelpers.getAge(data.dob);
 
     if (
       parseInt(userAge) < parseInt(minAge) ||
@@ -205,6 +204,7 @@ class ChatRequestContextProvider extends React.Component {
   };
 
   render() {
+    // console.log('chats!: ', this.state.regular, this.state.filteredOut);
     return (
       <ChatRequestContext.Provider
         value={{

@@ -141,7 +141,8 @@ export default class Phone extends React.Component {
           }
 
           if (result.isRegistered) {
-            this.props.navigation.navigate('Drawer');
+            // this.props.navigation.navigate('Drawer');
+            this.props.context._checkAuth();
           } else {
             this.props.navigation.navigate('Registration', {
               phoneNumber: phone,
@@ -208,7 +209,8 @@ export default class Phone extends React.Component {
             return;
           }
           if (result.isRegistered) {
-            this.props.navigation.navigate('Drawer');
+            // this.props.navigation.navigate('Drawer');
+            this.props.context._checkAuth();
           } else {
             this.props.navigation.navigate('Registration', {
               phoneNumber: phone,
@@ -332,7 +334,7 @@ export default class Phone extends React.Component {
             style={{height: 100, marginTop: 150, alignItems: 'center'}}
             onCodeChanged={(otp) => {
               this.setState({otp});
-              console.log(otp);
+              // console.log(otp);
             }}
             // onCodeFilled={this.confirmOtp}
           />

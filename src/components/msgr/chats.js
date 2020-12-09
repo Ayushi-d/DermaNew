@@ -11,7 +11,7 @@ export default class Chats extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={'CHATS'} {...this.props} />
+        <Header title={'MESSAGES'} {...this.props} />
       </View>
     );
   }

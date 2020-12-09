@@ -105,6 +105,8 @@ class SidebarJSX extends React.Component {
 
   render() {
     let rootNav = this.props.root.navigation;
+    let {user} = this.props.context;
+
     return (
       <ScrollView>
         <LinearGradient
@@ -124,7 +126,7 @@ class SidebarJSX extends React.Component {
           </TouchableOpacity>
           <Text
             style={style.name}
-            onPress={() => this._navigateTo('My Profile Screen')}>
+            onPress={() => rootNav.navigate('My Profile', {id: 0})}>
             {this.props.context.user ? this.props.context.user.nm : 'Default'}
           </Text>
           <TouchableOpacity
@@ -201,8 +203,17 @@ function RenderExpanded(props) {
   let likesCount =
     context && context.user && context.user.lf && context.user.lf.c;
 
-  let chatRequestCount =
-    context && context.user && context.user.con && context.user.con.rc;
+  let chatRequestCount = 0;
+
+  let cons = context.user.con;
+  if (cons) {
+    let con = Object.keys(context.user.con);
+    con.forEach((c) => {
+      if (!cons[c].sn) {
+        chatRequestCount += 1;
+      }
+    });
+  }
 
   let notification = text == 'Likes' ? likesCount : chatRequestCount;
 

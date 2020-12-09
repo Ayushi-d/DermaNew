@@ -13,11 +13,21 @@ import THEME from '../../config/theme';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
-export default class DrawerStackHeader extends React.Component {
+import {Menu, Divider} from 'react-native-paper';
+
+import BlockModal from '../modals/block';
+import ReportModal from '../modals/report';
+
+export default class MsgHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      menuOpen: false,
+      blockOpen: false,
+      reportOpen: false,
+    };
     this._isMounted = false;
   }
 
@@ -47,9 +57,26 @@ export default class DrawerStackHeader extends React.Component {
     this._isMounted = false;
   }
 
+  _openMenu = () => {
+    this.setState({menuOpen: true});
+  };
+
+  _closeMenu = () => {
+    this.setState({menuOpen: false});
+  };
+
+  _toggleBlockModal = () => {
+    this.setState({blockOpen: !this.state.blockOpen});
+  };
+
+  _toggleReportModal = () => {
+    this.setState({reportOpen: !this.state.reportOpen});
+  };
+
   render() {
-    let {title, type, route} = this.props;
-    let oUser = route.params.data.data.otheruser;
+    let {menuOpen, blockOpen, reportOpen} = this.state;
+    let {title, type, right, route} = this.props;
+    let oUser = route.params.data.otheruser;
 
     return (
       <View style={{...styles.header}}>
@@ -76,16 +103,60 @@ export default class DrawerStackHeader extends React.Component {
                 <Text style={styles.title}>
                   {oUser ? (oUser.nm ? oUser.nm : '') : ''}
                 </Text>
-                <Text style={styles.status}>Online</Text>
+                {/* <Text style={styles.status}>Online</Text> */}
               </View>
             </View>
 
-            <Pressable style={styles.iconBtn} onPress={this._goToDashboard}>
-              <AntDesign name={'home'} color={THEME.WHITE} size={28} />
-            </Pressable>
+            {right ? (
+              <Menu
+                visible={menuOpen}
+                onDismiss={this._closeMenu}
+                anchor={
+                  <Pressable
+                    style={{
+                      ...styles.iconBtn,
+
+                      height: 50,
+                    }}
+                    onPress={this._openMenu}>
+                    <Entypo name={'block'} color={THEME.WHITE} size={24} />
+                  </Pressable>
+                }>
+                <Menu.Item
+                  onPress={() => {
+                    this._toggleReportModal();
+                    this._closeMenu();
+                  }}
+                  title="REPORT"
+                />
+                <Menu.Item
+                  onPress={() => {
+                    this._toggleBlockModal();
+                    this._closeMenu();
+                  }}
+                  title="BLOCK"
+                />
+              </Menu>
+            ) : (
+              <Pressable style={styles.iconBtn} onPress={this._goToDashboard}>
+                <AntDesign name={'home'} color={THEME.WHITE} size={28} />
+              </Pressable>
+            )}
           </View>
         </DermaBg>
         <StatusBar barStyle={'light-content'} />
+        <BlockModal
+          isVisible={blockOpen}
+          userToBlock={oUser.uid}
+          blockToggle={this._toggleBlockModal}
+          {...this.props}
+        />
+        <ReportModal
+          isVisible={reportOpen}
+          userToReport={oUser.uid}
+          reportToggle={this._toggleReportModal}
+          {...this.props}
+        />
       </View>
     );
   }
@@ -106,8 +177,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   propic: {
-    width: 34,
-    height: 34,
+    width: 30,
+    height: 30,
     borderRadius: 20,
     backgroundColor: '#fff',
   },

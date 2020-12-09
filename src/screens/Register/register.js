@@ -209,11 +209,13 @@ class Registration extends React.Component {
 
   _saveData = () => {
     this.setState({loading: true});
+    let usr = {...this.props.context.user, ...this.state.values};
     this.props.reg
       .setRegistration({...this.props.context.user, ...this.state.values})
       .then((res) => {
         if (res) this.setState({loading: false});
-        this.props.navigation.navigate('Drawer');
+        this.props.context._setLoginUser(usr);
+        // this.props.navigation.navigate('Drawer');
       });
   };
 

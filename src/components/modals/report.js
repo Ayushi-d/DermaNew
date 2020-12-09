@@ -54,50 +54,53 @@ class ReportModal extends React.Component {
       let {reason, desc} = this.state;
       let reportsRef = database().ref('Reports').push();
 
-      reportsRef.set({
-        id: reportsRef.key,
-        info: desc,
-        read: 0,
-        ru: userToReport,
-        su: user.uid,
-        sub: reason,
-        tp: database.ServerValue.TIMESTAMP
-      }, err => {
-        console.log(err)
-      }).then(() => {
-        ToastAndroid.show("User Reported.", ToastAndroid.SHORT);
-        this.props.reportToggle();
-
-      }).catch(err => {
-        console.log("report.js: err: ", err);
-        ToastAndroid.show("Something went wrong. Please try again.", ToastAndroid.SHORT);
-      })
+      reportsRef
+        .set(
+          {
+            id: reportsRef.key,
+            info: desc,
+            read: 0,
+            ru: userToReport,
+            su: user.uid,
+            sub: reason,
+            tp: database.ServerValue.TIMESTAMP,
+          },
+          (err) => {
+            console.log(err);
+          },
+        )
+        .then(() => {
+          ToastAndroid.show('User Reported.', ToastAndroid.SHORT);
+          this.props.reportToggle();
+        })
+        .catch((err) => {
+          console.log('report.js: err: ', err);
+          ToastAndroid.show(
+            'Something went wrong. Please try again.',
+            ToastAndroid.SHORT,
+          );
+        });
     });
-
   };
 
-  
   render() {
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <ReactNativeModal
         isVisible={this.props.isVisible}
         style={{margin: 0, alignItems: 'center'}}
-        onBackdropPress={this.props.reportToggle}
-      >
+        onBackdropPress={this.props.reportToggle}>
         <View style={style.container}>
           <LinearGradient
             colors={[...THEME.GRADIENT_BG.PAIR].reverse()}
             style={[style.header]}
             start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-          >
+            end={{x: 1, y: 0}}>
             <Text style={style.heading}>REPORT</Text>
           </LinearGradient>
           <ScrollView
             style={{backgroundColor: THEME.WHITE, padding: 10}}
-            keyboardShouldPersistTaps={'handled'}
-          >
+            keyboardShouldPersistTaps={'handled'}>
             <View>
               <Select
                 data={reasons}
@@ -120,8 +123,7 @@ class ReportModal extends React.Component {
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 marginTop: 30,
-              }}
-            >
+              }}>
               <BUTTON_WITH_PARAM
                 text={'CANCEL'}
                 style={{width: '40%'}}

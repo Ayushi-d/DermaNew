@@ -70,6 +70,7 @@ class RootNav extends React.Component {
       user: {},
     };
     this._isMounted = false;
+    this._msgListeners = [];
   }
 
   componentDidMount() {
@@ -85,6 +86,7 @@ class RootNav extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+    this._removeListeners();
   }
 
   checkAuthentication = async () => {
@@ -107,7 +109,11 @@ class RootNav extends React.Component {
         if (isRegistered.exists) {
           this._setLoginUser(isRegistered.user)
             .then(() => {
-              this.setState({isLoggedIn: true, loginCheck: true});
+              this.setState({
+                user: isRegistered.user,
+                isLoggedIn: true,
+                loginCheck: true,
+              });
             })
             .catch((err) => {
               this.setState({isLoggedIn: false, loginCheck: true});
@@ -133,8 +139,14 @@ class RootNav extends React.Component {
           .then((res) => {
             if (res.exists) {
               let userDat = {...this.state.user, ...res.user};
-              this.setState({user: userDat});
+              // this.setState({user: userDat, isLoggedIn: true});
               this._callListeners(userDat);
+            } else {
+              this.setState({
+                user: userDat,
+                isLoggedIn: false,
+                loginCheck: true,
+              });
             }
             CheckUser.isDeleted(userDat.uid)
               .then((isDeleted) => {
@@ -155,6 +167,10 @@ class RootNav extends React.Component {
     });
   };
 
+  _completeLogin = (loginCheck, isLoggedIn) => {
+    this.setState({loginCheck, isLoggedIn});
+  };
+
   _loginCheck = () => {
     this._isMounted && this.setState({loginCheck: true});
   };
@@ -164,20 +180,61 @@ class RootNav extends React.Component {
     this._removeListeners();
   };
 
-  _callListeners = (user) => {
+  _callListeners = () => {
+    let user = auth().currentUser;
+    this.userRef = database().ref('Users/' + user.uid);
     this._callUserListener(user);
   };
 
   _removeListeners = () => {
-    this.userRef.off('value');
+    this.userRef && this.userRef.off('value');
+    this._msgListeners.length &&
+      this._msgListeners.forEach((listener) => {
+        listener.off('value');
+        console.log('removing msglistener!');
+      });
   };
 
   _callUserListener = (user) => {
     this.userRef.on('value', (snapshot) => {
       let userDat = snapshot.val();
       this.setState({user: userDat});
+      this._checkForMsgs(userDat);
+      console.log('calling!');
       // console.log(userDat);
     });
+  };
+
+  _checkForMsgs = (user) => {
+    this._removeMsgListeners();
+    if (user.con && user.con.length) {
+      Object.keys(user.con).forEach((con) => {
+        let msgListen = database().ref(`conversation/${con}/${user.uid}`);
+        msgListen.on(
+          'value',
+          (snap) => {
+            let conv = snap.val();
+            console.log('updated conv!: ', conv);
+            if (conv.isAcc && !this._msgListeners[conv.key]) {
+              this._msgListeners[conv.key](msgListen);
+              console.log('addeding listener!');
+            } else {
+              msgListen.off('value');
+            }
+          },
+          (err) => {
+            console.log('msgListener err: ', err);
+          },
+        );
+      });
+    }
+  };
+
+  _removeMsgListeners = () => {
+    this._msgListeners.length &&
+      this._msgListeners.forEach((mlistener) => {
+        mlistener.off('value');
+      });
   };
 
   changeDP = async (key, url) => {
@@ -378,11 +435,13 @@ class RootNav extends React.Component {
     let context = {
       user,
       _setLoginUser: this._setLoginUser,
+      _checkAuth: this.checkAuthentication,
       verifyEmail: this._verifyEmail,
       verifyPhone: this._verifyPhone,
       verifyFB: this._verifyFB,
       saveToFirebase: this._saveToFirebase,
       savePPToFirebase: this._savePPToFirebase,
+      _logout: this._logout,
     };
     return (
       <Stack.Navigator
@@ -408,24 +467,29 @@ class RootNav extends React.Component {
             )}
           </Stack.Screen>
         ) : null}
-        {!isLoggedIn ? this._loginRegisterStack(context) : null}
-        <Stack.Screen name="Drawer">
-          {(props) => <DrawerScreeen context={context} {...props} />}
-        </Stack.Screen>
-        {/* <Stack.Screen name="Member Profile">
+        {!isLoggedIn ? (
+          this._loginRegisterStack(context)
+        ) : (
+          <>
+            <Stack.Screen name="Drawer">
+              {(props) => <DrawerScreeen context={context} {...props} />}
+            </Stack.Screen>
+            {/* <Stack.Screen name="Member Profile">
           {(props) => <DrawerScreeen context={context} {...props} />}
         </Stack.Screen> */}
-        <Stack.Screen name="Search">
-          {(props) => <Search context={context} {...props} />}
-        </Stack.Screen>
+            <Stack.Screen name="Search">
+              {(props) => <Search context={context} {...props} />}
+            </Stack.Screen>
 
-        <Stack.Screen name="Search Result">
-          {(props) => <SearchResult context={context} {...props} />}
-        </Stack.Screen>
+            <Stack.Screen name="Search Result">
+              {(props) => <SearchResult context={context} {...props} />}
+            </Stack.Screen>
 
-        {this._profileStack(context)}
-        {this._settingsStack(context)}
-        {this._msgrStack(context)}
+            {this._profileStack(context)}
+            {this._settingsStack(context)}
+            {this._msgrStack(context)}
+          </>
+        )}
       </Stack.Navigator>
     );
   }

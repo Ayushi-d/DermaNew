@@ -4,6 +4,30 @@ import {BUTTON_WITH_PARAM} from '../general/button';
 import Cards from '../cards/cards';
 import DateHelpers from '../../helpers/datehelpers';
 import Header from '../Headers/SettingsHeader';
+import moment from 'moment';
+
+moment.updateLocale('en', {
+  calendar: {
+    lastDay: '[Yesterday]',
+    sameDay: 'LT',
+    nextDay: '[Tomorrow]',
+    lastWeek: 'dddd',
+    nextWeek: 'dddd',
+    sameElse: 'L',
+  },
+  longDateFormat: {
+    LT: 'h:mm A',
+    LTS: 'h:mm:ss A',
+    L: 'DD/MM/YYYY',
+    l: 'D/M/YYYY',
+    LL: 'Do MMMM YYYY',
+    ll: 'D MMM YYYY',
+    LLL: 'Do MMMM YYYY LT',
+    lll: 'D MMM YYYY LT',
+    LLLL: 'dddd, MMMM Do YYYY LT',
+    llll: 'ddd, MMM D YYYY LT',
+  },
+});
 
 class Chat extends React.Component {
   constructor(props) {
@@ -86,6 +110,9 @@ class Chat extends React.Component {
   };
 
   renderChatReqCards = () => {
+    let {user} = this.props.appContext;
+    let likes = Object.keys(user.lf);
+
     let data =
       this.state.tab == 0
         ? this.props.context.regular
@@ -98,20 +125,29 @@ class Chat extends React.Component {
     return (
       <FlatList
         data={Object.keys(data)}
-        renderItem={({item}) => (
-          <Cards
-            data={data[item].user_data}
-            hideButton={true}
-            sent={this.state.tab == 1}
-            message={data[item].lm.mg}
-            fromChat={true}
-            navigation={this.props.navigation}
-            likesMe={this.LikesMe(data[item])}
-            dateToShow={DateHelpers.getDateFromTimeStamp(data[item].lm.tp)}
-            messageRefKey={data[item].keyRef}
-            fromPage={'Chat Request'}
-          />
-        )}
+        renderItem={({item}) => {
+          let likesMe = likes.indexOf(data[item].user_data.uid);
+          if (likesMe > -1) {
+            likesMe = true;
+          } else {
+            likesMe = false;
+          }
+
+          return (
+            <Cards
+              data={data[item].user_data}
+              hideButton={true}
+              sent={this.state.tab == 1}
+              message={data[item].lm.msg}
+              fromChat={true}
+              navigation={this.props.navigation}
+              likesMe={likesMe}
+              dateToShow={moment(new Date(data[item].lm.tp)).calendar()}
+              messageRefKey={data[item].keyRef}
+              fromPage={'Chat Request'}
+            />
+          );
+        }}
         keyExtractor={(item, index) => index.toString()}
         style={{flexGrow: 1}}
       />
