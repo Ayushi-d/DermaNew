@@ -73,10 +73,32 @@ export default class MsgHeader extends React.Component {
     this.setState({reportOpen: !this.state.reportOpen});
   };
 
+  _navToProfile = () => {
+    let {refr, navigation, route} = this.props;
+    if (!refr) {
+      let data = route.params.data.otheruser;
+      navigation.push('Member Profile', {
+        data,
+        fromPage: this.props.fromPage,
+        fromPageHistory: this.props.fromPage,
+        hideMessage: true,
+      });
+    }
+  };
+
   render() {
     let {menuOpen, blockOpen, reportOpen} = this.state;
-    let {title, type, right, route} = this.props;
-    let oUser = route.params.data.otheruser;
+    let {refr, type, right, route} = this.props;
+    let oUser = {};
+    if (refr) {
+      oUser = route.params.data;
+    } else {
+      oUser = route.params.data.otheruser;
+    }
+    // console.log(this.props.data);
+    // if (refr) {
+    //   return <></>;
+    // }
 
     return (
       <View style={{...styles.header}}>
@@ -94,7 +116,7 @@ export default class MsgHeader extends React.Component {
               )}
             </Pressable>
 
-            <View style={styles.middleHead}>
+            <Pressable style={styles.middleHead} onPress={this._navToProfile}>
               {oUser && oUser.dp ? (
                 <Image source={{uri: oUser.dp}} style={styles.propic} />
               ) : null}
@@ -105,7 +127,7 @@ export default class MsgHeader extends React.Component {
                 </Text>
                 {/* <Text style={styles.status}>Online</Text> */}
               </View>
-            </View>
+            </Pressable>
 
             {right ? (
               <Menu

@@ -24,6 +24,8 @@ import auth from '@react-native-firebase/auth';
 import AboutMe from '../general/AboutMe';
 import CustomBackAction from '../general/CustomBackAction';
 
+import Header from '../Headers/msgHeader';
+
 const trustScoreObj = [
   ['em', verEmail, 'Email\nVerified'],
   ['f', verFacebook, 'Facebook\nLinked'],
@@ -92,28 +94,26 @@ class MemberProfile extends React.Component {
   }
 
   componentDidMount() {
-    let data = this.props.navigation.getParam('data');
+    let data = this.props.route.params.data;
   }
 
   renderTSIcon = () => {
-    let data = this.props.navigation.getParam('data');
+    let data = this.props.route.params.data;
     if (!data) return null;
     let tsd = data ? data.ts : null;
 
     return (
       <View style={ts.tsIconContainer}>
-        {trustScoreObj.map(item => {
+        {trustScoreObj.map((item) => {
           if (tsd[item[0]] == 1) {
             return (
               <View
                 key={item[0]}
-                style={{marginRight: 30, alignItems: 'center'}}
-              >
+                style={{marginRight: 30, alignItems: 'center'}}>
                 <View
                   style={{
                     alignItems: 'center',
-                  }}
-                >
+                  }}>
                   <Image source={item[1]} style={ts.tsIconImage} />
                   <Image source={checked} style={ts.checked} />
                 </View>
@@ -127,7 +127,7 @@ class MemberProfile extends React.Component {
   };
 
   renderTrustScore = () => {
-    let data = this.props.navigation.getParam('data');
+    let data = this.props.route.params.data;
     return (
       <View style={ts.container}>
         <View style={ts.circularProgress}>
@@ -138,9 +138,8 @@ class MemberProfile extends React.Component {
             tintColor={THEME.GRADIENT_BG.END_COLOR}
             backgroundColor={'#dedede'}
             rotation={270}
-            arcSweepAngle={180}
-          >
-            {fill => <Text style={ts.ts}>{data ? `${data.ts.ts}%` : 0}</Text>}
+            arcSweepAngle={180}>
+            {(fill) => <Text style={ts.ts}>{data ? `${data.ts.ts}%` : 0}</Text>}
           </AnimatedCircularProgress>
           <Text style={ts.tsText}>TRUST SCORE</Text>
         </View>
@@ -150,8 +149,8 @@ class MemberProfile extends React.Component {
   };
 
   renderCard = () => {
-    let data = this.props.navigation.getParam('data');
-    let likesMe = this.props.navigation.getParam('likesMe');
+    let data = this.props.route.params.data;
+    let likesMe = this.props.route.params.likesMe;
     return (
       <Cards
         data={data}
@@ -160,18 +159,19 @@ class MemberProfile extends React.Component {
         hideDOB={true}
         hideButton={true}
         fromMember={true}
+        {...this.props}
       />
     );
   };
 
   renderInfo = () => {
-    let user_data = this.props.navigation.getParam('data');
+    let user_data = this.props.route.params.data;
     if (!user_data) return null;
     return (
       <View style={tabContent.container}>
         {Object.keys(aboutUser).map((item, i) => (
           <View key={i} style={tabContent.block}>
-            {aboutUser[item].map(obj =>
+            {aboutUser[item].map((obj) =>
               getData(user_data, obj.name) == '' &&
               obj.name != 'ABOUT ME' &&
               obj.name != 'Interest' ? null : (
@@ -209,8 +209,7 @@ class MemberProfile extends React.Component {
           height: 80,
           alignItems: 'center',
           justifyContent: 'center',
-        }}
-      >
+        }}>
         <TouchableOpacity
           style={{
             backgroundColor: THEME.WHITE,
@@ -220,8 +219,7 @@ class MemberProfile extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onPress={this.navigateToMessageScreen}
-        >
+          onPress={this.navigateToMessageScreen}>
           <Image
             source={message}
             style={{
@@ -236,7 +234,7 @@ class MemberProfile extends React.Component {
   };
 
   navigateToMessageScreen = () => {
-    let oUserData = this.props.navigation.getParam('data');
+    let oUserData = this.props.route.params.data;
     let oUID = oUserData && oUserData.uid;
     let cUID = auth().currentUser.uid;
 
@@ -244,13 +242,13 @@ class MemberProfile extends React.Component {
       otheruser: {...oUserData},
     };
 
-    let fromPageHistory = this.props.navigation.getParam('fromPage');
+    let fromPageHistory = this.props.route.params.fromPage;
 
     this.props.navigation.navigate('Message', {
       data: {
-        data,
+        ...data,
         refKey: cUID < oUID ? cUID + oUID : oUID + cUID,
-        from: this.props.navigation.state.routeName,
+        from: null,
         member: oUserData,
       },
       fromPage: 'Member Profile',
@@ -259,24 +257,20 @@ class MemberProfile extends React.Component {
   };
 
   render() {
-    let data = this.props.navigation.getParam('data');
-    this.hideMessage = this.props.navigation.getParam('hideMessage');
-    this.fromPageHistory = this.props.navigation.getParam('fromPageHistory');
+    let data = this.props.route.params.data;
+    this.hideMessage = this.props.route.params.hideMessage;
+    console.log(this.props.route.params.hideMessage);
+    this.fromPageHistory = this.props.route.params.fromPageHistory;
+
     return (
       <View style={{flex: 1, paddingBottom: !this.hideMessage ? 100 : 0}}>
-        <MemberHeader
-          routeName={'Member Profile'}
-          {...this.props}
-          customGoBack={this.props.customGoBack}
-        />
+        <Header right {...this.props} data={data} refr />
         <ScrollView style={{flex: 1}}>
           {this.renderCard()}
           {this.renderTrustScore()}
           {this.renderInfo()}
         </ScrollView>
-        {this.hideMessage != 'hideMessage'
-          ? this.renderFloatingMessageIcon()
-          : null}
+        {!this.hideMessage ? this.renderFloatingMessageIcon() : null}
       </View>
     );
   }

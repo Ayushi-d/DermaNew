@@ -63,6 +63,9 @@ export default class MsgBox extends React.Component {
           console.log('msgBox _send _sendChatRequest err: ', err),
         );
     } else {
+      if (chat.inR.uid !== uid && !chat.isAcc) {
+        this.props._accept(refKey, ouid);
+      }
       database()
         .ref(`messages/${refKey}`)
         .push(
@@ -93,6 +96,8 @@ export default class MsgBox extends React.Component {
                 console.log('msgBox _send conversation uc update err: ', err);
               });
 
+            this._updateConLTime(refKey, uid, ouid);
+
             if (!chat.isAcc && chat.inR.uid === uid) {
               console.log('sending again!');
               database()
@@ -116,6 +121,27 @@ export default class MsgBox extends React.Component {
           },
         );
     }
+  };
+
+  _updateConLTime = (refKey, uid, ouid) => {
+    database()
+      .ref(`Users/${uid}/con/${refKey}/`)
+      .update({
+        lT: database.ServerValue.TIMESTAMP,
+      })
+      .then(() => {})
+      .catch((err) => console.log('msgBox.js, _updateConLTime uid err: ', err));
+
+    database()
+      .ref(`Users/${ouid}/con/${refKey}/`)
+      .update({
+        lT: database.ServerValue.TIMESTAMP,
+        uc: database.ServerValue.increment(1),
+      })
+      .then(() => {})
+      .catch((err) =>
+        console.log('msgBox.js, _updateConLTime ouid err: ', err),
+      );
   };
 
   render() {

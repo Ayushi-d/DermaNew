@@ -52,6 +52,7 @@ import VerifyEmail from '../components/VerifyEmail';
 import VerifyPhone from '../components/VerifyPhone';
 import DeclinedProfile from '../components/DeclinedProfile';
 import EditPreference from '../components/EditPreference';
+import MemberProfile from '../components/MemberProfile';
 
 // MSGR
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
@@ -413,6 +414,10 @@ class RootNav extends React.Component {
       <Stack.Screen name="Declined Profile">
         {(props) => <DeclinedProfile context={context} {...props} />}
       </Stack.Screen>
+
+      <Stack.Screen name="Member Profile">
+        {(props) => <MemberProfile context={context} {...props} />}
+      </Stack.Screen>
     </>
   );
 
@@ -443,6 +448,7 @@ class RootNav extends React.Component {
       savePPToFirebase: this._savePPToFirebase,
       _logout: this._logout,
     };
+
     return (
       <Stack.Navigator
         headerMode={'none'}

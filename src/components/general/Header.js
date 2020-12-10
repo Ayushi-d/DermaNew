@@ -27,13 +27,12 @@ const HeaderBG = () => (
  * @param {routeName} routeName -> Title of the header
  * @param navigationProps => {...props}
  */
-const HeaderMain = props => (
+const HeaderMain = (props) => (
   <LinearGradient
     colors={GRCOLOR}
     style={style.headerMain}
     start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-  >
+    end={{x: 1, y: 0}}>
     <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
       <Image source={menu} style={[style.image, {marginLeft: 10}]} />
     </TouchableOpacity>
@@ -45,19 +44,17 @@ const HeaderMain = props => (
   </LinearGradient>
 );
 
-const CustomHeaderStack = props => (
+const CustomHeaderStack = (props) => (
   <LinearGradient
     colors={GRCOLOR}
     style={[style.headerMain, {paddingHorizontal: 10}]}
     start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-  >
+    end={{x: 1, y: 0}}>
     <TouchableOpacity
       onPress={props.onPress}
       style={{
         padding: 5,
-      }}
-    >
+      }}>
       <Image
         source={back}
         style={[style.image, {marginLeft: 10, width: 15, height: 15}]}
@@ -104,18 +101,16 @@ class MemberHeader extends React.Component {
         colors={GRCOLOR}
         style={style.headerMain}
         start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-      >
+        end={{x: 1, y: 0}}>
         <TouchableOpacity onPress={props.customGoBack}>
           <Image source={back} style={[style.image, {marginLeft: 10}]} />
         </TouchableOpacity>
 
         <Text style={style.route}>{props.routeName}</Text>
         <TouchableOpacity
-          onPress={evt =>
+          onPress={(evt) =>
             this.showModal(evt.nativeEvent.pageX, evt.nativeEvent.pageY)
-          }
-        >
+          }>
           <Image source={blocked} style={[style.image, {marginRight: 10}]} />
         </TouchableOpacity>
         <ModalDrop
@@ -130,14 +125,14 @@ class MemberHeader extends React.Component {
           <BlockUser
             isVisible={this.state.blockShow}
             blockToggle={this.blockShow}
-            userToBlock={this.props.navigation.getParam('data').uid}
+            userToBlock={this.props.route.params.data.uid}
           />
         ) : null}
         {this.state.reportShow ? (
           <ReportModal
             isVisible={this.state.reportShow}
             reportToggle={this.reportShow}
-            userToReport={this.props.navigation.getParam('data').uid}
+            userToReport={this.props.route.params.data.uid}
           />
         ) : null}
       </LinearGradient>
@@ -179,10 +174,9 @@ class MemberHeaderForStack extends React.Component {
     return (
       <View>
         <TouchableOpacity
-          onPress={evt =>
+          onPress={(evt) =>
             this.showModal(evt.nativeEvent.pageX, evt.nativeEvent.pageY)
-          }
-        >
+          }>
           <Image source={blocked} style={[style.image, {marginRight: 10}]} />
         </TouchableOpacity>
         <ModalDrop

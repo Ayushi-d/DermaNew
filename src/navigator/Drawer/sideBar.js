@@ -98,6 +98,7 @@ class SidebarJSX extends React.Component {
           key={index}
           route={item.route}
           _navigateTo={this._navigateTo}
+          context={this.props.context}
         />
       );
     });
@@ -171,7 +172,23 @@ class SidebarJSX extends React.Component {
 }
 
 function DefaultItem(props) {
-  let {text, route, _navigateTo, _setExpanded} = props;
+  let {text, context, route, _navigateTo, _setExpanded} = props;
+
+  let msgsCount = 0;
+
+  let cons = context.user.con;
+  if (cons) {
+    let con = Object.keys(context.user.con);
+    con.forEach((c) => {
+      if (cons[c].sn) {
+        if (cons[c].uc) {
+          msgsCount += 1;
+        }
+      }
+    });
+  }
+
+  console.log(text);
   return (
     <View key={text} style={style.item}>
       <Image source={sidebar_icon[text]} style={style.image} />
@@ -204,6 +221,7 @@ function RenderExpanded(props) {
     context && context.user && context.user.lf && context.user.lf.c;
 
   let chatRequestCount = 0;
+  let msgsCount = 0;
 
   let cons = context.user.con;
   if (cons) {
@@ -211,6 +229,10 @@ function RenderExpanded(props) {
     con.forEach((c) => {
       if (!cons[c].sn) {
         chatRequestCount += 1;
+      } else {
+        if (cons[c].uc) {
+          msgsCount += 1;
+        }
       }
     });
   }

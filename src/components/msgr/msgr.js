@@ -125,19 +125,18 @@ export default class Msgr extends React.Component {
     if (user.con) {
       // console.log('ref', user.con[refKey]);
     }
-    if (
-      !chat.isAcc &&
-      user.con &&
-      Object.keys(user.con).indexOf(refKey) > -1 &&
-      !user.con[refKey].sn
-    ) {
-      console.log(user.uid, 'sent to me!');
+
+    if (user.con && Object.keys(user.con).indexOf(refKey) > -1) {
+      // console.log(user.uid, 'sent to me!');
       database()
         .ref(`Users/${uid}/con/${refKey}`)
         .update({
           sn: 1,
+          uc: 0,
         })
-        .then(() => {})
+        .then(() => {
+          console.log('msgs seen!');
+        })
         .catch((err) => {
           console.log('msgr.js _seen request error', err);
         });
@@ -200,9 +199,12 @@ export default class Msgr extends React.Component {
         .then(() => {
           database()
             .ref(`Users/${ouid}/con/${refKey}`)
-            .set('')
+            .set({
+              sn: 0,
+              lT: database.ServerValue.TIMESTAMP,
+            })
             .then(() => {
-              console.log('sent');
+              // console.log('sent');
               this.setState({chat: reqData});
             })
             .catch((err) =>
@@ -228,6 +230,32 @@ export default class Msgr extends React.Component {
 
   _keyExtractor = (item, index) => {
     return index.toString();
+  };
+
+  _accept = (refKey, ouid) => {
+    database()
+      .ref(`conversation/${refKey}`)
+      .update({isAcc: 1})
+      .then(() => {
+        let {chat} = this.state;
+        chat.isAcc = 1;
+        this._isMounted && this.setState({chat});
+      })
+      .catch((err) => {
+        console.log('msgr.js _accept err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/con/${refKey}`)
+      .set({sn: 1})
+      .then(() => {
+        let {chat} = this.state;
+        chat.isAcc = 1;
+        this._isMounted && this.setState({chat});
+      })
+      .catch((err) => {
+        console.log('msgr.js _accept ouser con err: ', err);
+      });
   };
 
   _renderMsg = ({item, index}) => {
@@ -270,6 +298,45 @@ export default class Msgr extends React.Component {
     );
   };
 
+  _renderHeader = () => {
+    let {chatCheck, chatExists, chat, msgs} = this.state;
+    let {user} = this.props.context;
+
+    return (
+      <>
+        {!chatExists ||
+        (chatExists && (chat.isAcc || chat.inR.uid === user.uid)) ? null : (
+          <View
+            style={{
+              width: '100%',
+              alignSelf: 'center',
+              padding: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              // backgroundColor: THEME.ACTIVE_COLOR,
+            }}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.reply,
+                {backgroundColor: THEME.GRADIENT_BG.END_COLOR},
+              ]}
+              onPress={this._replyToMessage}>
+              <Text
+                style={{
+                  color: THEME.WHITE,
+                  fontWeight: 'bold',
+                }}>
+                DECLINE
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </>
+    );
+  };
+
   render() {
     let {chatCheck, chatExists, chat, msgs} = this.state;
     let {user} = this.props.context;
@@ -281,6 +348,7 @@ export default class Msgr extends React.Component {
           data={msgs}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderMsg}
+          ListHeaderComponent={this._renderHeader}
           inverted
           style={{flex: 1}}
         />
@@ -289,21 +357,15 @@ export default class Msgr extends React.Component {
             <ActivityIndicator size={'small'} color={THEME.ACTIVE_COLOR} />
           </View>
         ) : (
-          <>
-            {!chatExists ||
-            (chatExists && (chat.isAcc || chat.inR.uid === user.uid)) ? (
-              <MsgBox
-                chatCheck={chatCheck}
-                chatExists={chatExists}
-                chat={chat}
-                _sendChatRequest={this._sendChatRequest}
-                _getMsgs={this._getMsgs}
-                {...this.props}
-              />
-            ) : (
-              <ReplyOrDecline />
-            )}
-          </>
+          <MsgBox
+            chatCheck={chatCheck}
+            chatExists={chatExists}
+            chat={chat}
+            _sendChatRequest={this._sendChatRequest}
+            _getMsgs={this._getMsgs}
+            _accept={this._accept}
+            {...this.props}
+          />
         )}
       </View>
     );
@@ -376,6 +438,7 @@ const styles = StyleSheet.create({
     // padding: 3,
     // backgroundColor: '#fff',
     paddingHorizontal: 5,
+    fontSize: 15,
   },
   msgTime: {
     fontSize: 10,

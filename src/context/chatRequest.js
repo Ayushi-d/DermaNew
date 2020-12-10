@@ -64,13 +64,11 @@ class ChatRequestContextProvider extends React.Component {
       const otherUID = key.split(this.uid).join('');
 
       // check if inR.uid == otherUID
-      const inR = await database()
-        .ref(`conversation/${key}`)
-        .child('inR')
-        .once('value');
+      const conv = await database().ref(`conversation/${key}`).once('value');
+      let con = conv.val();
 
-      if (!inR && !inR.val()) return false;
-      if (inR.val().uid != otherUID) {
+      if (!con && !con.inR) return false;
+      if (con.inR.uid != otherUID || con.isAcc) {
         return null;
       }
 

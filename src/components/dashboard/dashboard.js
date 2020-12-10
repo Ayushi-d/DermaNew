@@ -180,6 +180,7 @@ class Dashboard extends React.Component {
     let {user} = this.props.context;
 
     let chatRequestCount = 0;
+    let msgsCount = 0;
 
     let cons = user.con;
     if (cons) {
@@ -187,6 +188,10 @@ class Dashboard extends React.Component {
       con.forEach((c) => {
         if (!cons[c].sn) {
           chatRequestCount += 1;
+        } else {
+          if (cons[c].uc) {
+            msgsCount += 1;
+          }
         }
       });
     }
@@ -235,7 +240,7 @@ class Dashboard extends React.Component {
           }}>
           <View>
             <Image source={message} style={userLinks.image} />
-            {false ? (
+            {msgsCount ? (
               <View
                 style={{
                   position: 'absolute',
@@ -249,7 +254,7 @@ class Dashboard extends React.Component {
                   borderRadius: 20,
                 }}>
                 <Text style={{fontSize: 12, color: THEME.WHITE, padding: 5}}>
-                  {10}
+                  {msgsCount}
                 </Text>
               </View>
             ) : null}
