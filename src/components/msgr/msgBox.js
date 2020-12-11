@@ -4,10 +4,16 @@ import THEME from '../../config/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import database from '@react-native-firebase/database';
 
+function myTrim(x) {
+  return x.replace(/^\s+|\s+$/gm, '');
+}
+
 export default class MsgBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      msg: '',
+    };
     this._isMounted = false;
   }
 
@@ -146,6 +152,7 @@ export default class MsgBox extends React.Component {
 
   render() {
     let {msg} = this.state;
+    let disabled = !myTrim(msg);
     return (
       <View style={{...styles.container}}>
         <View style={styles.txtInpCon}>
@@ -158,7 +165,10 @@ export default class MsgBox extends React.Component {
             multiline
           />
         </View>
-        <Pressable style={styles.sendBtn} onPress={this._send}>
+        <Pressable
+          style={{...styles.sendBtn, opacity: disabled ? 0.7 : 1}}
+          onPress={this._send}
+          disabled={disabled}>
           <Ionicons name={'ios-send-sharp'} color={THEME.WHITE} size={27} />
         </Pressable>
       </View>
