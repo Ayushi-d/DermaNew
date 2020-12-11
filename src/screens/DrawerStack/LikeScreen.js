@@ -10,7 +10,13 @@ class LikeScreen extends React.Component {
     return (
       <UserInterectionProvider mainContext={root.context}>
         <UserInterectionContext.Consumer>
-          {(context) => <Likes {...this.props} context={context} />}
+          {(context) => (
+            <Likes
+              {...this.props}
+              appContext={root.context}
+              context={context}
+            />
+          )}
         </UserInterectionContext.Consumer>
       </UserInterectionProvider>
     );

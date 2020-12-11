@@ -176,7 +176,7 @@ class Cards extends React.Component {
           {!this.props.fromDeclined ? (
             <TouchableOpacity
               style={[style.button, style.decline]}
-              onPress={this.declineMessage}>
+              onPress={() => this.props._declineChat(this.props.messageRefKey)}>
               <Text style={{color: THEME.WHITE, fontWeight: 'bold'}}>
                 DECLINE
               </Text>

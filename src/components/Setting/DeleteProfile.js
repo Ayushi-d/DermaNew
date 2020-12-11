@@ -78,7 +78,7 @@ class DeleteProfile extends React.Component {
           alert(
             'Your profile has been submited for deletion.\nIt will be removed from the system soon and you will be informed accordingly.',
           );
-          this.props.navigation.navigate('Login');
+          this.props.context._logOut();
         });
       });
   };

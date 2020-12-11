@@ -176,19 +176,20 @@ function DefaultItem(props) {
 
   let msgsCount = 0;
 
-  let cons = context.user.con;
-  if (cons) {
-    let con = Object.keys(context.user.con);
-    con.forEach((c) => {
-      if (cons[c].sn) {
-        if (cons[c].uc) {
-          msgsCount += 1;
+  if (text === 'Messages') {
+    let cons = context.user.con;
+    if (cons) {
+      let con = Object.keys(context.user.con);
+      con.forEach((c) => {
+        if (cons[c].sn) {
+          if (cons[c].uc) {
+            msgsCount += 1;
+          }
         }
-      }
-    });
+      });
+    }
   }
 
-  console.log(text);
   return (
     <View key={text} style={style.item}>
       <Image source={sidebar_icon[text]} style={style.image} />
@@ -196,6 +197,8 @@ function DefaultItem(props) {
         onPress={() => _navigateTo(route)}
         style={{
           flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
           borderBottomColor: THEME.BORDERCOLOR,
           borderBottomWidth: 2,
         }}>
@@ -210,6 +213,7 @@ function DefaultItem(props) {
           ]}>
           {text}
         </Text>
+        {msgsCount ? <Text style={style.notification}>{msgsCount}</Text> : null}
       </TouchableOpacity>
     </View>
   );

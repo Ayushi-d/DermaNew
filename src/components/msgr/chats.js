@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Text, Image, FlatList, Pressable, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import Header from '../Headers/SettingsHeader';
 import database from '@react-native-firebase/database';
 import THEME from '../../config/theme';
@@ -35,6 +43,7 @@ export default class Chats extends React.Component {
     super(props);
     this.state = {
       chats: [],
+      loading: false,
     };
     this._isMounted = false;
   }
@@ -50,6 +59,7 @@ export default class Chats extends React.Component {
 
     // if (con && con.length) {
     // console.log('offline ', con);
+    this._isMounted && this.setState({loading: true});
     this.consListerner = database()
       .ref(`Users/${user.uid}`)
       .child('con')
@@ -62,6 +72,12 @@ export default class Chats extends React.Component {
         // console.log(conSnap);
         // console.log('snap!', conSnap.val());
         let cons = conSnap.val();
+
+        if (!cons) {
+          this._isMounted && this.setState({chats: [], loading: false});
+          return;
+        }
+
         let conKeys = Object.keys(cons);
         for (let con of conKeys) {
           let chatSnap = await database()
@@ -78,6 +94,13 @@ export default class Chats extends React.Component {
             continue;
           }
           let ouid = con.split(user.uid).join('');
+
+          // check if blocked!
+          if (user.bb && user.bb[ouid]) {
+            continue;
+          }
+          // check if blocked!
+
           let cUserSnap = await database()
             .ref(`Users/${ouid}`)
             .once('value')
@@ -92,9 +115,12 @@ export default class Chats extends React.Component {
         }
 
         // console.log('chats: ', chats.length);
-        this._isMounted && this.setState({chats});
+        this._isMounted && this.setState({chats, loading: false});
       },
-      (err) => console.log('chats.js _getChats err: ', err),
+      (err) => {
+        console.log('chats.js _getChats err: ', err);
+        this._isMounted && this.setState({loading: false});
+      },
     );
     // }
   };
@@ -113,11 +139,17 @@ export default class Chats extends React.Component {
   _renderChat = ({item, index}) => <RenderChat chat={item} {...this.props} />;
 
   render() {
-    let {chats} = this.state;
+    let {chats, loading} = this.state;
     return (
       <View style={styles.container}>
         <Header title={'MESSAGES'} {...this.props} />
-
+        {loading ? (
+          <ActivityIndicator
+            size={27}
+            color={THEME.ACTIVE_COLOR}
+            style={{marginTop: 5, marginBottom: 5}}
+          />
+        ) : null}
         <FlatList
           data={chats}
           keyExtractor={this._keyExtractor}
@@ -135,6 +167,7 @@ function RenderChat(props) {
   let {user} = context;
 
   let unRead = chat[user.uid].uc;
+
   return (
     <Pressable
       style={styles.chatCon}
@@ -157,7 +190,7 @@ function RenderChat(props) {
           <View style={styles.chatContentTop}>
             <Text
               style={{...styles.name, fontWeight: unRead ? 'bold' : 'normal'}}>
-              {cUser.nm}
+              {cUser.sn}
             </Text>
             <View style={styles.tScore}>
               <Text style={styles.tScoreTxt}>TRUST SCORE</Text>
@@ -174,9 +207,12 @@ function RenderChat(props) {
           <View style={styles.chatBottomCon}>
             <Text
               style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
-              {lm.sId === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`}{' '}
+              {lm.sid === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`}{' '}
               {lm.msg}
             </Text>
+            {chat[user.uid] && chat[user.uid].uc ? (
+              <Text style={styles.countBubble}>{chat[user.uid].uc}</Text>
+            ) : null}
           </View>
         </View>
       </View>
@@ -259,9 +295,19 @@ const styles = StyleSheet.create({
   chatBottomCon: {
     // marginLeft: 47,
     paddingBottom: 5,
+    flexDirection: 'row',
   },
   lMsg: {
+    flex: 1,
     fontSize: 13,
     color: '#888',
+  },
+  countBubble: {
+    fontSize: 10,
+    paddingHorizontal: 6,
+    textAlignVertical: 'center',
+    color: '#fff',
+    borderRadius: 20,
+    backgroundColor: THEME.ACTIVE_COLOR,
   },
 });

@@ -42,6 +42,8 @@ import TermsOfUse from '../components/login/terms';
 import SafetyGuidelines from '../components/Setting/SafetyGuideline';
 import Help from '../components/Setting/help';
 import FAQs from '../components/Setting/faqs';
+import About from '../components/Setting/About';
+import BetterMatches from '../components/Setting/BetterMatches';
 
 // Profile
 import MyProfile from '../components/MyProfile';
@@ -140,7 +142,7 @@ class RootNav extends React.Component {
           .then((res) => {
             if (res.exists) {
               let userDat = {...this.state.user, ...res.user};
-              // this.setState({user: userDat, isLoggedIn: true});
+              this.setState({user: userDat, isLoggedIn: true});
               this._callListeners(userDat);
             } else {
               this.setState({
@@ -189,54 +191,54 @@ class RootNav extends React.Component {
 
   _removeListeners = () => {
     this.userRef && this.userRef.off('value');
-    this._msgListeners.length &&
-      this._msgListeners.forEach((listener) => {
-        listener.off('value');
-        console.log('removing msglistener!');
-      });
+    // this._msgListeners.length &&
+    //   this._msgListeners.forEach((listener) => {
+    //     listener.off('value');
+    //     console.log('removing msglistener!');
+    //   });
   };
 
   _callUserListener = (user) => {
     this.userRef.on('value', (snapshot) => {
       let userDat = snapshot.val();
       this.setState({user: userDat});
-      this._checkForMsgs(userDat);
-      console.log('calling!');
+      // this._checkForMsgs(userDat);
+      // console.log('calling!');
       // console.log(userDat);
     });
   };
 
-  _checkForMsgs = (user) => {
-    this._removeMsgListeners();
-    if (user.con && user.con.length) {
-      Object.keys(user.con).forEach((con) => {
-        let msgListen = database().ref(`conversation/${con}/${user.uid}`);
-        msgListen.on(
-          'value',
-          (snap) => {
-            let conv = snap.val();
-            console.log('updated conv!: ', conv);
-            if (conv.isAcc && !this._msgListeners[conv.key]) {
-              this._msgListeners[conv.key](msgListen);
-              console.log('addeding listener!');
-            } else {
-              msgListen.off('value');
-            }
-          },
-          (err) => {
-            console.log('msgListener err: ', err);
-          },
-        );
-      });
-    }
-  };
+  // _checkForMsgs = (user) => {
+  //   this._removeMsgListeners();
+  //   if (user.con && user.con.length) {
+  //     Object.keys(user.con).forEach((con) => {
+  //       let msgListen = database().ref(`conversation/${con}/${user.uid}`);
+  //       msgListen.on(
+  //         'value',
+  //         (snap) => {
+  //           let conv = snap.val();
+  //           console.log('updated conv!: ', conv);
+  //           if (conv.isAcc && !this._msgListeners[conv.key]) {
+  //             this._msgListeners[conv.key](msgListen);
+  //             console.log('addeding listener!');
+  //           } else {
+  //             msgListen.off('value');
+  //           }
+  //         },
+  //         (err) => {
+  //           console.log('msgListener err: ', err);
+  //         },
+  //       );
+  //     });
+  //   }
+  // };
 
-  _removeMsgListeners = () => {
-    this._msgListeners.length &&
-      this._msgListeners.forEach((mlistener) => {
-        mlistener.off('value');
-      });
-  };
+  // _removeMsgListeners = () => {
+  //   this._msgListeners.length &&
+  //     this._msgListeners.forEach((mlistener) => {
+  //       mlistener.off('value');
+  //     });
+  // };
 
   changeDP = async (key, url) => {
     try {
@@ -380,6 +382,12 @@ class RootNav extends React.Component {
       <Stack.Screen name="Frequently Asked Question">
         {(props) => <FAQs context={context} {...props} />}
       </Stack.Screen>
+      <Stack.Screen name="About">
+        {(props) => <About context={context} {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="BetterMatches">
+        {(props) => <BetterMatches context={context} {...props} />}
+      </Stack.Screen>
       <Stack.Screen name="Change Mobile Number">
         {(props) => <ChangeMobileNumber context={context} {...props} />}
       </Stack.Screen>
@@ -427,7 +435,7 @@ class RootNav extends React.Component {
         {(props) => <Chats context={context} {...props} />}
       </Stack.Screen>
       <Stack.Screen name="Chat Request">
-        {(props) => <ChatScreen context={context} {...props} />}
+        {(props) => <ChatRqsts context={context} {...props} />}
       </Stack.Screen>
       <Stack.Screen name="Message">
         {(props) => <Msgr context={context} {...props} />}
@@ -492,10 +500,11 @@ class RootNav extends React.Component {
             </Stack.Screen>
 
             {this._profileStack(context)}
-            {this._settingsStack(context)}
             {this._msgrStack(context)}
           </>
         )}
+
+        {this._settingsStack(context)}
       </Stack.Navigator>
     );
   }

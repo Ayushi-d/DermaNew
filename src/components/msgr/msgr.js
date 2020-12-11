@@ -99,7 +99,7 @@ export default class Msgr extends React.Component {
     // console.log(after);
     this.msgsRef = database().ref(`messages/${refKey}`);
     this.msgsRef
-      .startAt(parseInt(after.tp) + 1)
+      .startAt(after ? parseInt(after.tp) + 1 : 0)
       .orderByChild('tp')
       // .startAt(after)
       .limitToLast(5)
@@ -258,6 +258,50 @@ export default class Msgr extends React.Component {
       });
   };
 
+  _declineChat = () => {
+    let {context, route, navigation} = this.props;
+    let {user} = context;
+    let {refKey} = route.params.data;
+    let oUser = route.params.data.otheruser;
+    let ouid = oUser.uid;
+
+    database()
+      .ref(`conversation/${refKey}`)
+      .remove()
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat conversation remove err: ', err);
+      });
+
+    database()
+      .ref(`messages/${refKey}`)
+      .remove()
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat messages remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${user.uid}/con/${refKey}`)
+      .remove()
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/con remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/con/${refKey}`)
+      .remove()
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/con remove err: ', err);
+      });
+
+    if (navigation.canGoBack()) {
+      navigation.pop();
+    }
+  };
+
   _renderMsg = ({item, index}) => {
     let {user} = this.props.context;
     let ouser = this.props.route.params.data.otheruser;
@@ -305,7 +349,8 @@ export default class Msgr extends React.Component {
     return (
       <>
         {!chatExists ||
-        (chatExists && (chat.isAcc || chat.inR.uid === user.uid)) ? null : (
+        (chatExists &&
+          (chat.isAcc || (chat.inR && chat.inR.uid === user.uid))) ? null : (
           <View
             style={{
               width: '100%',
@@ -322,7 +367,7 @@ export default class Msgr extends React.Component {
                 styles.reply,
                 {backgroundColor: THEME.GRADIENT_BG.END_COLOR},
               ]}
-              onPress={this._replyToMessage}>
+              onPress={this._declineChat}>
               <Text
                 style={{
                   color: THEME.WHITE,

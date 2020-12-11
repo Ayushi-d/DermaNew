@@ -17,7 +17,10 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import CountryModal from './countryModal';
 
+import {GradientText} from '../../../components/general/gradientText';
+
 import auth from '@react-native-firebase/auth';
+import {Loader} from '../../../components/modals';
 
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
@@ -256,7 +259,8 @@ export default class Phone extends React.Component {
     );
     return (
       <View style={{...styles.container, alignItems: 'center'}}>
-        <Title style={{color: '#000'}}>PHONE NUMBER</Title>
+        {/* <Title style={{color: '#000'}}>PHONE NUMBER</Title> */}
+        <GradientText text={'MOBILE NUMBER'} />
 
         <View
           style={{
@@ -325,7 +329,8 @@ export default class Phone extends React.Component {
             <Ionicons name={"ios-phone-portrait-outline"} color={"#fff"} size={117} />
             </View> */}
         <View style={{...styles.container}}>
-          <Title style={{color: '#000'}}>VERIFY OTP</Title>
+          {/* <Title style={{color: '#000'}}>VERIFY OTP</Title> */}
+          <GradientText text={'MOBILE NUMBER'} />
           <OTPInputView
             pinCount={6}
             autoFocusOnLoad
@@ -363,12 +368,13 @@ export default class Phone extends React.Component {
   };
 
   render() {
-    let {otpsent} = this.state;
+    let {otpsent, loading} = this.state;
     return (
       <DermaBackground>
         <View style={{flex: 1, padding: 25}}>
           {otpsent ? this._renderOTP() : this._renderPhone()}
         </View>
+        <Loader isVisible={loading} />
       </DermaBackground>
     );
   }

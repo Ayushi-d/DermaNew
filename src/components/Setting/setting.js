@@ -61,7 +61,7 @@ const data = [
     'How to get better matches',
     matches,
     function () {
-      this.navigateTo();
+      this.navigateTo('BetterMatches');
     },
   ],
   [
@@ -75,7 +75,7 @@ const data = [
     'About',
     about,
     function () {
-      this.navigateTo();
+      this.navigateTo('About');
     },
   ],
   [

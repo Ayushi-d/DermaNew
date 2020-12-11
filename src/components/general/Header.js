@@ -12,7 +12,7 @@ import BlockUser from '../modals/block';
 import ReportModal from '../modals/report';
 
 let GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
-
+// let GRCOLOR = THEME.GRADIENT_BG.PAIR;
 const HeaderBG = () => (
   <LinearGradient
     colors={GRCOLOR}

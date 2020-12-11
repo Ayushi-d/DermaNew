@@ -123,7 +123,7 @@ export default class MsgHeader extends React.Component {
 
               <View style={styles.headerTxt}>
                 <Text style={styles.title}>
-                  {oUser ? (oUser.nm ? oUser.nm : '') : ''}
+                  {oUser ? (oUser.sn ? oUser.sn : '') : ''}
                 </Text>
                 {/* <Text style={styles.status}>Online</Text> */}
               </View>

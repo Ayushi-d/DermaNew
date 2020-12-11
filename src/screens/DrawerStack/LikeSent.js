@@ -7,10 +7,17 @@ import LikeSent from '../../components/Likes/likeSent';
 class LikeSentScreen extends React.Component {
   render() {
     let {root} = this.props;
+
     return (
-      <UserInterectionProvider mainContext={root.user}>
+      <UserInterectionProvider mainContext={root.context}>
         <UserInterectionContext.Consumer>
-          {(context) => <LikeSent context={context} {...this.props} />}
+          {(context) => (
+            <LikeSent
+              appContext={root.context}
+              {...this.props}
+              context={context}
+            />
+          )}
         </UserInterectionContext.Consumer>
       </UserInterectionProvider>
     );
