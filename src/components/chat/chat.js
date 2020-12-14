@@ -138,11 +138,11 @@ class Chat extends React.Component {
               data={data[item].user_data}
               hideButton={true}
               sent={this.state.tab == 1}
-              message={data[item].lm.msg}
+              message={data[item].lm.mg}
               fromChat={true}
               navigation={this.props.navigation}
               likesMe={likesMe}
-              dateToShow={moment(new Date(data[item].lm.tp)).calendar()}
+              dateToShow={moment(new Date(data[item].lm.tp * 1000)).calendar()}
               messageRefKey={data[item].keyRef}
               fromPage={'Chat Request'}
             />

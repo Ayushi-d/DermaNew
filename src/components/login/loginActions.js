@@ -12,20 +12,20 @@ import HelpIcon from '../../assets/login/ic_help.png';
 import THEME from '../../config/theme';
 import HelpInfo from '../modals/help';
 import phone from '../../assets/login/ic_phone.png';
-import { normalize } from './getScale';
+import {normalize} from './getScale';
 
-const FacebookButton = props => (
+const FacebookButton = (props) => (
   <View
     style={{
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 20,
       maxWidth: '100%',
-    }}
-  >
+    }}>
     <View style={[loginAction.button]}>
       <TouchableOpacity style={[loginAction.fb]} onPress={props.onPress}>
-        <View style={{flexDirection: 'row', marginRight: 20, alignItems: 'center'}}>
+        <View
+          style={{flexDirection: 'row', marginRight: 20, alignItems: 'center'}}>
           <Image
             source={FacebookLogo}
             style={{
@@ -48,10 +48,8 @@ const FacebookButton = props => (
           style={{
             color: THEME.WHITE,
             fontWeight: '600',
-          fontSize: normalize(12)
-
-          }}
-        >
+            fontSize: normalize(12),
+          }}>
           CONTINUE WITH FACEBOOK
         </Text>
       </TouchableOpacity>
@@ -64,8 +62,7 @@ const FacebookButton = props => (
         alignItems: 'center',
         justifyContent: 'center',
       }}
-      onPress={props.toggleHelp}
-    >
+      onPress={props.toggleHelp}>
       <Image
         source={HelpIcon}
         style={{
@@ -79,7 +76,7 @@ const FacebookButton = props => (
   </View>
 );
 
-const PhoneButton = props => (
+const PhoneButton = (props) => (
   <View style={[loginAction.button, {marginBottom: 20}]}>
     <TouchableOpacity
       onPress={props.phoneLogin}
@@ -89,8 +86,7 @@ const PhoneButton = props => (
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-      }}
-    >
+      }}>
       <Image
         source={phone}
         style={{
@@ -104,16 +100,15 @@ const PhoneButton = props => (
       <Text
         style={{
           color: THEME.WHITE,
-          fontSize: normalize(12)
-        }}
-      >
+          fontSize: normalize(12),
+        }}>
         CONTINUE WITH PHONE NUMBER
       </Text>
     </TouchableOpacity>
   </View>
 );
 
-const ContactUs = props => (
+const ContactUs = (props) => (
   <View style={loginAction.contactUs}>
     <Text
       style={{...loginAction.loginText, ...loginAction.underline}}
@@ -122,14 +117,13 @@ const ContactUs = props => (
           hideHeader: true,
           from: 'Contact Us Login',
         })
-      }
-    >
+      }>
       Contact Us
     </Text>
   </View>
 );
 
-const TermsConditions = props => (
+const TermsConditions = (props) => (
   <View style={loginAction.terms}>
     <Text style={loginAction.loginText}>
       By Tapping continue you agree with our
@@ -137,15 +131,13 @@ const TermsConditions = props => (
     <View style={loginAction.privacy}>
       <Text
         style={{...loginAction.loginText, ...loginAction.underline}}
-        onPress={props.terms}
-      >
+        onPress={props.terms}>
         Terms of Use
       </Text>
       <Text style={loginAction.loginText}> & </Text>
       <Text
         style={{...loginAction.loginText, ...loginAction.underline}}
-        onPress={() => props.navigateTo('Privacy Policy', {from: 'Login'})}
-      >
+        onPress={() => props.navigateTo('PrivacyPolicy', {from: 'Login'})}>
         Privacy Policy
       </Text>
     </View>
@@ -188,7 +180,7 @@ class LoginAction extends React.Component {
   }
 }
 
-loginAction = StyleSheet.create({
+const loginAction = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',

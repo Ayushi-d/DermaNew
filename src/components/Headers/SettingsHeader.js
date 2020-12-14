@@ -16,6 +16,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import menu from '../../assets/general/ic_menu.png';
 
+import LinearGradient from 'react-native-linear-gradient';
+
+let GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
+
 export default class DrawerStackHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +48,12 @@ export default class DrawerStackHeader extends React.Component {
     let {title, type} = this.props;
     return (
       <View style={{...styles.header}}>
-        <DermaBg>
+        {/* <DermaBg> */}
+        <LinearGradient
+          colors={GRCOLOR}
+          style={styles.headerMain}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <Pressable style={styles.iconBtn} onPress={this._goBack}>
               {type ? (
@@ -62,8 +71,10 @@ export default class DrawerStackHeader extends React.Component {
               <Entypo name={'home'} color={THEME.WHITE} size={28} />
             </Pressable>
           </View>
-        </DermaBg>
-        <StatusBar barStyle={'light-content'} />
+        </LinearGradient>
+
+        {/* </DermaBg> */}
+        {/* <StatusBar barStyle={'light-content'} /> */}
       </View>
     );
   }
@@ -72,6 +83,22 @@ export default class DrawerStackHeader extends React.Component {
 const styles = StyleSheet.create({
   header: {
     height: 50,
+  },
+  headerMain: {
+    height: 50,
+    width: '100%',
+    alignItems: 'center',
+    flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
+    alignSelf: 'center',
+    backgroundColor: THEME.WHITE,
   },
   iconBtn: {
     alignItems: 'center',

@@ -76,6 +76,7 @@ class MyProfileJSX extends React.Component {
 
   componentDidMount() {
     let tab = this.props.route.params.id;
+
     if (tab == 0 || tab == 1) {
       this.setState({tab});
     }
@@ -87,6 +88,7 @@ class MyProfileJSX extends React.Component {
 
   UNSAFE_componentWillReceiveProps(props) {
     let tab = this.props.route.params.id;
+
     if (tab == 0 || tab == 1) {
       this.setState({tab});
     }
@@ -323,7 +325,7 @@ class MyProfileJSX extends React.Component {
   render() {
     return (
       <>
-        <Header title={'PROFILE'} {...this.props} />
+        <Header title={'MY PROFILE'} type {...this.props} />
         <ScrollView
           style={{flex: 1}}
           ref={(ref) => {

@@ -20,6 +20,10 @@ import {Menu, Divider} from 'react-native-paper';
 import BlockModal from '../modals/block';
 import ReportModal from '../modals/report';
 
+import LinearGradient from 'react-native-linear-gradient';
+
+let GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
+
 export default class MsgHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -102,7 +106,11 @@ export default class MsgHeader extends React.Component {
 
     return (
       <View style={{...styles.header}}>
-        <DermaBg>
+        <LinearGradient
+          colors={GRCOLOR}
+          style={styles.headerMain}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <Pressable style={styles.iconBtn} onPress={this._goBack}>
               {type ? (
@@ -165,8 +173,8 @@ export default class MsgHeader extends React.Component {
               </Pressable>
             )}
           </View>
-        </DermaBg>
-        <StatusBar barStyle={'light-content'} />
+        </LinearGradient>
+        {/* <StatusBar barStyle={'light-content'} /> */}
         <BlockModal
           isVisible={blockOpen}
           userToBlock={oUser.uid}
@@ -187,6 +195,22 @@ export default class MsgHeader extends React.Component {
 const styles = StyleSheet.create({
   header: {
     height: 50,
+  },
+  headerMain: {
+    height: 50,
+    width: '100%',
+    alignItems: 'center',
+    flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
+    alignSelf: 'center',
+    backgroundColor: THEME.WHITE,
   },
   iconBtn: {
     alignItems: 'center',

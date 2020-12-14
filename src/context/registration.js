@@ -89,6 +89,12 @@ class RegistrationHOC extends React.Component {
   _saveRegistrationToFirebase = async (obj) => {
     console.log(obj);
     let ref = database().ref('Users');
+    console.log(obj);
+    if (!obj.uid) {
+      alert('Something went wrong, Please try again.');
+      this.props.navigation.pop();
+      return;
+    }
 
     let data = await ref.child(obj.uid).set(obj, (err) => {
       if (err) return err;

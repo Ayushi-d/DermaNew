@@ -183,7 +183,7 @@ export default class Msgr extends React.Component {
     let reqData = {
       ...dat,
       inR: {
-        tp: database.ServerValue.TIMESTAMP,
+        tp: new Date().getTime() / 1000,
         uid: uid,
       },
       isAcc: 0,
@@ -201,7 +201,7 @@ export default class Msgr extends React.Component {
             .ref(`Users/${ouid}/con/${refKey}`)
             .set({
               sn: 0,
-              lT: database.ServerValue.TIMESTAMP,
+              lT: new Date().getTime() / 1000,
             })
             .then(() => {
               // console.log('sent');
@@ -331,11 +331,11 @@ export default class Msgr extends React.Component {
               }}
             />
             {/* <View style={{flex: 1}}> */}
-            <Text style={{...styles.msgTxt}}>{msg.msg}</Text>
+            <Text style={{...styles.msgTxt}}>{msg.mg}</Text>
             {/* </View> */}
           </View>
           <Text style={{...styles.msgTime}}>
-            {moment(new Date(msg.tp)).format('LT')}
+            {moment(new Date(msg.tp * 1000)).format('LT')}
           </Text>
         </View>
       </View>

@@ -39,10 +39,12 @@ class Carousel extends React.Component {
           scrollEventThrottle={10}
           decelerationRate="fast"
           scrollEventThrottle={16}
-          onScroll={Animated.event([
-            {nativeEvent: {contentOffset: {x: this.scrollX}}},
-          ])}
-        >
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: this.scrollX}}}],
+            {
+              useNativeDriver: false,
+            },
+          )}>
           {[
             <AppInfoText key={1} text={Info[0]} />,
             <AppInfoText key={2} text={Info[1]} />,
@@ -63,8 +65,7 @@ const Tags = () => (
         fontWeight: '600',
         color: THEME.WHITE,
         marginBottom: 10,
-      }}
-    >
+      }}>
       Skin Condition wise matching profile
     </Text>
     <View style={carousel.sameHeight}>
@@ -91,14 +92,14 @@ const Tags = () => (
   </View>
 );
 
-const AppInfoText = props => (
+const AppInfoText = (props) => (
   <View style={carousel.fullWidth}>
     <Text style={carousel.info}>{props.text}</Text>
     <Image source={DermaLogo} style={carousel.logo} />
   </View>
 );
 
-const Pager = props => (
+const Pager = (props) => (
   <View style={carousel.pager}>
     {Info.map((_, i) => {
       let opacity = props.position.interpolate({

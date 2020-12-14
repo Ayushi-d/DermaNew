@@ -142,7 +142,7 @@ export default class Chats extends React.Component {
     let {chats, loading} = this.state;
     return (
       <View style={styles.container}>
-        <Header title={'MESSAGES'} {...this.props} />
+        <Header title={'MESSAGES'} type {...this.props} />
         {loading ? (
           <ActivityIndicator
             size={27}
@@ -201,27 +201,29 @@ function RenderChat(props) {
               </LinearGradient>
             </View>
             <Text style={styles.cTime}>
-              {moment(new Date(lm.tp)).calendar()}
+              {moment(new Date(lm.tp * 1000)).calendar()}
             </Text>
           </View>
-          <View style={styles.chatBottomCon}>
+          {/* <View style={styles.chatBottomCon}>
             <Text
               style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
               {lm.sid === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`}{' '}
-              {lm.msg}
+              {lm.mg}
             </Text>
             {chat[user.uid] && chat[user.uid].uc ? (
               <Text style={styles.countBubble}>{chat[user.uid].uc}</Text>
             ) : null}
-          </View>
+          </View> */}
         </View>
       </View>
-      {/* <View style={styles.chatBottomCon}>
-        <Text style={styles.lMsg}>
-          {lm.sId === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`}{' '}
-          {lm.msg}
+      <View style={{...styles.chatBottomCon, marginLeft: 55, paddingRight: 5}}>
+        <Text style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
+          {lm.sid === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`} {lm.mg}
         </Text>
-      </View> */}
+        {chat[user.uid] && chat[user.uid].uc ? (
+          <Text style={styles.countBubble}>{chat[user.uid].uc}</Text>
+        ) : null}
+      </View>
     </Pressable>
   );
 }
@@ -247,9 +249,9 @@ const styles = StyleSheet.create({
     // paddingBottom: 0,
   },
   propic: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   chatContent: {
     flex: 1,

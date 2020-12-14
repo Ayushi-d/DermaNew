@@ -47,7 +47,7 @@ const data = [
     'Help',
     help,
     function () {
-      this.props.navigation.navigate('Help', {hideHeader: true});
+      this.props.navigation.navigate('Help Screen', {hideHeader: true});
     },
   ],
   [

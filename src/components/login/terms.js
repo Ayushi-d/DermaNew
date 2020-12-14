@@ -23,15 +23,8 @@ class TermsOfUse extends React.Component {
   };
 
   handleBackButton = () => {
-    let from = this.props.route.params.from;
-
-    if (from) {
-      this.props.navigation.navigate(from);
-      return true;
-    } else {
-      this.props.navigation.goBack();
-      return true;
-    }
+    this.props.navigation.goBack();
+    return;
   };
 
   rules = {

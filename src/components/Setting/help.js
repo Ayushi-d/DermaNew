@@ -122,18 +122,9 @@ class Help extends React.Component {
   };
 
   navigateToFAQs = () => {
-    let from = this.props.route.params.from;
-
-    if (from == 'Contact Us Login') {
-      this.props.navigation.navigate('FAQs', {
-        hideHeader: true,
-        from,
-      });
-    } else {
-      this.props.navigation.navigate('Frequently Asked Question', {
-        hideHeader: true,
-      });
-    }
+    this.props.navigation.navigate('Frequently Asked Question', {
+      hideHeader: true,
+    });
   };
 
   renderHelpForm = () => {

@@ -39,10 +39,10 @@ export default class MsgBox extends React.Component {
     let ouid = oUser.uid;
 
     let lMsg = {
-      msg: msg,
+      mg: msg,
       rid: ouid,
       sid: uid,
-      tp: database.ServerValue.TIMESTAMP,
+      tp: new Date().getTime() / 1000,
       x: 0,
     };
 
@@ -133,7 +133,7 @@ export default class MsgBox extends React.Component {
     database()
       .ref(`Users/${uid}/con/${refKey}/`)
       .update({
-        lT: database.ServerValue.TIMESTAMP,
+        lT: new Date().getTime() / 1000,
       })
       .then(() => {})
       .catch((err) => console.log('msgBox.js, _updateConLTime uid err: ', err));
@@ -141,7 +141,7 @@ export default class MsgBox extends React.Component {
     database()
       .ref(`Users/${ouid}/con/${refKey}/`)
       .update({
-        lT: database.ServerValue.TIMESTAMP,
+        lT: new Date().getTime() / 1000,
         uc: database.ServerValue.increment(1),
       })
       .then(() => {})

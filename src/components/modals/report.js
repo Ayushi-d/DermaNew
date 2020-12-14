@@ -63,7 +63,7 @@ class ReportModal extends React.Component {
             ru: userToReport,
             su: user.uid,
             sub: reason,
-            tp: database.ServerValue.TIMESTAMP,
+            tp: new Date().getTime() / 1000,
           },
           (err) => {
             console.log(err);

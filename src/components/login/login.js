@@ -42,7 +42,7 @@ class Login extends React.Component {
   }
 
   navigateToTerms = () => {
-    this.props.navigation.navigate('Terms of Use', {from: 'Login'});
+    this.props.navigation.navigate('TermsofUse', {from: 'Login'});
   };
 
   navigateTo = (route, obj) => {
@@ -50,7 +50,7 @@ class Login extends React.Component {
   };
 
   navigateToPhone = () => {
-    this.props.navigation.navigate('Phone');
+    this.props.navigation.navigate('PhoneLogin');
   };
 
   facebookLogin = async () => {

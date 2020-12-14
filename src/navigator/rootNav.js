@@ -4,8 +4,9 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import Registration from '../screens/Register/register';
-import Login from '../screens/Register/login';
-import PhoneLogin from '../screens/Register/PhoneLogin';
+// import Login from '../screens/Register/login';
+import Login from '../components/login';
+import PhoneLogin from '../components/PhoneLogin';
 import {Appbar} from 'react-native-paper';
 
 import CheckUser from '../helpers/login';
@@ -161,6 +162,28 @@ class RootNav extends React.Component {
                   isDeleted,
                   data: {...this.state},
                 });
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    });
+  };
+
+  setData = ({providerId, email, displayName, uid, phone}) => {
+    this._isMounted &&
+      this.setState({user: {providerId, email, displayName, uid, phone}});
+    return new Promise((resolve, reject) => {
+      this.setState({providerId, email, uid, displayName, phone}, () => {
+        CheckUser.isRegistered(uid)
+          .then((res) => {
+            CheckUser.isDeleted(uid)
+              .then((isDeleted) => {
+                resolve({isRegistered: res, isDeleted, data: {...this.state}});
               })
               .catch((err) => {
                 reject(err);
@@ -349,13 +372,13 @@ class RootNav extends React.Component {
 
   _loginRegisterStack = (context) => (
     <>
-      <Stack.Screen name="Login">
+      <Stack.Screen name="Login" options={{gestureEnabled: false}}>
         {(props) => <Login context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="PhoneLogin">
+      <Stack.Screen name="PhoneLogin" options={{gestureEnabled: false}}>
         {(props) => <PhoneLogin context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="Registration">
+      <Stack.Screen name="Registration" options={{gestureEnabled: false}}>
         {(props) => <RegisterationScreen context={context} {...props} />}
       </Stack.Screen>
     </>
@@ -379,7 +402,7 @@ class RootNav extends React.Component {
       <Stack.Screen name="Safety Guidelines">
         {(props) => <SafetyGuidelines context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="Help">
+      <Stack.Screen name="Help Screen">
         {(props) => <Help context={context} {...props} />}
       </Stack.Screen>
       <Stack.Screen name="Frequently Asked Question">
@@ -399,9 +422,9 @@ class RootNav extends React.Component {
 
   _profileStack = (context) => (
     <>
-      <Stack.Screen name="My Profile">
+      {/* <Stack.Screen name="My Profile">
         {(props) => <MyProfile context={context} {...props} />}
-      </Stack.Screen>
+      </Stack.Screen> */}
       <Stack.Screen name="Manage Photos">
         {(props) => <ManagePhotos context={context} {...props} />}
       </Stack.Screen>
@@ -422,9 +445,9 @@ class RootNav extends React.Component {
         {(props) => <EditPreference context={context} {...props} />}
       </Stack.Screen>
 
-      <Stack.Screen name="Declined Profile">
+      {/* <Stack.Screen name="Declined Profile">
         {(props) => <DeclinedProfile context={context} {...props} />}
-      </Stack.Screen>
+      </Stack.Screen> */}
 
       <Stack.Screen name="Member Profile">
         {(props) => <MemberProfile context={context} {...props} />}
@@ -434,12 +457,12 @@ class RootNav extends React.Component {
 
   _msgrStack = (context) => (
     <>
-      <Stack.Screen name="MessageBoard">
+      {/* <Stack.Screen name="MessageBoard">
         {(props) => <Chats context={context} {...props} />}
-      </Stack.Screen>
-      <Stack.Screen name="Chat Request">
+      </Stack.Screen> */}
+      {/* <Stack.Screen name="Chat Request">
         {(props) => <ChatRqsts context={context} {...props} />}
-      </Stack.Screen>
+      </Stack.Screen> */}
       <Stack.Screen name="Message">
         {(props) => <Msgr context={context} {...props} />}
       </Stack.Screen>
@@ -457,6 +480,7 @@ class RootNav extends React.Component {
       verifyFB: this._verifyFB,
       saveToFirebase: this._saveToFirebase,
       savePPToFirebase: this._savePPToFirebase,
+      setData: this.setData,
       _logout: this._logout,
     };
 
@@ -494,9 +518,9 @@ class RootNav extends React.Component {
             {/* <Stack.Screen name="Member Profile">
           {(props) => <DrawerScreeen context={context} {...props} />}
         </Stack.Screen> */}
-            <Stack.Screen name="Search">
+            {/* <Stack.Screen name="Search">
               {(props) => <Search context={context} {...props} />}
-            </Stack.Screen>
+            </Stack.Screen> */}
 
             <Stack.Screen name="Search Result">
               {(props) => <SearchResult context={context} {...props} />}
@@ -538,6 +562,12 @@ function DrawerScreeen(rootProps) {
             />
           )}
         </Drawer.Screen>
+
+        <Stack.Screen name="Search">
+          {(props) => (
+            <Search root={rootProps} context={rootProps.context} {...props} />
+          )}
+        </Stack.Screen>
         <Drawer.Screen name={'Likes'}>
           {(props) => (
             <LikesScreen
@@ -562,6 +592,57 @@ function DrawerScreeen(rootProps) {
             <Settings root={rootProps} context={rootProps.context} {...props} />
           )}
         </Drawer.Screen>
+
+        <Stack.Screen name="My Profile">
+          {(props) => (
+            <MyProfile
+              root={rootProps}
+              context={rootProps.context}
+              {...props}
+            />
+          )}
+        </Stack.Screen>
+        <Stack.Screen name="MessageBoard">
+          {(props) => (
+            <Chats root={rootProps} context={rootProps.context} {...props} />
+          )}
+        </Stack.Screen>
+        <Stack.Screen name="Chat Request">
+          {(props) => (
+            <ChatRqsts
+              root={rootProps}
+              context={rootProps.context}
+              {...props}
+            />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="Declined Profile">
+          {(props) => (
+            <DeclinedProfile
+              root={rootProps}
+              context={rootProps.context}
+              {...props}
+            />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="FAQs">
+          {(props) => (
+            <FAQs root={rootProps} context={rootProps.context} {...props} />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="Help">
+          {(props) => (
+            <Help
+              root={rootProps}
+              context={rootProps.context}
+              type
+              {...props}
+            />
+          )}
+        </Stack.Screen>
       </Drawer.Navigator>
     </>
   );

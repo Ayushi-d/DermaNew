@@ -12,6 +12,10 @@ import THEME from '../../config/theme';
 import RegistrationForm from '../../assets/data/form';
 import Country from '../../helpers/country';
 import Loader from '../../components/modals/loaders';
+import {
+  MemberHeaderForStac,
+  CustomHeaderStack,
+} from '../../components/general/Header';
 
 // import {HeaderBackButton} from 'react-navigation-stack';
 
@@ -210,11 +214,14 @@ class Registration extends React.Component {
   _saveData = () => {
     this.setState({loading: true});
     let usr = {...this.props.context.user, ...this.state.values};
+    // console.log(usr);
+    console.log(usr);
     this.props.reg
       .setRegistration({...this.props.context.user, ...this.state.values})
       .then((res) => {
         if (res) this.setState({loading: false});
         this.props.context._setLoginUser(usr);
+        this.props.context._checkAuth();
         // this.props.navigation.navigate('Drawer');
       });
   };
@@ -251,10 +258,10 @@ class Registration extends React.Component {
         style={{
           flex: 1,
         }}>
-        {/* <CustomHeaderStack
+        <CustomHeaderStack
           title={'Registration'}
           onPress={() => this.backHandler()}
-        /> */}
+        />
         <View style={style.parent}>
           <View style={style.registration}>
             <Text style={style.heading}>LET'S BUILD YOUR PROFILE</Text>

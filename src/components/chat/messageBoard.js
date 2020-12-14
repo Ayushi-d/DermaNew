@@ -27,8 +27,7 @@ class MessageBoard extends React.Component {
     return (
       <TouchableOpacity
         style={style.messageItem}
-        onPress={() => this.navigateToMessageScreen(messageData, item)}
-      >
+        onPress={() => this.navigateToMessageScreen(messageData, item)}>
         <View style={style.topPart}>
           <Image
             source={{
@@ -45,8 +44,7 @@ class MessageBoard extends React.Component {
               borderColor: THEME.GRADIENT_BG.START_COLOR,
               marginLeft: 'auto',
               marginRight: 10,
-            }}
-          >
+            }}>
             <Text style={{paddingHorizontal: 10}}>Trust Score</Text>
             <LinearGradient
               colors={[...THEME.GRADIENT_BG.PAIR].reverse()}
@@ -57,12 +55,11 @@ class MessageBoard extends React.Component {
                 justifyContent: 'center',
               }}
               start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-            >
+              end={{x: 1, y: 0}}>
               <Text style={{color: THEME.WHITE}}>{data.ts && data.ts.ts}%</Text>
             </LinearGradient>
           </View>
-          <Text>{this.getLastMessageDate(messageData.lm)}</Text>
+          {/* <Text>{this.getLastMessageDate(messageData.lm)}</Text> */}
         </View>
 
         <View style={style.bottomPart}>
@@ -71,8 +68,7 @@ class MessageBoard extends React.Component {
           </Text>
           <TouchableOpacity
             onPress={() => this.navigateToMessageScreen(messageData, item)}
-            style={{marginLeft: 'auto'}}
-          >
+            style={{marginLeft: 'auto'}}>
             <Image
               source={chat}
               style={{width: 30, height: 30, resizeMode: 'contain'}}
@@ -83,12 +79,12 @@ class MessageBoard extends React.Component {
     );
   };
 
-  getLastMessage = lm => {
+  getLastMessage = (lm) => {
     if (this.uid == lm.sid) return `You : ${lm.mg}`;
     return lm.mg;
   };
 
-  getLastMessageDate = lm => {
+  getLastMessageDate = (lm) => {
     return DateHelpers.getDateFromTimeStamp(lm.tp);
   };
 

@@ -8,6 +8,8 @@ import Country from '../../helpers/country';
 import {Loader} from '../modals';
 import THEME from '../../config/theme';
 
+import Header from '../Headers/SettingsHeader';
+
 class EditProfileJSX extends React.Component {
   constructor(props) {
     super(props);
@@ -199,30 +201,35 @@ class EditProfileJSX extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1, padding: 20}} showsVerticalScrollIndicator={false}>
-        <ScrollView style={style.shadowBox}>
-          {this.renderItems()}
-          <View
-            style={{
-              justifyContent: 'space-around',
-              flexDirection: 'row',
-              marginTop: 20,
-            }}>
-            <DEFAULT_BUTTON
-              text={'SAVE'}
-              style={{width: '40%'}}
-              _onPress={this.saveChanges}
-            />
-            <BUTTON_WITH_PARAM
-              text={'CANCEL'}
-              style={{width: '40%'}}
-              _onPress={this.goback}
-            />
-          </View>
-          <Loader isVisible={this.state.loading} />
-          {this.renderTopText()}
-        </ScrollView>
-      </View>
+      <>
+        <Header title={'EDIT PROFILE'} {...this.props} />
+        <View
+          style={{flex: 1, padding: 20}}
+          showsVerticalScrollIndicator={false}>
+          <ScrollView style={style.shadowBox}>
+            {this.renderItems()}
+            <View
+              style={{
+                justifyContent: 'space-around',
+                flexDirection: 'row',
+                marginTop: 20,
+              }}>
+              <DEFAULT_BUTTON
+                text={'SAVE'}
+                style={{width: '40%'}}
+                _onPress={this.saveChanges}
+              />
+              <BUTTON_WITH_PARAM
+                text={'CANCEL'}
+                style={{width: '40%'}}
+                _onPress={this.goback}
+              />
+            </View>
+            <Loader isVisible={this.state.loading} />
+            {this.renderTopText()}
+          </ScrollView>
+        </View>
+      </>
     );
   }
 }

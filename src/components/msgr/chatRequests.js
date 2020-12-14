@@ -267,14 +267,16 @@ export default class ChatRqsts extends React.Component {
 
   _renderCard = ({item, index}) => {
     let {user} = this.props.context;
-    let likes = Object.keys(user.lf);
+    let likes = user.lf ? Object.keys(user.lf) : 0;
     let chat = item;
-
-    let likesMe = likes.indexOf(chat.cUser.uid);
-    if (likesMe > -1) {
-      likesMe = true;
-    } else {
-      likesMe = false;
+    let likesMe = 0;
+    if (likes) {
+      likesMe = likes.indexOf(chat.cUser.uid);
+      if (likesMe > -1) {
+        likesMe = true;
+      } else {
+        likesMe = false;
+      }
     }
 
     return (
@@ -282,11 +284,11 @@ export default class ChatRqsts extends React.Component {
         data={chat.cUser}
         hideButton={true}
         sent={this.state.tab == 1}
-        message={chat.lm.msg}
+        message={chat.lm.mg}
         fromChat={true}
         navigation={this.props.navigation}
         likesMe={likesMe}
-        dateToShow={moment(new Date(chat.lm.tp)).calendar()}
+        dateToShow={moment(new Date(chat.lm.tp * 1000)).calendar()}
         messageRefKey={chat.refKey}
         fromPage={'Chat Request'}
         _declineChat={this._declineChat}
@@ -303,7 +305,7 @@ export default class ChatRqsts extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Header title={'CHAT REQUESTS'} {...this.props} />
+        <Header title={'CHAT REQUESTS'} type {...this.props} />
         {this._renderTab()}
         {loading ? (
           <ActivityIndicator

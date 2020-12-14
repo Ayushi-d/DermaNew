@@ -100,7 +100,7 @@ class SearchJSX extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Header title={'SEARCH'} {...this.props} />
+        <Header title={'SEARCH'} type {...this.props} />
         <View style={style.shadowBox} showsVerticalScrollIndicator={false}>
           {this.renderItems()}
           <View

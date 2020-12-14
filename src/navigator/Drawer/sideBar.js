@@ -52,7 +52,7 @@ const routes = [
   },
   {
     name: 'Help',
-    route: 'Help Screen',
+    route: 'Help',
   },
 ];
 const EXPANDED_NAVS = ['Chat Requests', 'Likes'];

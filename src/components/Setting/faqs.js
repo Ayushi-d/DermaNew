@@ -81,7 +81,7 @@ class FAQ extends React.Component {
     return (
       <View>
         {/* {this.renderHeader()} */}
-        <SettingsHeader title={'FAQs'} {...this.props} />
+        {/* <SettingsHeader title={'FAQs'} {...this.props} /> */}
         <ScrollView>
           <View style={style.container}>
             <Markdown style={mdStyle} rules={this.rules}>
