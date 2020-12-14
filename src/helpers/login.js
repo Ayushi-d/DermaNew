@@ -30,7 +30,7 @@ CheckUser.isDeleted = async (uid) => {
     let user_data = snapshot.val();
     // console.log(user_data);
 
-    if (user_data['del'] == 1) {
+    if (user_data && user_data['del'] == 1) {
       return true;
     } else {
       return false;

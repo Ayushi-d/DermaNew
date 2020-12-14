@@ -14,7 +14,7 @@ import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 import {Loader} from '../modals';
 
-const LoginJSX = props => (
+const LoginJSX = (props) => (
   <DermaBackground>
     <Loader isVisible={props.isVisible} />
     <Carousel />
@@ -83,37 +83,37 @@ class Login extends React.Component {
     }
   };
 
-  firebaseFbAuthentication = accessToken => {
+  firebaseFbAuthentication = (accessToken) => {
     auth()
       .signInWithCredential(
         firebase.auth.FacebookAuthProvider.credential(accessToken),
       )
-      .then(res => {
+      .then((res) => {
         let {providerId} = res.additionalUserInfo;
         let {displayName, email, uid} = res.user;
         this.props.context
           .setData({providerId, displayName, email, uid})
-          .then(result => {
+          .then((result) => {
             this.setState({showLoadingModal: false});
 
             if (result.isDeleted) {
               alert('Your profile has been under deletion process.');
               auth()
                 .signOut()
-                .then(res => {
-                  this.props.navigation.navigate('Login');
+                .then((res) => {
+                  this.props.context._logOut();
                 });
               return;
             }
 
             if (result.isRegistered) {
-              this.props.navigation.navigate('Dashboard');
+              this.props.context._checkAuth();
             } else {
               this.props.navigation.navigate('Registration');
             }
           });
       })
-      .catch(err => alert(err));
+      .catch((err) => alert(err));
   };
 
   render() {

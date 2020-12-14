@@ -100,7 +100,7 @@ class RootNav extends React.Component {
         let isRegistered = await CheckUser.isRegistered(user.uid);
         let isDeleted = await CheckUser.isDeleted(user.uid);
 
-        // console.log(isRegistered, isDeleted);
+        console.log(isRegistered, isDeleted);
 
         if (isDeleted) {
           await auth().signOut();
@@ -121,6 +121,9 @@ class RootNav extends React.Component {
             .catch((err) => {
               this.setState({isLoggedIn: false, loginCheck: true});
             });
+        } else {
+          this.setState({loginCheck: true, isLoggedIn: false});
+          return;
         }
       } catch (error) {
         console.log(error);

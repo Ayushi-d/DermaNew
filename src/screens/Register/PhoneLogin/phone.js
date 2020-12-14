@@ -138,7 +138,7 @@ export default class Phone extends React.Component {
             auth()
               .signOut()
               .then((res) => {
-                this.props.navigation.navigate('Login');
+                this.props.navigation.pop();
               });
             return;
           }

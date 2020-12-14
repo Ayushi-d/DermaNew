@@ -20,12 +20,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DermaBackground from '../../components/general/background';
 import THEME from '../../config/theme';
 
+import {
+  LoginManager,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
+import {Loader} from '../../components/modals';
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       pswd: '',
+      showLoadingModal: false,
+      notificationMessage: null,
+      id: null,
     };
     this._isMounted = false;
   }
@@ -39,9 +50,72 @@ export default class Login extends React.Component {
 
   _loginBtn = () => {};
 
+  facebookLogin = async () => {
+    let result;
+    try {
+      this.setState({showLoadingModal: true});
+      LoginManager.setLoginBehavior('NATIVE_ONLY');
+      result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+    } catch (nativeError) {
+      try {
+        LoginManager.setLoginBehavior('WEB_ONLY');
+        result = await LoginManager.logInWithPermissions([
+          'public_profile',
+          'email',
+        ]);
+      } catch (webError) {}
+    }
+    // handle the case that users clicks cancel button in Login view
+    if (result.isCancelled) {
+      this.setState({
+        showLoadingModal: false,
+        notificationMessage: 'cancelled',
+      });
+    } else {
+      const accessData = await AccessToken.getCurrentAccessToken();
+      this.firebaseFbAuthentication(accessData.accessToken);
+    }
+  };
+
+  firebaseFbAuthentication = (accessToken) => {
+    auth()
+      .signInWithCredential(
+        firebase.auth.FacebookAuthProvider.credential(accessToken),
+      )
+      .then((res) => {
+        let {providerId} = res.additionalUserInfo;
+        let {displayName, email, uid} = res.user;
+        this.props.context
+          .setData({providerId, displayName, email, uid})
+          .then((result) => {
+            this.setState({showLoadingModal: false});
+
+            if (result.isDeleted) {
+              alert('Your profile has been under deletion process.');
+              auth()
+                .signOut()
+                .then((res) => {
+                  this.props.context._logOut();
+                });
+              return;
+            }
+
+            if (result.isRegistered) {
+              this.props.context._checkAuth();
+            } else {
+              this.props.navigation.navigate('Registration');
+            }
+          });
+      })
+      .catch((err) => alert(err));
+  };
+
   render() {
     let {navigation} = this.props;
-    let {email, pswd, loading, errMsg} = this.state;
+    let {showLoadingModal} = this.state;
     return (
       <DermaBackground>
         <Carousel />
@@ -52,6 +126,7 @@ export default class Login extends React.Component {
               <AntDesign name={'facebook-square'} color={'#fff'} size={27} />
             }
             title={'CONTINUE WITH FACEBOOK'}
+            onPress={this.facebookLogin}
           />
 
           <LoginBtn
@@ -86,6 +161,7 @@ export default class Login extends React.Component {
             </Text>
           </Text>
         </View>
+        <Loader isVisible={showLoadingModal} />
       </DermaBackground>
     );
   }

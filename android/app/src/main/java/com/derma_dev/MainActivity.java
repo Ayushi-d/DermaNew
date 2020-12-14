@@ -1,4 +1,4 @@
-package com.derma_dev;
+package com.derma.app;
 
 import com.facebook.react.ReactActivity;
 
