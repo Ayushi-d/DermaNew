@@ -325,7 +325,7 @@ class MyProfileJSX extends React.Component {
   render() {
     return (
       <>
-        <Header title={'MY PROFILE'} type {...this.props} />
+        <Header title={'My Profile'} type {...this.props} />
         <ScrollView
           style={{flex: 1}}
           ref={(ref) => {

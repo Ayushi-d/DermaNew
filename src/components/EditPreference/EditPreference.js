@@ -116,7 +116,7 @@ class EditPPJSX extends React.Component {
   render() {
     return (
       <View style={{flex: 1, padding: 20}} showsVerticalScrollIndicator={false}>
-        <Header title={'EDIT PREFERENCE'} {...this.props} />
+        <Header title={'Edit Preference'} {...this.props} />
         <ScrollView style={style.shadowBox}>
           {this.renderItems()}
           <View

@@ -264,7 +264,7 @@ class ManagePhotosJSX extends React.Component {
   render() {
     return (
       <>
-        <Header title={'ADD PHOTOS'} {...this.props} />
+        <Header title={'Manage Photos'} {...this.props} />
         <ScrollView
           style={{
             flex: 1,

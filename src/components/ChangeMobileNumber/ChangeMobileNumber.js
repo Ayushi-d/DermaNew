@@ -259,7 +259,7 @@ class ChangeMobileNumberJSX extends React.Component {
   render() {
     return (
       <>
-        <SettingsHeader title={'CHANGE PHONE'} {...this.props} />
+        <SettingsHeader title={'Change Mobile Number'} {...this.props} />
         {!this.state.otpsent ? (
           <PhoneJSX
             _onPress={this.loginWithOtp}

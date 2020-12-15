@@ -128,7 +128,7 @@ class DeleteProfile extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <SettingsHeader title={'DELETE PROFILE'} {...this.props} />
+        <SettingsHeader title={'Delete'} {...this.props} />
         <ScrollView style={{flex: 1}}>
           {this.renderDeleteForm()}
           {this.state.loading ? (

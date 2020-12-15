@@ -85,7 +85,9 @@ class TermsOfUse extends React.Component {
     let {refr} = this.props;
     return (
       <View>
-        {refr ? <SettingsHeader title={'Terms'} {...this.props} /> : null}
+        {refr ? (
+          <SettingsHeader title={'Terms Of Use'} {...this.props} />
+        ) : null}
         <ScrollView>
           <View style={style.container}>
             <Markdown style={mdStyle} rules={this.rules}>

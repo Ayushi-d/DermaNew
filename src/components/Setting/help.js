@@ -180,7 +180,7 @@ class Help extends React.Component {
     return (
       <View style={{flex: 1}}>
         {/* {this.renderHeader()} */}
-        <SettingsHeader title={'HELP'} {...this.props} />
+        <SettingsHeader title={'Help'} {...this.props} />
         <ScrollView>
           <TouchableOpacity style={style.faqs} onPress={this.navigateToFAQs}>
             <Text style={style.text}>FAQS</Text>

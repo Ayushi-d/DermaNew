@@ -11,7 +11,7 @@ export default class About extends React.Component {
   render() {
     return (
       <View style={{...styles.container}}>
-        <Header title={'BETTER MATCHES'} {...this.props} />
+        <Header title={'Better Matches'} {...this.props} />
       </View>
     );
   }

@@ -75,7 +75,7 @@ class BlockedUsersJSX extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <SettingsHeader title={'BLOCKED USERS'} {...this.props} />
+        <SettingsHeader title={'Blocked'} {...this.props} />
         <Text
           style={{color: THEME.PARAGRAPH, marginTop: 20, alignSelf: 'center'}}>
           You had blocked these users

@@ -166,7 +166,7 @@ class SearchResult extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Header title={'SEARCH RESULTS'} {...this.props} />
+        <Header title={'Search Results'} {...this.props} />
         {this.renderCards()}
         {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
       </View>

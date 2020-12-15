@@ -87,7 +87,7 @@ class PrivacyPolicy extends React.Component {
   render() {
     return (
       <View>
-        <SettingsHeader title={'PRIVACY POLICY'} {...this.props} />
+        <SettingsHeader title={'Privacy Policy'} {...this.props} />
         <ScrollView>
           <View style={style.container}>
             <Markdown style={mdStyle} rules={this.rules}>

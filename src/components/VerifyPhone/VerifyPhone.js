@@ -162,7 +162,7 @@ class VerifyPhoneJSX extends React.Component {
   render() {
     return (
       <>
-        <Header title={'VERIFY PHONE'} {...this.props} />
+        <Header title={'Verify Phone'} {...this.props} />
         {!this.state.otpsent ? (
           <PhoneJSX
             _onPress={this.loginWithOtp}

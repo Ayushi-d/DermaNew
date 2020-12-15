@@ -264,7 +264,13 @@ class MemberProfile extends React.Component {
 
     return (
       <View style={{flex: 1, paddingBottom: !this.hideMessage ? 100 : 0}}>
-        <Header right {...this.props} data={data} refr />
+        <Header
+          right
+          title={'Member Profile'}
+          {...this.props}
+          data={data}
+          refr
+        />
         <ScrollView style={{flex: 1}}>
           {this.renderCard()}
           {this.renderTrustScore()}

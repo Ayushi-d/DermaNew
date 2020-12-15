@@ -201,7 +201,7 @@ class EditProfileJSX extends React.Component {
   render() {
     return (
       <>
-        <Header title={'EDIT PROFILE'} {...this.props} />
+        <Header title={'Edit Profile'} {...this.props} />
         <View
           style={{flex: 1, padding: 20}}
           showsVerticalScrollIndicator={false}>

@@ -38,10 +38,9 @@ class FilterOut extends React.Component {
     if (id == 'Chat Request') {
       this.setState({tab: 1});
     }
-
   }
 
-  _onTabPress = tabValue => {
+  _onTabPress = (tabValue) => {
     this.setState({tab: tabValue}, () => {
       this.props.navigation.setParams({
         id: this.state.tab == 0 ? 'Likes' : 'Chat Request',
@@ -56,8 +55,7 @@ class FilterOut extends React.Component {
           flexDirection: 'row',
           justifyContent: 'space-around',
           padding: 20,
-        }}
-      >
+        }}>
         <BUTTON_WITH_PARAM
           text={'LIKES'}
           style={{width: '40%'}}
@@ -77,7 +75,7 @@ class FilterOut extends React.Component {
   };
 
   renderCards = () => {
-    let data = this.props.context.likeData
+    let data = this.props.context.likeData;
     if (data) {
       return (
         <FlatList
@@ -99,8 +97,8 @@ class FilterOut extends React.Component {
     }
   };
 
-  LikesMe = data => {
-	let lt = this.props.context && this.props.context.user_data.lt;
+  LikesMe = (data) => {
+    let lt = this.props.context && this.props.context.user.lt;
     if (lt && data) {
       return Object.keys(lt).includes(data.uid);
     }
@@ -108,15 +106,13 @@ class FilterOut extends React.Component {
     return false;
   };
 
-
   renderChatReqCards = () => {
     let data = this.props.context && this.props.context.messageReq;
 
     if (!data) return null;
 
-	if (Object.keys(data).length == 0) return null;
+    if (Object.keys(data).length == 0) return null;
 
-	
     return (
       <FlatList
         data={Object.keys(data)}
@@ -142,7 +138,7 @@ class FilterOut extends React.Component {
       <View style={{flex: 1}}>
         <HeaderMain routeName="Filter Out" {...this.props} />
         {this.renderTab()}
-		{this.state.tab == 0 ? this.renderCards() : this.renderChatReqCards()}
+        {this.state.tab == 0 ? this.renderCards() : this.renderChatReqCards()}
       </View>
     );
   }

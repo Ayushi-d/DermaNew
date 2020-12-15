@@ -126,7 +126,7 @@ class DeclinedProfileJSX extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Header title="DECLINED PROFILE" type {...this.props} />
+        <Header title="Declined Profile" type {...this.props} />
         {this.renderTab()}
         {this.renderMessageReq()}
       </View>

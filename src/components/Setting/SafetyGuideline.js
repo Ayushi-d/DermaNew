@@ -71,7 +71,7 @@ class SafetyGuideLines extends React.Component {
   render() {
     return (
       <View>
-        <SettingsHeader title={'SAFETY GUIDELINES'} {...this.props} />
+        <SettingsHeader title={'Safety Guide'} {...this.props} />
         <ScrollView>
           <View style={style.container}>
             <Markdown style={mdStyle} rules={this.rules}>

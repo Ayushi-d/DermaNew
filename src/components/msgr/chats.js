@@ -142,7 +142,7 @@ export default class Chats extends React.Component {
     let {chats, loading} = this.state;
     return (
       <View style={styles.container}>
-        <Header title={'MESSAGES'} type {...this.props} />
+        <Header title={'Messages'} type {...this.props} />
         {loading ? (
           <ActivityIndicator
             size={27}

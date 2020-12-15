@@ -11,7 +11,7 @@ export default class About extends React.Component {
   render() {
     return (
       <View style={{...styles.container}}>
-        <Header title={'ABOUT'} {...this.props} />
+        <Header title={'About'} {...this.props} />
       </View>
     );
   }

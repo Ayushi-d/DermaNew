@@ -173,7 +173,7 @@ class VerifyEmailJSX extends React.Component {
   render() {
     return (
       <>
-        <Header title={'VERIFY EMAIL'} {...this.props} />
+        <Header title={'Verify Email'} {...this.props} />
         {!this.state.otpsent ? (
           <PhoneJSX
             _onPress={this.loginWithOtp}

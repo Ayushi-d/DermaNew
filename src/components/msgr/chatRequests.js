@@ -305,7 +305,7 @@ export default class ChatRqsts extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Header title={'CHAT REQUESTS'} type {...this.props} />
+        <Header title={'Chat Requests'} type {...this.props} />
         {this._renderTab()}
         {loading ? (
           <ActivityIndicator

@@ -157,7 +157,7 @@ class Chat extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Header title={'CHAT REQUESTS'} {...this.props} />
+        <Header title={'Chat Requests'} {...this.props} />
         {this.renderTab()}
         {this.renderChatReqCards()}
       </View>

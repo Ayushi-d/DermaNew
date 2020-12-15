@@ -92,17 +92,13 @@ export default class MsgHeader extends React.Component {
 
   render() {
     let {menuOpen, blockOpen, reportOpen} = this.state;
-    let {refr, type, right, route} = this.props;
+    let {refr, type, title, right, route} = this.props;
     let oUser = {};
     if (refr) {
       oUser = route.params.data;
     } else {
       oUser = route.params.data.otheruser;
     }
-    // console.log(this.props.data);
-    // if (refr) {
-    //   return <></>;
-    // }
 
     return (
       <View style={{...styles.header}}>
@@ -124,18 +120,24 @@ export default class MsgHeader extends React.Component {
               )}
             </Pressable>
 
-            <Pressable style={styles.middleHead} onPress={this._navToProfile}>
-              {oUser && oUser.dp ? (
-                <Image source={{uri: oUser.dp}} style={styles.propic} />
-              ) : null}
-
-              <View style={styles.headerTxt}>
-                <Text style={styles.title}>
-                  {oUser ? (oUser.sn ? oUser.sn : '') : ''}
-                </Text>
-                {/* <Text style={styles.status}>Online</Text> */}
+            {title ? (
+              <View style={styles.middleHead}>
+                <Text style={styles.title}>{title ? title : ''}</Text>
               </View>
-            </Pressable>
+            ) : (
+              <Pressable style={styles.middleHead} onPress={this._navToProfile}>
+                {oUser && oUser.dp ? (
+                  <Image source={{uri: oUser.dp}} style={styles.propic} />
+                ) : null}
+
+                <View style={styles.headerTxt}>
+                  <Text style={styles.title}>
+                    {oUser ? (oUser.sn ? oUser.sn : '') : ''}
+                  </Text>
+                  {/* <Text style={styles.status}>Online</Text> */}
+                </View>
+              </Pressable>
+            )}
 
             {right ? (
               <Menu

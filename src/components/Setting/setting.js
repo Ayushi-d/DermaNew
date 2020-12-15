@@ -159,7 +159,7 @@ class SettingsJSX extends React.Component {
   render() {
     return (
       <View>
-        <SettingsHeader title={'SETTINGS'} type={1} {...this.props} />
+        <SettingsHeader title={'Settings'} type={1} {...this.props} />
         <FlatList
           data={data}
           renderItem={({item}) => this.renderItems(item)}
