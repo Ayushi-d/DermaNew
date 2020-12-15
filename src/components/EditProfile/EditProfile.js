@@ -22,7 +22,7 @@ class EditProfileJSX extends React.Component {
     this.items.map(
       (item) =>
         (state[item.name] = getData(
-          this.props.context.user_data,
+          this.props.context.user,
           item.label,
           false,
           true,
@@ -135,8 +135,7 @@ class EditProfileJSX extends React.Component {
   renderItems = () => {
     return this.items.map((item) =>
       item.name == 'rl' ? (
-        this.props.context.user_data &&
-        this.props.context.user_data.rle == 1 ? (
+        this.props.context.user && this.props.context.user.rle == 1 ? (
           <item.DISABLED_COMPONENT
             label={item.label}
             data={this.formatData(
