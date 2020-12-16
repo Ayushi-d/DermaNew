@@ -28,7 +28,7 @@ class MyMatchesJSX extends React.Component {
     this.fetchUser();
 
     this.didFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
+      'focus',
       (payload) => {
         // console.log('focused', 'my matches');
         this.refreshList();

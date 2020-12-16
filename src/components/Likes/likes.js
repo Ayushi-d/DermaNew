@@ -50,14 +50,41 @@ class Likes extends React.Component {
       this.setState({tab: 1});
     }
     this.didFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
+      'focus',
       (payload) => {
+        // console.log('call!');
         this._changeCount();
       },
     );
   }
   componentWillUnmount() {
     this.didFocusSubscription && this.didFocusSubscription();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    let id = this.props.route.params.id;
+    let prevId = prevProps.route.params.id;
+    if (id !== prevId) {
+      if (id == 'Regular' || id == 'default') {
+        this.setState({tab: 0}, () => {
+          this.flatListref &&
+            this.flatListref.scrollToOffset({
+              offset: this.state.scrollPosition[0],
+              animated: false,
+            });
+        });
+      }
+
+      if (id == 'Filtered Out') {
+        this.setState({tab: 1}, () => {
+          this.flatListref &&
+            this.flatListref.scrollToOffset({
+              offset: this.state.scrollPosition[1],
+              animated: false,
+            });
+        });
+      }
+    }
   }
 
   _changeCount() {

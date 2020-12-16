@@ -4,14 +4,14 @@ import {BackHandler} from 'react-native';
 const CustomBackAction = (Component) => {
   return class CustomAppBackHandler extends React.Component {
     componentDidMount() {
-      this.didFocus = this.props.navigation.addListener('didFocus', (e) => {
+      this.didFocus = this.props.navigation.addListener('focus', (e) => {
         this.backHandler = BackHandler.addEventListener(
           'hardwareBackPress',
           this.customGoBack,
         );
       });
 
-      this.willblur = this.props.navigation.addListener('willBlur', (e) => {
+      this.willblur = this.props.navigation.addListener('beforeRemove', (e) => {
         this.backHandler.remove();
       });
     }

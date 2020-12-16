@@ -61,6 +61,9 @@ import MemberProfile from '../components/MemberProfile';
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
 import ChatScreen from '../screens/ChatScreen';
 
+const DUMMY_DP =
+  'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
+
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -216,55 +219,84 @@ class RootNav extends React.Component {
   };
 
   _removeListeners = () => {
-    this.userRef && this.userRef.off('value');
-    // this._msgListeners.length &&
-    //   this._msgListeners.forEach((listener) => {
-    //     listener.off('value');
-    //     console.log('removing msglistener!');
-    //   });
+    if (this.userRef) {
+      this.userRef.off('value');
+      this.userRef.off('child_changed');
+      this.userRef.off('child_added');
+      this.userRef.off('child_removed');
+    }
+    if (this.tsRef) this.tsRef.off('value');
   };
 
   _callUserListener = (user) => {
     this.userRef.on('value', (snapshot) => {
       let userDat = snapshot.val();
       this.setState({user: userDat});
-      // this._checkForMsgs(userDat);
-      // console.log('calling!');
-      // console.log(userDat);
+      this.trustScoreEventListener();
+      this.privacyNameListener(userDat, userDat.uid);
+      this.profilePicEventListener(userDat);
     });
   };
 
-  // _checkForMsgs = (user) => {
-  //   this._removeMsgListeners();
-  //   if (user.con && user.con.length) {
-  //     Object.keys(user.con).forEach((con) => {
-  //       let msgListen = database().ref(`conversation/${con}/${user.uid}`);
-  //       msgListen.on(
-  //         'value',
-  //         (snap) => {
-  //           let conv = snap.val();
-  //           console.log('updated conv!: ', conv);
-  //           if (conv.isAcc && !this._msgListeners[conv.key]) {
-  //             this._msgListeners[conv.key](msgListen);
-  //             console.log('addeding listener!');
-  //           } else {
-  //             msgListen.off('value');
-  //           }
-  //         },
-  //         (err) => {
-  //           console.log('msgListener err: ', err);
-  //         },
-  //       );
-  //     });
-  //   }
-  // };
+  trustScoreEventListener = () => {
+    const {uid} = auth().currentUser;
 
-  // _removeMsgListeners = () => {
-  //   this._msgListeners.length &&
-  //     this._msgListeners.forEach((mlistener) => {
-  //       mlistener.off('value');
-  //     });
-  // };
+    this.tsRef = database().ref(`Users/${uid}/ts`);
+
+    this.tsRef.on('value', (snap) => {
+      let value = snap.val();
+      let count = 0;
+
+      Object.keys(value).map((item) => {
+        if (item == 'ts') {
+          return;
+        }
+
+        if (value[item] == 1) {
+          count++;
+        }
+      });
+
+      // console.log(count);
+
+      if (count * 20 != value['ts']) {
+        database()
+          .ref(`Users/${uid}/ts`)
+          .child('ts')
+          .set(count * 20);
+      }
+    });
+  };
+
+  removeTrustScoreEventListener = () => {
+    if (this.tsRef) this.tsRef.off('value');
+  };
+
+  getShowName = (pnm, name, gender) => {
+    if (pnm == 1) {
+      return gender == 'Male' ? name.split(' ')[0] : name.charAt(0);
+    } else {
+      return name.charAt(0);
+    }
+  };
+
+  privacyNameListener = (data, uid) => {
+    let gender = data.g;
+    let show_name = data.sn;
+    let name = data.nm;
+    let pnm = data.pnm;
+
+    let correct_show_name = this.getShowName(pnm, name, gender);
+
+    if (show_name == correct_show_name) {
+      return;
+    }
+
+    database()
+      .ref('Users/' + uid)
+      .child('sn')
+      .set(correct_show_name);
+  };
 
   changeDP = async (key, url) => {
     try {
@@ -367,6 +399,77 @@ class RootNav extends React.Component {
       return true;
     } catch (err) {
       return false;
+    }
+  };
+
+  profilePicEventListener = (user_data) => {
+    const APPROVED = user_data.dp != DUMMY_DP ? true : false;
+
+    // if none
+
+    let aop = user_data.aop && Object.values(user_data.aop);
+    let op = user_data.op && Object.values(user_data.op);
+    let dp = user_data.dp;
+    let ndp = user_data.ndp;
+
+    if (!user_data.aop && !user_data.op) {
+      if (user_data.dp != DUMMY_DP) {
+        this.changeDP('dp', DUMMY_DP);
+      }
+
+      if (user_data.ndp != DUMMY_DP) {
+        this.changeDP('ndp', DUMMY_DP);
+      }
+
+      this.csOfAddPhoto(0);
+
+      return;
+    }
+
+    if (!APPROVED && user_data.aop && !aop.includes(ndp)) {
+      this.changeDP('ndp', aop[0]);
+      if (user_data.ts.dp != -1) {
+        this.csOfAddPhoto(-1);
+      }
+    }
+
+    if (APPROVED && user_data.op && ndp != dp) {
+      this.changeDP('ndp', dp);
+    }
+
+    if (APPROVED && user_data.op && !op.includes(dp)) {
+      this.changeDP('dp', op[0]);
+      this.changeDP('ndp', op[0]);
+    }
+
+    if (APPROVED && !user_data.op) {
+      this.changeDP('dp', DUMMY_DP);
+
+      if (user_data.aop) {
+        this.changeDP('ndp', aop[0]);
+        this.csOfAddPhoto(-1);
+      } else {
+        this.changeDP('ndp', DUMMY_DP);
+        this.csOfAddPhoto(0);
+      }
+    }
+
+    if (!APPROVED && user_data.op) {
+      this.changeDP('dp', op[0]);
+      this.changeDP('ndp', op[0]);
+    }
+
+    if (APPROVED && user_data.op && user_data.ts.dp != 1) {
+      this.csOfAddPhoto(1);
+    }
+  };
+
+  csOfAddPhoto = async (value) => {
+    try {
+      let ap = await this.userRef.child('ts').child('dp').set(value);
+      return true;
+    } catch (error) {
+      return true;
     }
   };
 
@@ -481,6 +584,7 @@ class RootNav extends React.Component {
       saveToFirebase: this._saveToFirebase,
       savePPToFirebase: this._savePPToFirebase,
       setData: this.setData,
+      updateTSBy20: this.updateTSBy20,
       _logout: this._logout,
     };
 

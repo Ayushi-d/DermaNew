@@ -98,6 +98,22 @@ class MyProfileJSX extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    // console.log('update!', this.props.route.params.id);
+    let tab = this.props.route.params.id;
+    let prevTab = prevProps.route.params.id;
+
+    if (tab !== prevTab) {
+      if (tab == 0 || tab == 1) {
+        this.setState({tab});
+      }
+
+      if (tab == 1) {
+        this.scrollView.scrollToEnd({animated: true});
+      }
+    }
+  }
+
   _onPressNavigate = (routeName, obj) => {
     if (obj.data == 'Interest') {
       this.setState({interest: true});

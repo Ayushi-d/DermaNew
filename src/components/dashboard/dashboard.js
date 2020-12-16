@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
   componentDidMount() {
     this.fetched = false;
     this.didFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
+      'focus',
       (payload) => {
         this.fetchUsers();
       },

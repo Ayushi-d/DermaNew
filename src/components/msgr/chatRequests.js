@@ -49,6 +49,23 @@ export default class ChatRqsts extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    let tab = this.props.route.params.id;
+    let prevTab = prevProps.route.params.id;
+
+    // console.log('update!', tab, prevTab);
+
+    if (tab !== prevTab) {
+      if (tab == 'Regular' || tab == 'default') {
+        this.setState({tab: 0});
+      }
+
+      if (tab == 'Filtered Out') {
+        this.setState({tab: 1});
+      }
+    }
+  }
+
   _declineChat = (refKey) => {
     let {context, navigation} = this.props;
     let {user} = context;

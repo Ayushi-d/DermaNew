@@ -63,7 +63,7 @@ class PhotoSwiper extends React.Component {
 
   componentDidMount() {
     this.willFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
+      'focus',
       (payload) => {
         this.ref.setPage(0);
       },

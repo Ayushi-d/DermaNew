@@ -160,7 +160,7 @@ class ManagePhotosJSX extends React.Component {
     );
   };
 
-  deletePhoto = (key, url) => {
+  deletePhoto = (key, url, type) => {
     console.log(key, url, 'check delete');
     Alert.alert(
       'Delete photo',
@@ -177,7 +177,7 @@ class ManagePhotosJSX extends React.Component {
           text: 'Yes',
           onPress: () => {
             this.setState({loading: true});
-            Uploader.deletePhoto(key, url)
+            Uploader.deletePhoto(key, url, type)
               .then((res) => {
                 console.log(res);
                 if (res) {
@@ -188,6 +188,7 @@ class ManagePhotosJSX extends React.Component {
                 }
               })
               .catch((err) => {
+                console.log('Err: ', err);
                 this.setState({loading: false});
               });
           },
@@ -219,7 +220,7 @@ class ManagePhotosJSX extends React.Component {
             uri={dp}
             helpText={'Profile Photo'}
             onHelpTextPress={() => null}
-            deletePhoto={() => this.deletePhoto(key, dp)}
+            deletePhoto={() => this.deletePhoto(key, dp, 1)}
           />
         ) : null}
 

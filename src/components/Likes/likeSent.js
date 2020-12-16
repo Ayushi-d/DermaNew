@@ -10,6 +10,10 @@ class LikeSent extends React.Component {
     super(props);
   }
 
+  componentDidMount() {}
+
+  componentWillUnmount() {}
+
   renderCards = () => {
     let data = this.props.context.sent;
 
