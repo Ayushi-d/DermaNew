@@ -34,10 +34,13 @@ class MultiChoicePicker extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(props) {
-    if (props.value) this.setState({data: props.value.split(',')});
+    if (props.value) {
+      let dat = props.value.split(',');
+      this.setState({data: dat});
+    }
   }
 
-  handlePress = item => {
+  handlePress = (item) => {
     let included = this.state.data.includes(item);
 
     let data = [...this.state.data];
@@ -86,9 +89,16 @@ class MultiChoicePicker extends React.Component {
     this.props.saveChanges(pushData);
   };
 
-  // onLayout = () => {
-  //   this.flatListRef.scrollToIndex({animated: true, index: this.initialIndex});
-  // };
+  onLayout = () => {
+    if (this.props.value) {
+      let dat = this.props.value.split(',');
+      let data = this.props.data;
+      let initIdx = data.indexOf(dat[0]);
+      if (initIdx > -1) {
+        this.flatListRef.scrollToIndex({animated: true, index: initIdx});
+      }
+    }
+  };
 
   getItemLayout = (item, index) => {
     return {
@@ -105,12 +115,11 @@ class MultiChoicePicker extends React.Component {
         isVisible={props.isVisible}
         backdropOpacity={0.5}
         onBackButtonPress={this.props.onCancelled}
-        onBackdropPress={this.props.onCancelled}
-      >
+        onBackdropPress={this.props.onCancelled}>
         <View style={style.container}>
           <FlatList
             style={style.religions}
-            ref={ref => (this.flatListRef = ref)}
+            ref={(ref) => (this.flatListRef = ref)}
             data={props.data}
             keyExtractor={(item, index) => item}
             showsVerticalScrollIndicator={false}
@@ -129,6 +138,7 @@ class MultiChoicePicker extends React.Component {
                 handleClearAll={this.handleClearAll}
               />
             }
+            onLayout={this.onLayout}
           />
 
           <View
@@ -150,8 +160,7 @@ class MultiChoicePicker extends React.Component {
               elevation: 2,
               height: 60,
               alignItems: 'center',
-            }}
-          >
+            }}>
             <BUTTON_WITH_PARAM
               text={'Cancel'}
               style={{width: '40%'}}
@@ -191,8 +200,7 @@ class COUNTRY_ROW extends React.Component {
                 : THEME.WHITE,
             },
           ]}
-          onPress={() => handlePress(item)}
-        >
+          onPress={() => handlePress(item)}>
           <Image
             source={check}
             style={[
@@ -215,8 +223,7 @@ const COUNTNRY_HEADER = ({title, handleClearAll}) => {
       colors={[...THEME.GRADIENT_BG.PAIR].reverse()}
       style={[style.header]}
       start={{x: 0, y: 0}}
-      end={{x: 1, y: 0}}
-    >
+      end={{x: 1, y: 0}}>
       <Text style={style.heading}>{title} </Text>
       <Text style={style.clear} onPress={handleClearAll}>
         Clear All
