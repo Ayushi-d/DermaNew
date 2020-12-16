@@ -19,7 +19,7 @@ class FilterOut extends React.Component {
   };
 
   UNSAFE_componentWillReceiveProps(props) {
-    let id = props.navigation.getParam('id');
+    let id = props.route.params.id;
     if (id == 'Likes') {
       this.setState({tab: 0});
     }
@@ -30,7 +30,7 @@ class FilterOut extends React.Component {
   }
 
   componentDidMount() {
-    let id = this.props.navigation.getParam('id');
+    let id = this.props.route.params.id;
     if (id == 'Likes') {
       this.setState({tab: 0});
     }

@@ -17,9 +17,9 @@ const CustomBackAction = (Component) => {
     }
 
     customGoBack = () => {
-      let fromPage = this.props.navigation.getParam('fromPage');
-      let fromPageHistory = this.props.navigation.getParam('fromPageHistory');
-      let isData = this.props.navigation.getParam('returnData');
+      let fromPage = this.props.route.params.fromPage;
+      let fromPageHistory = this.props.route.params.fromPageHistory;
+      let isData = this.props.route.params.returnData;
       if (fromPage) {
         if (isData) {
           this.props.navigation.navigate(fromPage, {
@@ -46,7 +46,7 @@ const CustomBackAction = (Component) => {
 
       if (this.willblur) this.willblur();
 
-      if (this.backHandler) this.backHandler();
+      if (this.backHandler) this.backHandler.remove();
     }
   };
 };
