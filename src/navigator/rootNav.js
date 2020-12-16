@@ -208,6 +208,7 @@ class RootNav extends React.Component {
   };
 
   _logout = () => {
+    console.log('logout!');
     this._isMounted && this.setState({isLoggedIn: false, user: {}});
     this._removeListeners();
   };
@@ -493,9 +494,6 @@ class RootNav extends React.Component {
       <Stack.Screen name="Blocked">
         {(props) => <BlockedUser context={context} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="Delete">
-        {(props) => <DeleteProfile context={context} {...props} />}
-      </Stack.Screen>
       <Stack.Screen name="PrivacyPolicy">
         {(props) => <PrivacyPolicy context={context} {...props} />}
       </Stack.Screen>
@@ -554,6 +552,10 @@ class RootNav extends React.Component {
 
       <Stack.Screen name="Member Profile">
         {(props) => <MemberProfile context={context} {...props} />}
+      </Stack.Screen>
+
+      <Stack.Screen name="Delete">
+        {(props) => <DeleteProfile context={context} {...props} />}
       </Stack.Screen>
     </>
   );
