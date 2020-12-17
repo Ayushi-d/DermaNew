@@ -138,59 +138,59 @@ Uploader.deletePhoto = async (key, url, type) => {
       database().ref(`Users/${uid}`).child('ndp').set(usr.dp);
     }
 
-    if (type) {
-      console.log('deleting dp!');
-      let op = await database()
-        .ref('Users/' + uid + '/op')
-        .once('value');
-      let aop = await database()
-        .ref('Users/' + uid + '/aop')
-        .once('value');
+    // if (type) {
+    // console.log('deleting dp!');
+    let op = await database()
+      .ref('Users/' + uid + '/op')
+      .once('value');
+    let aop = await database()
+      .ref('Users/' + uid + '/aop')
+      .once('value');
 
-      let nextDp = '';
-      let unAprooved = true;
-      if (op.exists) {
-        let dat = op.val();
+    let nextDp = '';
+    let unAprooved = true;
+    if (op.exists) {
+      let dat = op.val();
+      if (dat) {
+        let ids = Object.keys(dat);
+        if (ids && ids.length) {
+          nextDp = dat[ids[0]];
+          unAprooved = false;
+        }
+      }
+    }
+
+    if (!nextDp) {
+      if (aop.exists) {
+        let dat = aop.val();
         if (dat) {
           let ids = Object.keys(dat);
           if (ids && ids.length) {
             nextDp = dat[ids[0]];
-            unAprooved = false;
+            unAprooved = true;
           }
         }
-      }
-
-      if (!nextDp) {
-        if (aop.exists) {
-          let dat = aop.val();
-          if (dat) {
-            let ids = Object.keys(dat);
-            if (ids && ids.length) {
-              nextDp = dat[ids[0]];
-              unAprooved = true;
-            }
-          }
-        }
-      }
-
-      // console.log('nextDp: ', nextDp);
-
-      if (nextDp) {
-        if (unAprooved) {
-          database().ref(`Users/${uid}`).child('dp').set(Uploader.newuser);
-          database().ref(`Users/${uid}`).child('ts').child('dp').set(0);
-        } else {
-          database().ref(`Users/${uid}`).child('dp').set(nextDp);
-        }
-
-        database().ref(`Users/${uid}`).child('ndp').set(nextDp);
-      } else {
-        database().ref(`Users/${uid}`).child('dp').set(Uploader.newuser);
-        database().ref(`Users/${uid}`).child('ts').child('dp').set(0);
-
-        database().ref(`Users/${uid}`).child('ndp').set(Uploader.newuser);
       }
     }
+
+    // console.log('nextDp: ', nextDp);
+
+    if (nextDp) {
+      if (unAprooved) {
+        database().ref(`Users/${uid}`).child('dp').set(Uploader.newuser);
+        database().ref(`Users/${uid}`).child('ts').child('dp').set(0);
+      } else {
+        database().ref(`Users/${uid}`).child('dp').set(nextDp);
+      }
+
+      database().ref(`Users/${uid}`).child('ndp').set(nextDp);
+    } else {
+      database().ref(`Users/${uid}`).child('dp').set(Uploader.newuser);
+      database().ref(`Users/${uid}`).child('ts').child('dp').set(0);
+
+      database().ref(`Users/${uid}`).child('ndp').set(Uploader.newuser);
+    }
+    // }
 
     return true;
   } catch (err) {

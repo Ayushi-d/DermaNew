@@ -156,17 +156,17 @@ export default class MsgHeader extends React.Component {
                 }>
                 <Menu.Item
                   onPress={() => {
-                    this._toggleReportModal();
-                    this._closeMenu();
-                  }}
-                  title="REPORT"
-                />
-                <Menu.Item
-                  onPress={() => {
                     this._toggleBlockModal();
                     this._closeMenu();
                   }}
                   title="BLOCK"
+                />
+                <Menu.Item
+                  onPress={() => {
+                    this._toggleReportModal();
+                    this._closeMenu();
+                  }}
+                  title="REPORT"
                 />
               </Menu>
             ) : (

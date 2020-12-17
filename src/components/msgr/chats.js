@@ -58,7 +58,7 @@ export default class Chats extends React.Component {
     let {con} = user;
 
     // if (con && con.length) {
-    // console.log('offline ', con);
+    // console.log('offline ', user.con);
     this._isMounted && this.setState({loading: true});
     this.consListerner = database()
       .ref(`Users/${user.uid}`)
@@ -86,12 +86,16 @@ export default class Chats extends React.Component {
             .catch((err) =>
               console.log('chats.js _getChats chat conGeterr: ', err),
             );
-          if (!chatSnap.exists) {
+
+          if (!chatSnap.exists()) {
             continue;
           }
           let chat = chatSnap.val();
-          if (!chat.isAcc) {
-            continue;
+          // console.log(chat.inR);
+          if (chat.inR && chat.inR.uid !== user.uid) {
+            if (!chat.isAcc) {
+              continue;
+            }
           }
           let ouid = con.split(user.uid).join('');
 

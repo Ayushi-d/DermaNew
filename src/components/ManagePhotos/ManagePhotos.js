@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  PermissionsAndroid,
   Alert,
 } from 'react-native';
 import React from 'react';
@@ -36,6 +37,37 @@ const data = [
  *  // check op for pic -- index 0 of op will always be profile pic
  *  // if not in op then 0 in aop
  */
+
+const requestCameraPermission = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Derma Cupid Camera Permission',
+          message:
+            'Derma Cupid needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      console.log(granted);
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+        resolve({perm: true});
+      } else {
+        console.log('Camera permission denied');
+        resolve({perm: false});
+      }
+    } catch (err) {
+      console.log(err);
+      reject(err);
+    }
+  });
+};
+
 class ManagePhotosJSX extends React.Component {
   constructor(props) {
     super(props);
@@ -127,17 +159,33 @@ class ManagePhotosJSX extends React.Component {
   };
 
   _onFromCamera = () => {
-    ImagePicker.openCamera({
-      width: 400,
-      height: 400,
-      cropping: true,
-      freeStyleCropEnabled: true,
-    })
-      .then((image) => {
-        this.setState({uploadModal: false, loading: true});
-        Uploader.uploadFile(image.path, this.setProgress, this.onCompletion);
+    requestCameraPermission()
+      .then((res) => {
+        if (res.perm) {
+          ImagePicker.openCamera({
+            width: 400,
+            height: 400,
+            cropping: true,
+            freeStyleCropEnabled: true,
+          })
+            .then((image) => {
+              this.setState({uploadModal: false, loading: true});
+              Uploader.uploadFile(
+                image.path,
+                this.setProgress,
+                this.onCompletion,
+              );
+            })
+            .catch(
+              (err) => console.log(err) || this.setState({uploadModal: false}),
+            );
+        } else {
+          alert('Grant Camera access from settings.');
+        }
       })
-      .catch((err) => console.log(err) || this.setState({uploadModal: false}));
+      .catch((err) => {
+        alert('Something went wrong. Please try again.');
+      });
   };
 
   renderHeader = () => {

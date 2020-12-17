@@ -149,7 +149,7 @@ export default class ChatRqsts extends React.Component {
             .catch((err) =>
               console.log('chats.js _getChats chat conGeterr: ', err),
             );
-          if (!chatSnap.exists) {
+          if (!chatSnap.exists()) {
             continue;
           }
 

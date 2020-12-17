@@ -34,7 +34,29 @@ export default class Msgr extends React.Component {
     let oUser = params.data.otheruser;
     let {refKey} = params.data;
     this._checkIfChatExists(refKey);
+
+    this._chatListener(refKey);
   }
+
+  _chatListener = (refKey) => {
+    let {navigation} = this.props;
+
+    this.listenChat = database().ref(`conversation/${refKey}`);
+    this.listenChat.on(
+      'value',
+      (chatSnap) => {
+        if (chatSnap) {
+          this._isMounted &&
+            this.setState({chat: chatSnap.val(), chatExists: true});
+        } else {
+          if (navigation.canGoBack()) {
+            navigation.pop();
+          }
+        }
+      },
+      (err) => console.log('msgr.js _chatListener err: ', err),
+    );
+  };
 
   _checkIfChatExists = (refKey) => {
     let {params} = this.props.route;
@@ -211,6 +233,20 @@ export default class Msgr extends React.Component {
               console.log('msgr.js _send con chat request err: ', err),
             );
 
+          database()
+            .ref(`Users/${uid}/con/${refKey}`)
+            .set({
+              sn: 1,
+              lT: new Date().getTime() / 1000,
+            })
+            .then(() => {
+              // console.log('sent');
+              this.setState({chat: reqData});
+            })
+            .catch((err) =>
+              console.log('msgr.js _send con chat uid request err: ', err),
+            );
+
           this._isMounted &&
             this.setState({chatExists: true, sendingReq: false});
           resolve(true);
@@ -226,6 +262,7 @@ export default class Msgr extends React.Component {
   componentWillUnmount() {
     this._isMounted = false;
     this.msgsRef && this.msgsRef.off('child_added');
+    this.listenChat && this.listenChat.off('value');
   }
 
   _keyExtractor = (item, index) => {
@@ -345,6 +382,8 @@ export default class Msgr extends React.Component {
   _renderHeader = () => {
     let {chatCheck, chatExists, chat, msgs} = this.state;
     let {user} = this.props.context;
+
+    // console.log('check: ', chat['inR']);
 
     return (
       <>

@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, ToastAndroid} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ReactNativeModal from 'react-native-modal';
 import THEME from '../../config/theme';
@@ -70,7 +77,7 @@ class ReportModal extends React.Component {
           },
         )
         .then(() => {
-          ToastAndroid.show('User Reported.', ToastAndroid.SHORT);
+          alert(`Thanks for your feedback. \nWe shall get back to you soon.`);
           this.props.reportToggle();
         })
         .catch((err) => {

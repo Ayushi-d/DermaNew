@@ -46,6 +46,8 @@ export default class MsgBox extends React.Component {
       x: 0,
     };
 
+    this.setState({msg: ''});
+
     if (!chatExists) {
       _sendChatRequest(lMsg)
         .then((res) => {
