@@ -20,7 +20,7 @@ class LikeSent extends React.Component {
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
       (a, b) =>
-        data[b].lt[auth().currentUser.uid] - data[a].lt[auth().currentUser.uid],
+        data[b].lf[auth().currentUser.uid] - data[a].lf[auth().currentUser.uid],
     );
     return (
       <FlatList
