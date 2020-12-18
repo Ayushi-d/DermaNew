@@ -67,7 +67,7 @@ class FilterOutContextProvider extends React.Component {
 
   getChatReqData = async () => {
     this.chatReqRef = database()
-      .ref('/dermaAndroid/users/' + this.uid)
+      .ref('Users/' + this.uid)
       .child('rf');
 
     this.chatReqRef.on('child_added', (snap) => {
@@ -82,10 +82,7 @@ class FilterOutContextProvider extends React.Component {
   };
 
   chatReqData = async (nid, uid) => {
-    let user = await database()
-      .ref('/dermaAndroid/users')
-      .child(uid)
-      .once('value');
+    let user = await database().ref('Users').child(uid).once('value');
 
     let isNotMyType = await this.notMyType(
       this.props.mainContext.user,
@@ -95,7 +92,7 @@ class FilterOutContextProvider extends React.Component {
     if (!isNotMyType) return;
 
     let message = await database()
-      .ref('/dermaAndroid/users/' + this.uid)
+      .ref('Users/' + this.uid)
       .child('rm')
       .child(nid)
       .once('value');

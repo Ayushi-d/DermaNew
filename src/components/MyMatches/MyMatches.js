@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, FlatList, ActivityIndicator} from 'react-native';
-
+import {CommonActions} from '@react-navigation/native';
 import {HeaderMain} from '../general/Header';
 import database from '@react-native-firebase/database';
 import Snackbar from 'react-native-snackbar';
@@ -30,14 +30,24 @@ class MyMatchesJSX extends React.Component {
     this.didFocusSubscription = this.props.navigation.addListener(
       'focus',
       (payload) => {
-        // console.log('focused', 'my matches');
-        this.refreshList();
+        let {route} = this.props;
+        if (route.params.from === 'ref') {
+          this.refreshList();
+        }
+      },
+    );
+
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'blur',
+      (payload) => {
+        this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );
   }
 
   componentWillUnmount() {
     this.didFocusSubscription && this.didFocusSubscription();
+    this.didBlurSubscription && this.didBlurSubscription();
   }
 
   navigateToMember = (data) => {

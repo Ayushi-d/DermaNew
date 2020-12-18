@@ -25,6 +25,9 @@ const routes = [
   {
     name: 'My Matches',
     route: 'My Matches',
+    params: {
+      from: 'ref',
+    },
   },
   {
     name: 'Search',
@@ -97,6 +100,7 @@ class SidebarJSX extends React.Component {
           text={item.name}
           key={index}
           route={item.route}
+          params={item.params}
           _navigateTo={this._navigateTo}
           context={this.props.context}
         />
@@ -172,7 +176,7 @@ class SidebarJSX extends React.Component {
 }
 
 function DefaultItem(props) {
-  let {text, context, route, _navigateTo, _setExpanded} = props;
+  let {text, context, route, params, _navigateTo, _setExpanded} = props;
 
   let msgsCount = 0;
 
@@ -194,7 +198,7 @@ function DefaultItem(props) {
     <View key={text} style={style.item}>
       <Image source={sidebar_icon[text]} style={style.image} />
       <TouchableOpacity
-        onPress={() => _navigateTo(route)}
+        onPress={() => _navigateTo(route, params)}
         style={{
           flex: 1,
           flexDirection: 'row',

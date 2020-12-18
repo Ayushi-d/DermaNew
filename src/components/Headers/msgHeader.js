@@ -42,7 +42,7 @@ export default class MsgHeader extends React.Component {
       return;
     }
     if (navigation.canGoBack()) {
-      navigation.goBack();
+      navigation.pop();
     }
   };
 

@@ -41,6 +41,17 @@ export default class ChatRqsts extends React.Component {
         this.setState({tab: 1});
       }
     }
+
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'focus',
+      (payload) => {
+        let {route} = this.props;
+        if (!this.state.rqsts.length) {
+          this._getChatReqs();
+          console.log('chatReqs: return!');
+        }
+      },
+    );
   }
   componentWillUnmount() {
     this._isMounted = false;
@@ -66,31 +77,20 @@ export default class ChatRqsts extends React.Component {
     }
   }
 
-  _declineChat = (refKey) => {
+  _declineChat = (refKey, ouser) => {
     let {context, navigation} = this.props;
     let {user} = context;
+    let uid = user.uid;
+    let ouid = ouser.uid;
+    let onid = ouser.nid;
 
-    let ouid = refKey.split(user.uid).join('');
-
-    database()
-      .ref(`conversation/${refKey}`)
-      .remove()
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat conversation remove err: ', err);
-      });
-
-    database()
-      .ref(`messages/${refKey}`)
-      .remove()
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat messages remove err: ', err);
-      });
+    // let ouid = refKey.split(user.uid).join('');
 
     database()
       .ref(`Users/${user.uid}/con/${refKey}`)
-      .remove()
+      .update({
+        lT: new Date().getTime() / 1000,
+      })
       .then(() => {})
       .catch((err) => {
         console.log('msgr.js _declineChat user/con remove err: ', err);
@@ -98,20 +98,43 @@ export default class ChatRqsts extends React.Component {
 
     database()
       .ref(`Users/${ouid}/con/${refKey}`)
-      .remove()
+      .update({
+        lT: new Date().getTime() / 1000,
+      })
       .then(() => {})
       .catch((err) => {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
       });
 
-    // if (navigation.canGoBack()) {
-    //   navigation.pop();
-    // }
+    // delete from rf node of current user
+
+    database()
+      .ref('Users')
+      .child(uid)
+      .child('rf')
+      .child(onid.toString())
+      .set(null);
+
+    // move the data to dt node of current user
+
+    database()
+      .ref('Users')
+      .child(uid)
+      .child('dt')
+      .child(onid.toString())
+      .set(ouid);
+
+    // add data to the db node of other user
+    database().ref('Users').child(ouid).child('db').child(uid).set(1);
   };
 
   _getChatReqs = () => {
     let {user} = this.props.context;
     let {con} = user;
+
+    if (this.consListerner) {
+      this.consListerner.off('value');
+    }
 
     // if (con && con.length) {
     // console.log('offline ', con);
@@ -150,6 +173,9 @@ export default class ChatRqsts extends React.Component {
               console.log('chats.js _getChats chat conGeterr: ', err),
             );
           if (!chatSnap.exists()) {
+            let rqs = this.state.rqsts;
+            rqs.filter((r) => r.refKey !== con);
+            this.setState({rqsts: rqs});
             continue;
           }
 
@@ -163,7 +189,11 @@ export default class ChatRqsts extends React.Component {
           if (user.bb && user.bb[ouid]) {
             continue;
           }
-          // check if blocked!
+          // check if blocked by user!
+          if (user.bt && user.bt[ouid]) {
+            continue;
+          }
+
           let cUserSnap = await database()
             .ref(`Users/${ouid}`)
             .once('value')
@@ -172,6 +202,17 @@ export default class ChatRqsts extends React.Component {
             continue;
           }
           let cUser = cUserSnap.val();
+
+          if (user.dt && user.dt[cUser.nid]) {
+            continue;
+          }
+
+          if (cUser.db && cUser.db[user.uid]) {
+            continue;
+          }
+
+          // console.log(chat);
+
           chat['cUser'] = cUser;
           chat['refKey'] = con;
           let filter = this._isMyType(user, cUser);

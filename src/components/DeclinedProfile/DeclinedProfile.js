@@ -7,6 +7,8 @@ import Cards from '../cards/cards';
 import {BUTTON_WITH_PARAM} from '../general/button';
 import Header from '../Headers/SettingsHeader';
 
+import moment from 'moment';
+
 class DeclinedProfileJSX extends React.Component {
   state = {
     declinedUserData: {},
@@ -21,7 +23,7 @@ class DeclinedProfileJSX extends React.Component {
   componentDidMount() {
     this.uid = this.props.context.user.uid;
     this.dtRef = database()
-      .ref('/dermaAndroid/users/' + this.uid)
+      .ref('Users/' + this.uid)
       .child('dt');
 
     this.dtRef.on('child_added', (snap) => {
@@ -39,21 +41,32 @@ class DeclinedProfileJSX extends React.Component {
     });
   }
 
-  fetchData = async (nid, uid) => {
+  fetchData = async (nid, ouid) => {
+    let {user} = this.props.context;
+    let uid = user.uid;
+
+    let uid1 = uid < ouid ? uid : ouid;
+    let uid2 = uid > ouid ? uid : ouid;
+
+    let refKey = uid1 + uid2;
+
     let data = await database()
-      .ref('/dermaAndroid/users/' + uid)
+      .ref('Users/' + ouid)
       .once('value');
     let message = await database()
-      .ref('/dermaAndroid/users/' + this.uid)
+      .ref('Users/' + this.uid)
       .child('rm')
       .child(nid)
       .once('value');
 
+    let chat = await database().ref(`conversation/${refKey}`).once('value');
+
     let declinedUserData = {...this.state.declinedUserData};
-    declinedUserData[uid] = data.val();
+    declinedUserData[ouid] = data.val();
+    declinedUserData[ouid]['chat'] = chat.val();
 
     let declinedMessage = {...this.state.declinedMessage};
-    declinedMessage[uid] = message.val();
+    declinedMessage[ouid] = message.val();
 
     this.setState({declinedMessage, declinedUserData});
   };
@@ -65,17 +78,23 @@ class DeclinedProfileJSX extends React.Component {
     return (
       <FlatList
         data={Object.keys(data)}
-        renderItem={({item}) => (
-          <Cards
-            data={data[item]}
-            hideButton={true}
-            sent={this.state.tab == 1}
-            message={this.state.declinedMessage[item]}
-            fromDeclined={true}
-            navigation={this.props.navigation}
-            likesMe={this.LikesMe(data[item])}
-          />
-        )}
+        renderItem={({item}) => {
+          let chat = this.state.declinedUserData[item].chat;
+          return (
+            <Cards
+              data={data[item]}
+              hideButton={true}
+              sent={this.state.tab == 1}
+              message={chat.lm.mg}
+              fromDeclined={true}
+              navigation={this.props.navigation}
+              likesMe={this.LikesMe(data[item])}
+              dateToShow={moment(new Date(chat.lm.tp * 1000)).calendar()}
+              messageRefKey={chat.refKey}
+              fromPage={'Decline Profile'}
+            />
+          );
+        }}
         keyExtractor={(item, index) => index.toString()}
         style={{flexGrow: 1}}
       />

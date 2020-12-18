@@ -382,7 +382,9 @@ class Dashboard extends React.Component {
         <DEFAULT_BUTTON
           text={'View Matching profiles'}
           style={{alignSelf: 'center', marginVertical: 20, width: 220}}
-          _onPress={() => this.props.navigation.navigate('My Matches')}
+          _onPress={() =>
+            this.props.navigation.navigate('My Matches', {from: 'ref'})
+          }
         />
       </>
     );

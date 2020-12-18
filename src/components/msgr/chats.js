@@ -51,11 +51,26 @@ export default class Chats extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     this._getChats();
+
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'focus',
+      (payload) => {
+        let {route} = this.props;
+        if (!this.state.chats.length) {
+          this._getChats();
+          console.log('chats return!');
+        }
+      },
+    );
   }
 
   _getChats = () => {
     let {user} = this.props.context;
     let {con} = user;
+
+    if (this.consListerner) {
+      this.consListerner.off('value');
+    }
 
     // if (con && con.length) {
     // console.log('offline ', user.con);
@@ -88,10 +103,13 @@ export default class Chats extends React.Component {
             );
 
           if (!chatSnap.exists()) {
+            let chts = this.state.chats;
+            chts.filter((c) => c.refKey !== con);
+            this.setState({chats: chts});
             continue;
           }
           let chat = chatSnap.val();
-          // console.log(chat.inR);
+
           if (chat.inR && chat.inR.uid !== user.uid) {
             if (!chat.isAcc) {
               continue;
@@ -99,11 +117,14 @@ export default class Chats extends React.Component {
           }
           let ouid = con.split(user.uid).join('');
 
-          // check if blocked!
+          // check if blocked by ouser!
           if (user.bb && user.bb[ouid]) {
             continue;
           }
-          // check if blocked!
+          // check if blocked by user!
+          if (user.bt && user.bt[ouid]) {
+            continue;
+          }
 
           let cUserSnap = await database()
             .ref(`Users/${ouid}`)
@@ -113,6 +134,15 @@ export default class Chats extends React.Component {
             continue;
           }
           let cUser = cUserSnap.val();
+
+          if (user.dt && user.dt[cUser.nid]) {
+            continue;
+          }
+
+          if (cUser.db && cUser.db[user.uid]) {
+            continue;
+          }
+
           chat['cUser'] = cUser;
           chat['refKey'] = con;
           chats.push(chat);
@@ -134,6 +164,7 @@ export default class Chats extends React.Component {
     if (this.consListerner) {
       this.consListerner.off('value');
     }
+    this.didFocusSubscription && this.didFocusSubscription();
   }
 
   _keyExtractor = (item, index) => {
@@ -208,16 +239,6 @@ function RenderChat(props) {
               {moment(new Date(lm.tp * 1000)).calendar()}
             </Text>
           </View>
-          {/* <View style={styles.chatBottomCon}>
-            <Text
-              style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
-              {lm.sid === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`}{' '}
-              {lm.mg}
-            </Text>
-            {chat[user.uid] && chat[user.uid].uc ? (
-              <Text style={styles.countBubble}>{chat[user.uid].uc}</Text>
-            ) : null}
-          </View> */}
         </View>
       </View>
       <View style={{...styles.chatBottomCon, marginLeft: 55, paddingRight: 5}}>
@@ -245,6 +266,7 @@ const styles = StyleSheet.create({
   chatConIn: {
     flex: 1,
     paddingLeft: 7,
+    paddingTop: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },

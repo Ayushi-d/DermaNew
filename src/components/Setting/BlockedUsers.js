@@ -32,7 +32,7 @@ class BlockedUsersJSX extends React.Component {
     this.setState({data, loading: false});
   };
   getData = () => {
-    let data = this.props.context.user && this.props.context.user;
+    let data = this.props.context.user;
 
     data = data && data.bt;
 

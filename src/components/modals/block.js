@@ -13,58 +13,58 @@ class BlockUser extends React.Component {
     let blockuid = this.props.userToBlock;
 
     let ref = await database()
-      .ref('/dermaAndroid/users/' + uid)
+      .ref('Users/' + uid)
       .child('bt')
       .child(blockuid)
       .set(1);
 
     let likeToRef = await database()
-      .ref('/dermaAndroid/users/' + uid)
+      .ref('Users/' + uid)
       .child('lt')
       .child(blockuid)
       .set(null);
 
     let lifeFromRef = await database()
-      .ref('/dermaAndroid/users/' + uid)
+      .ref('Users/' + uid)
       .child('lf')
       .child(blockuid)
-      .set(null)
+      .set(null);
 
     // other user
 
     await database()
-      .ref('/dermaAndroid/users/' + blockuid)
+      .ref('Users/' + blockuid)
       .child('bb')
       .child(uid)
       .set(1);
 
     await database()
-      .ref('/dermaAndroid/users/' + blockuid)
+      .ref('Users/' + blockuid)
       .child('lt')
       .child(uid)
       .set(null);
 
     await database()
-      .ref('/dermaAndroid/users/' + blockuid)
+      .ref('Users/' + blockuid)
       .child('lf')
       .child(uid)
       .set(null);
 
     this.props.blockToggle();
+    this.props.navigation.pop();
+    alert('User Blocked!');
   };
   render() {
     return (
       <ReactNativeModal
         isVisible={this.props.isVisible}
-        style={{margin: 0, alignItems: 'center'}}
-      >
+        style={{margin: 0, alignItems: 'center'}}>
         <View style={style.container}>
           <LinearGradient
             colors={[...THEME.GRADIENT_BG.PAIR].reverse()}
             style={[style.header]}
             start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-          >
+            end={{x: 1, y: 0}}>
             <Text style={style.heading}>BLOCK</Text>
           </LinearGradient>
           <View style={{backgroundColor: THEME.WHITE, padding: 20}}>
@@ -76,8 +76,7 @@ class BlockUser extends React.Component {
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 marginTop: 30,
-              }}
-            >
+              }}>
               <BUTTON_WITH_PARAM
                 text={'CANCEL'}
                 style={{width: '40%'}}

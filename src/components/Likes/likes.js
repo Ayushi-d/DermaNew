@@ -151,6 +151,7 @@ class Likes extends React.Component {
         : this.props.context.filteredOut;
 
     // sort by like recieved time
+
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
       (a, b) =>

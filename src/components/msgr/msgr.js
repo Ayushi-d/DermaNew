@@ -22,7 +22,7 @@ export default class Msgr extends React.Component {
     this.state = {
       chatCheck: false,
       chatExists: false,
-      chat: '',
+      chat: [],
       msgs: [],
     };
     this._isMounted = false;
@@ -46,8 +46,10 @@ export default class Msgr extends React.Component {
       'value',
       (chatSnap) => {
         if (chatSnap) {
-          this._isMounted &&
-            this.setState({chat: chatSnap.val(), chatExists: true});
+          if (chatSnap.val() !== null) {
+            this._isMounted &&
+              this.setState({chat: chatSnap.val(), chatExists: true});
+          }
         } else {
           if (navigation.canGoBack()) {
             navigation.pop();
@@ -270,6 +272,14 @@ export default class Msgr extends React.Component {
   };
 
   _accept = (refKey, ouid) => {
+    let {fromPage} = this.props.route.params;
+    console.log('accept!');
+    console.log(fromPage);
+
+    if (fromPage === 'Decline Profile') {
+      this._unDecline();
+    }
+
     database()
       .ref(`conversation/${refKey}`)
       .update({isAcc: 1})
@@ -295,32 +305,49 @@ export default class Msgr extends React.Component {
       });
   };
 
+  _unDecline = () => {
+    let {context, route} = this.props;
+    let {user} = context;
+
+    let oUser = route.params.data.otheruser;
+    let uid = user.uid;
+    let ouid = oUser.uid;
+    let onid = oUser.nid;
+    console.log('undecline!');
+    database()
+      .ref('Users')
+      .child(uid)
+      .child('rf')
+      .child(onid.toString())
+      .remove();
+
+    // move the data to dt node of current user
+
+    database()
+      .ref('Users')
+      .child(uid)
+      .child('dt')
+      .child(onid.toString())
+      .remove();
+
+    // add data to the db node of other user
+    database().ref('Users').child(ouid).child('db').child(uid).remove();
+  };
+
   _declineChat = () => {
     let {context, route, navigation} = this.props;
     let {user} = context;
     let {refKey} = route.params.data;
     let oUser = route.params.data.otheruser;
+    let uid = user.uid;
     let ouid = oUser.uid;
-
-    database()
-      .ref(`conversation/${refKey}`)
-      .remove()
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat conversation remove err: ', err);
-      });
-
-    database()
-      .ref(`messages/${refKey}`)
-      .remove()
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat messages remove err: ', err);
-      });
+    let onid = oUser.nid;
 
     database()
       .ref(`Users/${user.uid}/con/${refKey}`)
-      .remove()
+      .update({
+        lT: new Date().getTime() / 1000,
+      })
       .then(() => {})
       .catch((err) => {
         console.log('msgr.js _declineChat user/con remove err: ', err);
@@ -328,11 +355,34 @@ export default class Msgr extends React.Component {
 
     database()
       .ref(`Users/${ouid}/con/${refKey}`)
-      .remove()
+      .update({
+        lT: new Date().getTime() / 1000,
+      })
       .then(() => {})
       .catch((err) => {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
       });
+
+    // delete from rf node of current user
+
+    database()
+      .ref('Users')
+      .child(uid)
+      .child('rf')
+      .child(onid.toString())
+      .set(null);
+
+    // move the data to dt node of current user
+
+    database()
+      .ref('Users')
+      .child(uid)
+      .child('dt')
+      .child(onid.toString())
+      .set(ouid);
+
+    // add data to the db node of other user
+    database().ref('Users').child(ouid).child('db').child(uid).set(1);
 
     if (navigation.canGoBack()) {
       navigation.pop();
@@ -381,10 +431,13 @@ export default class Msgr extends React.Component {
 
   _renderHeader = () => {
     let {chatCheck, chatExists, chat, msgs} = this.state;
+    let {fromPage} = this.props.route.params;
+
     let {user} = this.props.context;
 
-    // console.log('check: ', chat['inR']);
-
+    if (fromPage === 'Decline Profile') {
+      return <></>;
+    }
     return (
       <>
         {!chatExists ||
