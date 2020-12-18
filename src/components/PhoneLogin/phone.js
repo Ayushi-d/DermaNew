@@ -149,16 +149,15 @@ class Phone extends React.Component {
                       });
                   })
                   .catch((err) => {
-                    this.setState({loading: false}, () => {
-                      console.log(err);
-                    });
+                    this.setState({loading: false});
+                    console.log('phone.js err: ', err);
                   });
               });
               break;
           }
         },
         (error) => {
-          console.log('phone login err: ', err);
+          console.log('phone login err: ', error);
         },
         (phoneAuthSnapshot) => {
           console.log('phoneAuthSnap: ', phoneAuthSnapshot.state);
@@ -228,13 +227,12 @@ class Phone extends React.Component {
           });
       })
       .catch((err) => {
-        this.setState({loading: false}, () => {
-          if (err.code == 'auth/invalid-verification-code') {
-            alert('Incorrect verification code.');
-          } else {
-            alert(err);
-          }
-        });
+        this.setState({loading: false});
+        if (err.code == 'auth/invalid-verification-code') {
+          alert('Incorrect verification code.');
+        } else {
+          alert(err);
+        }
       });
   };
 

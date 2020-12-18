@@ -433,6 +433,14 @@ class RootNav extends React.Component {
         this.csOfAddPhoto(-1);
       }
     }
+    if (!APPROVED && user_data.aop && !aop.includes(dp)) {
+      console.log('call!');
+
+      this.changeDP('ndp', aop[0]);
+      if (user_data.ts.dp != -1) {
+        this.csOfAddPhoto(-1);
+      }
+    }
 
     if (APPROVED && user_data.op && ndp != dp) {
       this.changeDP('ndp', dp);
