@@ -431,7 +431,6 @@ export default class Msgr extends React.Component {
     let {chatCheck, chatExists, chat, msgs} = this.state;
     let {fromPage, data} = this.props.route.params;
     let ouser = data.otheruser;
-    console.log('ouser: ', ouser);
 
     let {user} = this.props.context;
 
