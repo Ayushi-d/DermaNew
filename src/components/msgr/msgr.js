@@ -384,9 +384,7 @@ export default class Msgr extends React.Component {
     // add data to the db node of other user
     database().ref('Users').child(ouid).child('db').child(uid).set(1);
 
-    if (navigation.canGoBack()) {
-      navigation.pop();
-    }
+    this._isMounted && this.setState({declined: true});
   };
 
   _renderMsg = ({item, index}) => {
@@ -431,12 +429,35 @@ export default class Msgr extends React.Component {
 
   _renderHeader = () => {
     let {chatCheck, chatExists, chat, msgs} = this.state;
-    let {fromPage} = this.props.route.params;
+    let {fromPage, data} = this.props.route.params;
+    let ouser = data.otheruser;
+    console.log('ouser: ', ouser);
 
     let {user} = this.props.context;
 
-    if (fromPage === 'Decline Profile') {
-      return <></>;
+    // if (fromPage === 'Decline Profile') {
+    //   return <></>;
+    // }
+    if (user.dt && user.dt[ouser.nid]) {
+      return (
+        <View
+          style={{
+            width: '100%',
+            alignSelf: 'center',
+            padding: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            // backgroundColor: THEME.ACTIVE_COLOR,
+          }}>
+          <Text
+            style={{
+              color: '#000',
+            }}>
+            {`You have declined this user. \nSend a message to start conversation.`}
+          </Text>
+        </View>
+      );
     }
     return (
       <>

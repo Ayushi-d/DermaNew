@@ -86,26 +86,6 @@ export default class ChatRqsts extends React.Component {
 
     // let ouid = refKey.split(user.uid).join('');
 
-    database()
-      .ref(`Users/${user.uid}/con/${refKey}`)
-      .update({
-        lT: new Date().getTime() / 1000,
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat user/con remove err: ', err);
-      });
-
-    database()
-      .ref(`Users/${ouid}/con/${refKey}`)
-      .update({
-        lT: new Date().getTime() / 1000,
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat ouser/con remove err: ', err);
-      });
-
     // delete from rf node of current user
 
     database()
@@ -126,6 +106,26 @@ export default class ChatRqsts extends React.Component {
 
     // add data to the db node of other user
     database().ref('Users').child(ouid).child('db').child(uid).set(1);
+
+    database()
+      .ref(`Users/${user.uid}/con/${refKey}`)
+      .update({
+        lT: new Date().getTime() / 1000,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/con remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/con/${refKey}`)
+      .update({
+        lT: new Date().getTime() / 1000,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/con remove err: ', err);
+      });
   };
 
   _getChatReqs = () => {
@@ -207,7 +207,7 @@ export default class ChatRqsts extends React.Component {
             continue;
           }
 
-          if (cUser.db && cUser.db[user.uid]) {
+          if (cUser.dt && cUser.dt[user.nid]) {
             continue;
           }
 

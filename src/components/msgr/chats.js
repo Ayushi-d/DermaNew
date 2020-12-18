@@ -139,7 +139,7 @@ export default class Chats extends React.Component {
             continue;
           }
 
-          if (cUser.db && cUser.db[user.uid]) {
+          if (cUser.dt && cUser.dt[user.nid]) {
             continue;
           }
 
