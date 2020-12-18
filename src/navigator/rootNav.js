@@ -232,6 +232,11 @@ class RootNav extends React.Component {
   _callUserListener = (user) => {
     this.userRef.on('value', (snapshot) => {
       let userDat = snapshot.val();
+      if (snapshot.val() === null) {
+        this._removeListeners();
+        this._logout();
+        return;
+      }
       this.setState({user: userDat});
       this.trustScoreEventListener();
       this.privacyNameListener(userDat, userDat.uid);
@@ -363,7 +368,7 @@ class RootNav extends React.Component {
   updateTSBy20 = async () => {
     console.log('updatin ts by 20 check');
 
-    let ts = this.state.user_data.ts.ts;
+    let ts = this.state.user.ts.ts;
     ts += 20;
     try {
       let up = await this.userRef.child('ts').child('ts').set(ts);

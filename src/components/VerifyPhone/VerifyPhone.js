@@ -33,7 +33,7 @@ class VerifyPhoneJSX extends React.Component {
 
   constructor(props) {
     super(props);
-    this.fromfb = this.props.route.params.linkingFromFB;
+    // this.fromfb = this.props.route.params.linkingFromFB;
     this.phoneNumber = null;
     this.state = {
       code: '+91',

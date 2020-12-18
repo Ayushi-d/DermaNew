@@ -44,14 +44,23 @@ const routes = [
   {
     name: 'Messages',
     route: 'MessageBoard',
+    params: {
+      from: 'ref',
+    },
   },
   {
     name: 'Likes Sent',
     route: 'Likes Sent',
+    params: {
+      from: 'ref',
+    },
   },
   {
     name: 'Declined Profile',
     route: 'Declined Profile',
+    params: {
+      from: 'ref',
+    },
   },
   {
     name: 'Help',
@@ -261,7 +270,7 @@ function RenderExpanded(props) {
         }}>
         <View style={style.itemContainer}>
           <TouchableOpacity
-            onPress={() => _navigateTo(route, {id: 'default'})}
+            onPress={() => _navigateTo(route, {id: 'default', from: 'ref'})}
             style={{
               marginRight: 'auto',
               height: 50,
@@ -288,7 +297,7 @@ function RenderExpanded(props) {
           ? EXPAND[text].item.map((data) => (
               <View style={{height: 30}} key={data}>
                 <TouchableOpacity
-                  onPress={() => _navigateTo(route, {id: data})}>
+                  onPress={() => _navigateTo(route, {id: data, from: 'ref'})}>
                   <Text
                     style={{
                       height: 30,

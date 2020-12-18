@@ -201,7 +201,10 @@ class Dashboard extends React.Component {
         <TouchableOpacity
           style={[userLinks.link]}
           onPress={() =>
-            this.props.navigation.navigate('Likes', {id: 'Regular'})
+            this.props.navigation.navigate('Likes', {
+              id: 'Regular',
+              from: 'ref',
+            })
           }>
           <View>
             <Image source={likes} style={userLinks.image} />
@@ -236,6 +239,7 @@ class Dashboard extends React.Component {
           onPress={() => {
             this.props.navigation.navigate('MessageBoard', {
               fromPage: 'Dashboard',
+              from: 'ref',
             });
           }}>
           <View>
@@ -267,7 +271,10 @@ class Dashboard extends React.Component {
         <TouchableOpacity
           style={[userLinks.link]}
           onPress={() => {
-            this.props.navigation.navigate('Chat Request', {id: 'Regular'});
+            this.props.navigation.navigate('Chat Request', {
+              id: 'Regular',
+              from: 'ref',
+            });
           }}>
           <View>
             <Image source={filter} style={userLinks.image} />

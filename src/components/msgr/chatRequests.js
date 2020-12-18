@@ -14,6 +14,8 @@ import Cards from '../cards/cards';
 import moment from 'moment';
 import THEME from '../../config/theme';
 
+import {CommonActions} from '@react-navigation/native';
+
 export default class ChatRqsts extends React.Component {
   constructor(props) {
     super(props);
@@ -46,10 +48,16 @@ export default class ChatRqsts extends React.Component {
       'focus',
       (payload) => {
         let {route} = this.props;
-        if (!this.state.rqsts.length) {
+        if (route.params && route.params.from === 'ref') {
           this._getChatReqs();
-          console.log('chatReqs: return!');
+          console.log('chats requests return!');
         }
+      },
+    );
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'blur',
+      (payload) => {
+        this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );
   }
@@ -58,6 +66,8 @@ export default class ChatRqsts extends React.Component {
     if (this.consListerner) {
       this.consListerner.off('value');
     }
+    this.didFocusSubscription && this.didFocusSubscription();
+    this.didBlurSubscription && this.didBlurSubscription();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -137,7 +147,7 @@ export default class ChatRqsts extends React.Component {
     }
 
     // if (con && con.length) {
-    // console.log('offline ', con);
+    // console.log('call ');
     this.consListerner = database()
       .ref(`Users/${user.uid}`)
       .child('con')
@@ -226,7 +236,7 @@ export default class ChatRqsts extends React.Component {
           rqsts.push(chat);
         }
 
-        console.log('regular: ', regular.length, 'filtered: ', filtered.length);
+        // console.log('regular: ', regular.length, 'filtered: ', filtered.length);
         this._isMounted &&
           this.setState({regular, filtered, rqsts, loading: false});
       },

@@ -87,6 +87,15 @@ class UserInterectionProvider extends React.Component {
   };
 
   getUserLikeData = async () => {
+    if (this.ltRef) {
+      this.ltRef.off('child_added');
+      this.ltRef.off('child_removed');
+    }
+
+    if (this.lfRef) {
+      this.lfRef.off('child_added');
+      this.lfRef.off('child_removed');
+    }
     this.ltRef = this.currentUserRef.child('lt');
     let lu_data;
     let lu_filtered_data;
@@ -125,6 +134,9 @@ class UserInterectionProvider extends React.Component {
       if (res && res.key != 'c') {
         let userData = await this.userBase.child(res.key).once('value');
         // console.log(userData);
+        if (userData.val() === null) {
+          return;
+        }
         let isMyType = this.isMyType(
           this.props.mainContext.user,
           userData.val(),
@@ -200,6 +212,8 @@ class UserInterectionProvider extends React.Component {
           filteredOut: this.state.lu_filtered_data,
           lt: this.state.lt,
           lf: this.state.lf,
+          getUserLikeData: this.getUserLikeData,
+          childRemoved: this.childRemoved,
         }}>
         {this.props.children}
       </UserInterectionContext.Provider>

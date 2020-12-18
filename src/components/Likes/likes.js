@@ -8,6 +8,8 @@ import auth from '@react-native-firebase/auth';
 import DateHelpers from '../../helpers/datehelpers';
 import database from '@react-native-firebase/database';
 
+import {CommonActions} from '@react-navigation/native';
+
 class Likes extends React.Component {
   constructor(props) {
     super(props);
@@ -49,16 +51,29 @@ class Likes extends React.Component {
     if (id == 'Filtered Out') {
       this.setState({tab: 1});
     }
+
     this.didFocusSubscription = this.props.navigation.addListener(
       'focus',
       (payload) => {
-        // console.log('call!');
+        let {route} = this.props;
+        if (route.params && route.params.from === 'ref') {
+          this.props.context.getUserLikeData();
+          this.props.context.childRemoved();
+          console.log('likes.js return!');
+        }
         this._changeCount();
+      },
+    );
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'blur',
+      (payload) => {
+        this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );
   }
   componentWillUnmount() {
     this.didFocusSubscription && this.didFocusSubscription();
+    this.didBlurSubscription && this.didBlurSubscription();
   }
 
   componentDidUpdate(prevProps, prevState) {

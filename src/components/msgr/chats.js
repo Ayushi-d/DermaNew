@@ -13,6 +13,8 @@ import database from '@react-native-firebase/database';
 import THEME from '../../config/theme';
 import LinearGradient from 'react-native-linear-gradient';
 
+import {CommonActions} from '@react-navigation/native';
+
 import moment from 'moment';
 
 moment.updateLocale('en', {
@@ -56,10 +58,16 @@ export default class Chats extends React.Component {
       'focus',
       (payload) => {
         let {route} = this.props;
-        if (!this.state.chats.length) {
+        if (route.params && route.params.from === 'ref') {
           this._getChats();
           console.log('chats return!');
         }
+      },
+    );
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'blur',
+      (payload) => {
+        this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );
   }
@@ -165,6 +173,7 @@ export default class Chats extends React.Component {
       this.consListerner.off('value');
     }
     this.didFocusSubscription && this.didFocusSubscription();
+    this.didBlurSubscription && this.didBlurSubscription();
   }
 
   _keyExtractor = (item, index) => {
@@ -241,7 +250,7 @@ function RenderChat(props) {
           </View>
         </View>
       </View>
-      <View style={{...styles.chatBottomCon, marginLeft: 55, paddingRight: 5}}>
+      <View style={{...styles.chatBottomCon, marginLeft: 60, paddingRight: 5}}>
         <Text style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
           {lm.sid === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`} {lm.mg}
         </Text>
@@ -256,12 +265,15 @@ function RenderChat(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
 
   // RENDER CHAT
   chatCon: {
     flex: 1,
     backgroundColor: '#fff',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#777',
   },
   chatConIn: {
     flex: 1,
@@ -327,8 +339,8 @@ const styles = StyleSheet.create({
   },
   lMsg: {
     flex: 1,
-    fontSize: 13,
-    color: '#888',
+    fontSize: 14,
+    color: '#222',
   },
   countBubble: {
     fontSize: 10,

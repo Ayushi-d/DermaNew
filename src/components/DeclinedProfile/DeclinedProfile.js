@@ -9,6 +9,7 @@ import Header from '../Headers/SettingsHeader';
 
 import moment from 'moment';
 
+import {CommonActions} from '@react-navigation/native';
 class DeclinedProfileJSX extends React.Component {
   state = {
     declinedUserData: {},
@@ -21,6 +22,30 @@ class DeclinedProfileJSX extends React.Component {
   };
 
   componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'focus',
+      (payload) => {
+        let {route} = this.props;
+        if (route.params && route.params.from === 'ref') {
+          this._getDec();
+          console.log('declinedProfile return!');
+        }
+      },
+    );
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'blur',
+      (payload) => {
+        this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
+      },
+    );
+  }
+
+  _getDec = () => {
+    if (this.dtRef) {
+      this.dtRef.off('child_added');
+      this.dtRef.off('child_removed');
+    }
+
     this.uid = this.props.context.user.uid;
     this.dtRef = database()
       .ref('Users/' + this.uid)
@@ -39,7 +64,7 @@ class DeclinedProfileJSX extends React.Component {
 
       this.setState({declinedMessage, declinedUserData});
     });
-  }
+  };
 
   fetchData = async (nid, ouid) => {
     let {user} = this.props.context;
@@ -114,6 +139,8 @@ class DeclinedProfileJSX extends React.Component {
       this.dtRef.off('child_added');
       this.dtRef.off('child_removed');
     }
+    this.didFocusSubscription && this.didFocusSubscription();
+    this.didBlurSubscription && this.didBlurSubscription();
   }
 
   renderTab = () => {

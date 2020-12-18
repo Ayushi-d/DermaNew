@@ -84,6 +84,7 @@ class Login extends React.Component {
   };
 
   firebaseFbAuthentication = (accessToken) => {
+    console.log('test!');
     auth()
       .signInWithCredential(
         firebase.auth.FacebookAuthProvider.credential(accessToken),
@@ -106,9 +107,12 @@ class Login extends React.Component {
               return;
             }
 
-            if (result.isRegistered) {
+            console.log(result);
+
+            if (result.isRegistered.exists) {
               this.props.context._checkAuth();
             } else {
+              console.log('register!');
               this.props.navigation.navigate('Registration');
             }
           });

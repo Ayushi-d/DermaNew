@@ -4,19 +4,40 @@ import {HeaderMain} from '../general/Header';
 import Cards from '../cards/cards';
 import DateHelpers from '../../helpers/datehelpers';
 import auth from '@react-native-firebase/auth';
+import {CommonActions} from '@react-navigation/native';
 
 class LikeSent extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'focus',
+      (payload) => {
+        let {route} = this.props;
+        if (route.params && route.params.from === 'ref') {
+          this.props.context.getUserLikeData();
+          this.props.context.childRemoved();
+          console.log('likesSent.js return!');
+        }
+      },
+    );
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'blur',
+      (payload) => {
+        this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
+      },
+    );
+  }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.didFocusSubscription && this.didFocusSubscription();
+    this.didBlurSubscription && this.didBlurSubscription();
+  }
 
   renderCards = () => {
     let data = this.props.context.sent;
-
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
       (a, b) =>
