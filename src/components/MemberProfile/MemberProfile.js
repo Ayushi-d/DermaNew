@@ -167,7 +167,6 @@ class MemberProfile extends React.Component {
   renderInfo = () => {
     let user_data = this.props.route.params.data;
     if (!user_data) return null;
-    console.log(user_data);
     return (
       <View style={tabContent.container}>
         {Object.keys(aboutUser).map((item, i) => (
