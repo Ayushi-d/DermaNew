@@ -24,7 +24,7 @@ const UserConfig = {
   AgeRange: 'pa',
   Children: 'ch',
   'Do you have children': 'ch',
-  Diet: 'dt',
+  Diet: 'de',
   'State / Province': 's',
 };
 
@@ -46,7 +46,6 @@ const getData = (obj, field, pp = false, edit = false) => {
   }
 
   let ch = UserConfig[field];
-  console.log(ch);
 
   if (ch == 'in') {
     return obj[ch].split(',').join(', ');
@@ -92,8 +91,6 @@ const getPP = (pp, field) => {
   if (ch == 'pa' && field == 'AgeRange') return [pp.a1, pp.a2];
 
   if (ch == 'pa') return `${pp.a1} to ${pp.a2} Yrs`;
-
-  if (ch == 'dt') return '';
 
   return pp[ch];
 };
