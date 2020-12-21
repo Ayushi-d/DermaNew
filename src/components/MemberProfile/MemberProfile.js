@@ -167,14 +167,16 @@ class MemberProfile extends React.Component {
   renderInfo = () => {
     let user_data = this.props.route.params.data;
     if (!user_data) return null;
+    console.log(user_data);
     return (
       <View style={tabContent.container}>
         {Object.keys(aboutUser).map((item, i) => (
           <View key={i} style={tabContent.block}>
-            {aboutUser[item].map((obj) =>
-              getData(user_data, obj.name) == '' &&
-              obj.name != 'ABOUT ME' &&
-              obj.name != 'Interest' ? null : (
+            {aboutUser[item].map((obj) => {
+              console.log(obj.name);
+              return getData(user_data, obj.name) == '' &&
+                obj.name != 'ABOUT ME' &&
+                obj.name != 'Interest' ? null : (
                 <View key={obj.name} style={tabContent.blockItem}>
                   <Text style={tabContent.ch}>{obj.name}</Text>
                   {obj.name == 'ABOUT ME' ? (
@@ -188,8 +190,8 @@ class MemberProfile extends React.Component {
                     </Text>
                   )}
                 </View>
-              ),
-            )}
+              );
+            })}
           </View>
         ))}
       </View>

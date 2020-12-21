@@ -53,7 +53,7 @@ class SearchResult extends React.Component {
           newUsers[uk] = users[uk];
         }
 
-        this.setData(newUsers);
+        this.setData(users);
       } else {
         this.setState({loading: false}, () => {
           alert('No Matching users found');

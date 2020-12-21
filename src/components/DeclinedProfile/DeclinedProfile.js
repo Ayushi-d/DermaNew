@@ -63,7 +63,14 @@ class DeclinedProfileJSX extends React.Component {
       let declinedMessage = {...this.state.declinedMessage};
       delete declinedMessage[snap.val()];
 
-      this.setState({declinedMessage, declinedUserData});
+      let dKeys = this.state.dKeys;
+
+      let kIdx = dKeys.indexOf(snap.val());
+      if (kIdx > -1) {
+        dKeys.splice(kIdx, 1);
+      }
+
+      this.setState({dKeys, declinedMessage, declinedUserData});
     });
   };
 

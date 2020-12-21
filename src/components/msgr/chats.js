@@ -154,6 +154,9 @@ export default class Chats extends React.Component {
 
           chat['cUser'] = cUser;
           chat['refKey'] = con;
+
+          chats.sort((a, b) => a.lm.lT * 1000 - b.lm.lT * 1000);
+
           chats.push(chat);
         }
 
