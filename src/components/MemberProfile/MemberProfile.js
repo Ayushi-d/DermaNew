@@ -173,7 +173,6 @@ class MemberProfile extends React.Component {
         {Object.keys(aboutUser).map((item, i) => (
           <View key={i} style={tabContent.block}>
             {aboutUser[item].map((obj) => {
-              console.log(obj.name);
               return getData(user_data, obj.name) == '' &&
                 obj.name != 'ABOUT ME' &&
                 obj.name != 'Interest' ? null : (
