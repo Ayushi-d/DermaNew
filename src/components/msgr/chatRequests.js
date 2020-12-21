@@ -31,7 +31,7 @@ export default class ChatRqsts extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this.setState({loading: true});
+    // this.setState({loading: true});
     this._getChatReqs();
     if (this.props.route.params.id) {
       let id = this.props.route.params.id;
@@ -50,6 +50,7 @@ export default class ChatRqsts extends React.Component {
         let {route} = this.props;
         if (route.params && route.params.from === 'ref') {
           this._getChatReqs();
+          this._seenChats();
           console.log('chats requests return!');
         }
       },
@@ -61,6 +62,28 @@ export default class ChatRqsts extends React.Component {
       },
     );
   }
+
+  _seenChats = () => {
+    let {user} = this.props.context;
+    let cons = JSON.parse(JSON.stringify(user.con));
+
+    if (cons) {
+      let con = Object.keys(user.con);
+      con.forEach((c) => {
+        if (!cons[c].sn) {
+          database().ref(`Users/${user.uid}/con/${c}/sn`).set(1);
+        }
+      });
+      // cons.forEach((c) => {
+      //   // if(!c.sn) {
+      //   let key = Object.keys(c);
+      //   console.log(key);
+      //   // database().ref(`Users/${user.uid}/con/`)
+      //   // }
+      // });
+    }
+  };
+
   componentWillUnmount() {
     this._isMounted = false;
     if (this.consListerner) {
@@ -87,7 +110,7 @@ export default class ChatRqsts extends React.Component {
     }
   }
 
-  _declineChat = (refKey, ouser) => {
+  _declineChat = async (refKey, ouser) => {
     let {context, navigation} = this.props;
     let {user} = context;
     let uid = user.uid;
@@ -98,7 +121,7 @@ export default class ChatRqsts extends React.Component {
 
     // delete from rf node of current user
 
-    database()
+    await database()
       .ref('Users')
       .child(uid)
       .child('rf')
@@ -107,7 +130,7 @@ export default class ChatRqsts extends React.Component {
 
     // move the data to dt node of current user
 
-    database()
+    await database()
       .ref('Users')
       .child(uid)
       .child('dt')
@@ -115,27 +138,35 @@ export default class ChatRqsts extends React.Component {
       .set(ouid);
 
     // add data to the db node of other user
-    database().ref('Users').child(ouid).child('db').child(uid).set(1);
+    await database()
+      .ref('Users')
+      .child(ouid)
+      .child('db')
+      .child(uid)
+      .set(1)
+      .then(async () => {
+        await database()
+          .ref(`Users/${ouid}/con/${refKey}`)
+          .update({
+            lT: new Date().getTime() / 1000,
+          })
+          .then(() => {})
+          .catch((err) => {
+            console.log('msgr.js _declineChat ouser/con remove err: ', err);
+          });
 
-    database()
-      .ref(`Users/${user.uid}/con/${refKey}`)
-      .update({
-        lT: new Date().getTime() / 1000,
+        await database()
+          .ref(`Users/${user.uid}/con/${refKey}`)
+          .update({
+            lT: new Date().getTime() / 1000,
+            uc: 0,
+          })
+          .then(() => {})
+          .catch((err) => {
+            console.log('msgr.js _declineChat user/con remove err: ', err);
+          });
       })
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat user/con remove err: ', err);
-      });
-
-    database()
-      .ref(`Users/${ouid}/con/${refKey}`)
-      .update({
-        lT: new Date().getTime() / 1000,
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat ouser/con remove err: ', err);
-      });
+      .catch((err) => console.log('decline err chatRequests.js: ', err));
   };
 
   _getChatReqs = () => {
@@ -145,6 +176,7 @@ export default class ChatRqsts extends React.Component {
     if (this.consListerner) {
       this.consListerner.off('value');
     }
+    this._isMounted && this.setState({loading: true});
 
     // if (con && con.length) {
     // console.log('call ');
@@ -159,7 +191,7 @@ export default class ChatRqsts extends React.Component {
         let regular = [];
         let filtered = [];
         let rqsts = [];
-        // console.log(conSnap);
+        // console.log('snap!: ', conSnap);
         // console.log('snap!', conSnap.val());
         let cons = conSnap.val();
 
@@ -208,16 +240,18 @@ export default class ChatRqsts extends React.Component {
             .ref(`Users/${ouid}`)
             .once('value')
             .catch((err) => console.log('chats.js _getChats cUser err: ', err));
-          if (!cUserSnap.exists) {
+          if (!cUserSnap.exists || cUserSnap.val() === null) {
             continue;
           }
           let cUser = cUserSnap.val();
+          // console.log(user.dt, user.db, cUser.nid);
+          // console.log(cUser.dt, cUser.db, user.nid);
 
-          if (user.dt && user.dt[cUser.nid]) {
+          if (user.db && user.db[cUser.uid]) {
             continue;
           }
 
-          if (cUser.dt && cUser.dt[user.nid]) {
+          if (cUser.db && cUser.db[user.uid]) {
             continue;
           }
 
@@ -235,6 +269,8 @@ export default class ChatRqsts extends React.Component {
           }
           rqsts.push(chat);
         }
+
+        rqsts.sort((a, b) => a.lm.lT * 1000 - b.lm.lT * 1000);
 
         // console.log('regular: ', regular.length, 'filtered: ', filtered.length);
         this._isMounted &&
@@ -300,6 +336,7 @@ export default class ChatRqsts extends React.Component {
 
   _renderTab = () => {
     let {tab} = this.state;
+    let {navigation} = this.props;
     return (
       <View
         style={{
@@ -313,6 +350,7 @@ export default class ChatRqsts extends React.Component {
           checked={tab == 0}
           _onPress={() => {
             this.setState({tab: 0});
+            navigation.dispatch(CommonActions.setParams({tab: 'Regular'}));
           }}
           pressParam={0}
         />
@@ -322,6 +360,7 @@ export default class ChatRqsts extends React.Component {
           checked={!(tab == 0)}
           _onPress={() => {
             this.setState({tab: 1});
+            navigation.dispatch(CommonActions.setParams({tab: 'Filtered Out'}));
           }}
           pressParam={1}
         />

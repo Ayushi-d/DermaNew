@@ -87,6 +87,8 @@ class UserInterectionProvider extends React.Component {
   };
 
   getUserLikeData = async () => {
+    let {user} = this.props.mainContext;
+
     if (this.ltRef) {
       this.ltRef.off('child_added');
       this.ltRef.off('child_removed');
@@ -109,13 +111,23 @@ class UserInterectionProvider extends React.Component {
 
           let userData = await this.userBase.child(res.key).once('value');
 
+          let oUser = userData.val();
+
+          if (user.db && user.db[oUser.uid]) {
+            return;
+          }
+
+          if (oUser.db && oUser.db[user.uid]) {
+            return;
+          }
+
           if (this.state.lbu_data) {
             lbu_data = {...this.state.lbu_data};
           } else {
             lbu_data = {};
           }
 
-          lbu_data[res.key] = userData.val();
+          lbu_data[res.key] = oUser;
           let lt = {...this.state.lt};
           lt[res.key] = res;
           this.setState({lbu_data, lt});
@@ -134,6 +146,9 @@ class UserInterectionProvider extends React.Component {
       if (res && res.key != 'c') {
         let userData = await this.userBase.child(res.key).once('value');
         // console.log(userData);
+
+        let oUser = userData.val();
+
         if (userData.val() === null) {
           return;
         }
@@ -141,6 +156,14 @@ class UserInterectionProvider extends React.Component {
           this.props.mainContext.user,
           userData.val(),
         );
+
+        if (user.db && user.db[oUser.uid]) {
+          return;
+        }
+
+        if (oUser.db && oUser.db[user.uid]) {
+          return;
+        }
 
         lu_data = this.state.lu_data ? {...this.state.lu_data} : {};
 

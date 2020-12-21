@@ -5,7 +5,7 @@ import Cards from '../cards/cards';
 import DateHelpers from '../../helpers/datehelpers';
 import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
-
+import moment from 'moment';
 class LikeSent extends React.Component {
   constructor(props) {
     super(props);
@@ -51,9 +51,9 @@ class LikeSent extends React.Component {
             data={data[item]}
             fromLike={true}
             sent={true}
-            dateToShow={DateHelpers.getDateFromTimeStamp(
-              data[item].lf[auth().currentUser.uid],
-            )}
+            dateToShow={moment(
+              new Date(data[item].lf[auth().currentUser.uid] * 1000),
+            ).calendar()}
             likesMe={this.LikesMe(data[item])}
             likeOther={true}
             fromPage={'Like Sent'}

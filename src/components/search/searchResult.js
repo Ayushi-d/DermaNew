@@ -34,10 +34,26 @@ class SearchResult extends React.Component {
   // }
 
   fetchUser = async () => {
+    let {user} = this.props.context;
+
     this.setState({loading: true}, async () => {
       let users = await this.pp.getUsers();
       if (users && Object.keys(users).length != 0) {
-        this.setData(users);
+        let uKeys = Object.keys(users);
+        let newUsers = {};
+        for (let uk of uKeys) {
+          let ouser = users[uk];
+          if (user.db && user.db[ouser.uid]) {
+            continue;
+          }
+
+          if (ouser.db && ouser.db[user.uid]) {
+            continue;
+          }
+          newUsers[uk] = users[uk];
+        }
+
+        this.setData(newUsers);
       } else {
         this.setState({loading: false}, () => {
           alert('No Matching users found');
@@ -47,13 +63,27 @@ class SearchResult extends React.Component {
   };
 
   loadMore = async () => {
+    let {user} = this.props.context;
     if (this.state.onEndReachedCalledDuringMomentum) return null;
 
     this.setState({loadMore: true});
 
     let users = await this.pp.getUsers();
     if (users && Object.keys(users).length != 0) {
-      this.setData(users);
+      let uKeys = Object.keys(users);
+      let newUsers = {};
+      for (let uk of uKeys) {
+        let ouser = users[uk];
+        if (user.db && user.db[ouser.uid]) {
+          continue;
+        }
+
+        if (ouser.db && ouser.db[user.uid]) {
+          continue;
+        }
+        newUsers[uk] = users[uk];
+      }
+      this.setData(newUsers);
     } else {
       Snackbar.show({
         title: 'You have reached to the end of the matched users list.',

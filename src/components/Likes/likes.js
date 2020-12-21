@@ -7,7 +7,7 @@ import Cards from '../cards/cards';
 import auth from '@react-native-firebase/auth';
 import DateHelpers from '../../helpers/datehelpers';
 import database from '@react-native-firebase/database';
-
+import moment from 'moment';
 import {CommonActions} from '@react-navigation/native';
 
 class Likes extends React.Component {
@@ -185,9 +185,9 @@ class Likes extends React.Component {
               sent={this.state.tab == 1}
               likesMe={true}
               likeOther={this.likeOther(data[item])}
-              dateToShow={DateHelpers.getDateFromTimeStamp(
-                data[item].lt[auth().currentUser.uid],
-              )}
+              dateToShow={moment(
+                new Date(data[item].lt[auth().currentUser.uid] * 1000),
+              ).calendar()}
               fromPage={'Likes'}
               {...this.props}
             />

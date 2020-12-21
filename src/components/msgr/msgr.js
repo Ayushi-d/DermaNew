@@ -24,6 +24,7 @@ export default class Msgr extends React.Component {
       chatExists: false,
       chat: [],
       msgs: [],
+      loaded: false,
     };
     this._isMounted = false;
   }
@@ -81,7 +82,7 @@ export default class Msgr extends React.Component {
             this._getInitMsgs(refKey);
           } else {
             this._isMounted &&
-              this.setState({chatExists: false, chatCheck: true});
+              this.setState({chatExists: false, chatCheck: true, loaded: true});
           }
         },
         (err) => {
@@ -108,7 +109,7 @@ export default class Msgr extends React.Component {
             msgs.push(msg);
           });
           msgs = msgs.reverse();
-          this._isMounted && this.setState({msgs});
+          this._isMounted && this.setState({msgs, loaded: true});
 
           this._getMsgs(refKey, msgs[0]);
           this._seen(refKey);
@@ -219,6 +220,19 @@ export default class Msgr extends React.Component {
         reject('already trying to send a request!');
       }
       let sendRequest = database().ref(`conversation/${refKey}`).set(reqData);
+      database()
+        .ref(`messages/${refKey}`)
+        .push(
+          rMsg,
+          (res) => {
+            // console.log('msg sent!');
+            // this._isMounted && this.setState({msg: ''});
+            this._getMsgs(refKey);
+          },
+          (err) => {
+            console.log('msgBox _send err: ', err);
+          },
+        );
       sendRequest
         .then(() => {
           database()
@@ -273,8 +287,6 @@ export default class Msgr extends React.Component {
 
   _accept = (refKey, ouid) => {
     let {fromPage} = this.props.route.params;
-    console.log('accept!');
-    console.log(fromPage);
 
     if (fromPage === 'Decline Profile') {
       this._unDecline();
@@ -343,26 +355,6 @@ export default class Msgr extends React.Component {
     let ouid = oUser.uid;
     let onid = oUser.nid;
 
-    database()
-      .ref(`Users/${user.uid}/con/${refKey}`)
-      .update({
-        lT: new Date().getTime() / 1000,
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat user/con remove err: ', err);
-      });
-
-    database()
-      .ref(`Users/${ouid}/con/${refKey}`)
-      .update({
-        lT: new Date().getTime() / 1000,
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.log('msgr.js _declineChat ouser/con remove err: ', err);
-      });
-
     // delete from rf node of current user
 
     database()
@@ -382,7 +374,34 @@ export default class Msgr extends React.Component {
       .set(ouid);
 
     // add data to the db node of other user
-    database().ref('Users').child(ouid).child('db').child(uid).set(1);
+    database()
+      .ref('Users')
+      .child(ouid)
+      .child('db')
+      .child(uid)
+      .set(1)
+      .then(() => {
+        database()
+          .ref(`Users/${user.uid}/con/${refKey}`)
+          .update({
+            lT: new Date().getTime() / 1000,
+          })
+          .then(() => {})
+          .catch((err) => {
+            console.log('msgr.js _declineChat user/con remove err: ', err);
+          });
+
+        database()
+          .ref(`Users/${ouid}/con/${refKey}`)
+          .update({
+            lT: new Date().getTime() / 1000,
+          })
+          .then(() => {})
+          .catch((err) => {
+            console.log('msgr.js _declineChat ouser/con remove err: ', err);
+          });
+      })
+      .catch((err) => console.log('msg.js _declineCHat err: ', err));
 
     this._isMounted && this.setState({declined: true});
   };
@@ -428,8 +447,8 @@ export default class Msgr extends React.Component {
   };
 
   _renderHeader = () => {
-    let {chatCheck, chatExists, chat, msgs} = this.state;
-    let {fromPage, data} = this.props.route.params;
+    let {chatCheck, chatExists, chat, msgs, loaded} = this.state;
+    let {data} = this.props.route.params;
     let ouser = data.otheruser;
 
     let {user} = this.props.context;
@@ -454,6 +473,71 @@ export default class Msgr extends React.Component {
               color: '#000',
             }}>
             {`You have declined this user. \nSend a message to start conversation.`}
+          </Text>
+        </View>
+      );
+    }
+
+    if (user.db && user.db[ouser.uid]) {
+      return (
+        <View
+          style={{
+            width: '100%',
+            alignSelf: 'center',
+            padding: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            // backgroundColor: THEME.ACTIVE_COLOR,
+          }}>
+          <Text
+            style={{
+              color: '#000',
+            }}>
+            {`${ouser.sn} has declined your chat request.`}
+          </Text>
+        </View>
+      );
+    }
+    if (loaded && !msgs.length) {
+      return (
+        <View
+          style={{
+            width: '100%',
+            alignSelf: 'center',
+            padding: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            // backgroundColor: THEME.ACTIVE_COLOR,
+          }}>
+          <Text
+            style={{
+              color: '#000',
+            }}>
+            {`Type a message to send chat request.`}
+          </Text>
+        </View>
+      );
+    }
+
+    if (chatExists && chat.inR && chat.inR.uid === user.uid && !chat.isAcc) {
+      return (
+        <View
+          style={{
+            width: '100%',
+            alignSelf: 'center',
+            padding: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            // backgroundColor: THEME.ACTIVE_COLOR,
+          }}>
+          <Text
+            style={{
+              color: '#000',
+            }}>
+            {`${ouser.sn} has not accepted your chat request yet.`}
           </Text>
         </View>
       );
@@ -496,7 +580,10 @@ export default class Msgr extends React.Component {
 
   render() {
     let {chatCheck, chatExists, chat, msgs} = this.state;
+    let {data} = this.props.route.params;
     let {user} = this.props.context;
+    let ouser = data.otheruser;
+
     // console.log(chat);
     return (
       <View style={styles.container}>
@@ -514,15 +601,19 @@ export default class Msgr extends React.Component {
             <ActivityIndicator size={'small'} color={THEME.ACTIVE_COLOR} />
           </View>
         ) : (
-          <MsgBox
-            chatCheck={chatCheck}
-            chatExists={chatExists}
-            chat={chat}
-            _sendChatRequest={this._sendChatRequest}
-            _getMsgs={this._getMsgs}
-            _accept={this._accept}
-            {...this.props}
-          />
+          <>
+            {user.db && user.db[ouser.uid] ? null : (
+              <MsgBox
+                chatCheck={chatCheck}
+                chatExists={chatExists}
+                chat={chat}
+                _sendChatRequest={this._sendChatRequest}
+                _getMsgs={this._getMsgs}
+                _accept={this._accept}
+                {...this.props}
+              />
+            )}
+          </>
         )}
       </View>
     );

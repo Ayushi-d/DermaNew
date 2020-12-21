@@ -22,8 +22,8 @@ moment.updateLocale('en', {
     lastDay: '[Yesterday]',
     sameDay: 'LT',
     nextDay: '[Tomorrow]',
-    lastWeek: 'dddd',
-    nextWeek: 'dddd',
+    lastWeek: 'll',
+    nextWeek: 'll',
     sameElse: 'L',
   },
   longDateFormat: {
@@ -32,7 +32,7 @@ moment.updateLocale('en', {
     L: 'DD/MM/YYYY',
     l: 'D/M/YYYY',
     LL: 'Do MMMM YYYY',
-    ll: 'D MMM YYYY',
+    ll: 'MMM D, YYYY',
     LLL: 'Do MMMM YYYY LT',
     lll: 'D MMM YYYY LT',
     LLLL: 'dddd, MMMM Do YYYY LT',
@@ -138,16 +138,17 @@ export default class Chats extends React.Component {
             .ref(`Users/${ouid}`)
             .once('value')
             .catch((err) => console.log('chats.js _getChats cUser err: ', err));
-          if (!cUserSnap.exists) {
+          if (!cUserSnap.exists || cUserSnap.val() === null) {
             continue;
           }
           let cUser = cUserSnap.val();
+          // console.log(cUser);
 
-          if (user.dt && user.dt[cUser.nid]) {
+          if (user.db && user.db[cUser.uid]) {
             continue;
           }
 
-          if (cUser.dt && cUser.dt[user.nid]) {
+          if (cUser.db && cUser.db[user.uid]) {
             continue;
           }
 

@@ -190,6 +190,7 @@ class Dashboard extends React.Component {
           chatRequestCount += 1;
         } else {
           if (cons[c].uc) {
+            console.log(c);
             msgsCount += 1;
           }
         }

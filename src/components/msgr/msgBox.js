@@ -52,19 +52,19 @@ export default class MsgBox extends React.Component {
       _sendChatRequest(lMsg)
         .then((res) => {
           if (res) {
-            database()
-              .ref(`messages/${refKey}`)
-              .push(
-                lMsg,
-                (res) => {
-                  console.log('msg sent!');
-                  this._isMounted && this.setState({msg: ''});
-                  this.props._getMsgs(refKey);
-                },
-                (err) => {
-                  console.log('msgBox _send err: ', err);
-                },
-              );
+            // database()
+            //   .ref(`messages/${refKey}`)
+            //   .push(
+            //     lMsg,
+            //     (res) => {
+            //       console.log('msg sent!');
+            //       this._isMounted && this.setState({msg: ''});
+            //       this.props._getMsgs(refKey);
+            //     },
+            //     (err) => {
+            //       console.log('msgBox _send err: ', err);
+            //     },
+            //   );
           }
         })
         .catch((err) =>

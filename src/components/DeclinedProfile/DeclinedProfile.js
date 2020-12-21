@@ -14,6 +14,7 @@ class DeclinedProfileJSX extends React.Component {
   state = {
     declinedUserData: {},
     declinedMessage: {},
+    dKeys: [],
     tab: 0,
   };
 
@@ -85,6 +86,9 @@ class DeclinedProfileJSX extends React.Component {
       .once('value');
 
     let chat = await database().ref(`conversation/${refKey}`).once('value');
+    if (!chat.exists || chat.val() === null) {
+      return;
+    }
 
     let declinedUserData = {...this.state.declinedUserData};
     declinedUserData[ouid] = data.val();
@@ -93,16 +97,27 @@ class DeclinedProfileJSX extends React.Component {
     let declinedMessage = {...this.state.declinedMessage};
     declinedMessage[ouid] = message.val();
 
-    this.setState({declinedMessage, declinedUserData});
+    // declinedUserData.sort((a, b) => a.chat.lm.lT - b.chat.lm.lT);
+    let dKeys = Object.keys(declinedUserData);
+    if (dKeys.length !== 0) {
+      dKeys.sort(
+        (a, b) =>
+          declinedUserData[a].chat.lm.lT - declinedUserData[b].chat.lm.lT,
+      );
+    }
+
+    this.setState({declinedMessage, declinedUserData, dKeys: dKeys.reverse()});
   };
 
   renderMessageReq = () => {
     let data = this.state.declinedUserData;
+    let {dKeys} = this.state;
+    // console.log(dKeys);
 
-    if (Object.keys(data).length == 0) return null;
+    if (dKeys.length == 0) return null;
     return (
       <FlatList
-        data={Object.keys(data)}
+        data={dKeys}
         renderItem={({item}) => {
           let chat = this.state.declinedUserData[item].chat;
           return (
