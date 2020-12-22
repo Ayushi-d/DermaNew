@@ -33,13 +33,13 @@ export default class ChatRqsts extends React.Component {
     this._isMounted = true;
     // this.setState({loading: true});
     this._getChatReqs();
-    if (this.props.route.params.id) {
-      let id = this.props.route.params.id;
-      if (id == 'Regular' || id == 'default') {
+    if (this.props.route.params.tab) {
+      let tab = this.props.route.params.tab;
+      if (tab == 'Regular' || tab == 'default') {
         this.setState({tab: 0});
       }
 
-      if (id == 'Filtered Out') {
+      if (tab == 'Filtered Out') {
         this.setState({tab: 1});
       }
     }
@@ -50,7 +50,7 @@ export default class ChatRqsts extends React.Component {
         let {route} = this.props;
         if (route.params && route.params.from === 'ref') {
           this._getChatReqs();
-          this._seenChats();
+          // this._seenChats();
           console.log('chats requests return!');
         }
       },
@@ -94,8 +94,8 @@ export default class ChatRqsts extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let tab = this.props.route.params.id;
-    let prevTab = prevProps.route.params.id;
+    let tab = this.props.route.params.tab;
+    let prevTab = prevProps.route.params.tab;
 
     // console.log('update!', tab, prevTab);
 
@@ -107,6 +107,13 @@ export default class ChatRqsts extends React.Component {
       if (tab == 'Filtered Out') {
         this.setState({tab: 1});
       }
+    } else {
+      // if ((tab == 'Regular' || tab == 'default') && this.state.tab !== 0) {
+      //   this.setState({tab: 0});
+      // }
+      // if (tab == 'Filtered Out' && this.state.tab !== 1) {
+      //   this.setState({tab: 1});
+      // }
     }
   }
 
@@ -117,56 +124,38 @@ export default class ChatRqsts extends React.Component {
     let ouid = ouser.uid;
     let onid = ouser.nid;
 
-    // let ouid = refKey.split(user.uid).join('');
-
-    // delete from rf node of current user
-
-    await database()
-      .ref('Users')
-      .child(uid)
-      .child('rf')
-      .child(onid.toString())
-      .set(null);
-
-    // move the data to dt node of current user
-
-    await database()
-      .ref('Users')
-      .child(uid)
-      .child('dt')
-      .child(onid.toString())
-      .set(ouid);
-
-    // add data to the db node of other user
-    await database()
-      .ref('Users')
-      .child(ouid)
-      .child('db')
-      .child(uid)
-      .set(1)
-      .then(async () => {
-        await database()
-          .ref(`Users/${ouid}/con/${refKey}`)
-          .update({
-            lT: new Date().getTime() / 1000,
-          })
-          .then(() => {})
-          .catch((err) => {
-            console.log('msgr.js _declineChat ouser/con remove err: ', err);
-          });
-
-        await database()
-          .ref(`Users/${user.uid}/con/${refKey}`)
-          .update({
-            lT: new Date().getTime() / 1000,
-            uc: 0,
-          })
-          .then(() => {})
-          .catch((err) => {
-            console.log('msgr.js _declineChat user/con remove err: ', err);
-          });
+    database()
+      .ref(`conversation/${refKey}`)
+      .update({
+        isAcc: -1,
       })
-      .catch((err) => console.log('decline err chatRequests.js: ', err));
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/con remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${user.uid}/con/${refKey}`)
+      .update({
+        lT: new Date().getTime() / 1000,
+        uc: 0,
+        isAcc: -1,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/con remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/con/${refKey}`)
+      .update({
+        lT: new Date().getTime() / 1000,
+        isAcc: -1,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/con remove err: ', err);
+      });
   };
 
   _getChatReqs = () => {
@@ -176,7 +165,7 @@ export default class ChatRqsts extends React.Component {
     if (this.consListerner) {
       this.consListerner.off('value');
     }
-    this._isMounted && this.setState({loading: true});
+    // this._isMounted && this.setState({loading: true});
 
     // if (con && con.length) {
     // console.log('call ');
@@ -217,12 +206,16 @@ export default class ChatRqsts extends React.Component {
           if (!chatSnap.exists()) {
             let rqs = this.state.rqsts;
             rqs.filter((r) => r.refKey !== con);
-            this.setState({rqsts: rqs});
+            this.setState({rqsts: rqs, loading: false});
             continue;
           }
 
           let chat = chatSnap.val();
-          if (chat.isAcc || (chat.inR && chat.inR.uid === user.uid)) {
+          if (
+            chat.isAcc ||
+            chat.isAcc === -1 ||
+            (chat.inR && chat.inR.uid === user.uid)
+          ) {
             continue;
           }
           let ouid = con.split(user.uid).join('');
@@ -244,18 +237,6 @@ export default class ChatRqsts extends React.Component {
             continue;
           }
           let cUser = cUserSnap.val();
-          // console.log(user.dt, user.db, cUser.nid);
-          // console.log(cUser.dt, cUser.db, user.nid);
-
-          if (user.db && user.db[cUser.uid]) {
-            continue;
-          }
-
-          if (cUser.db && cUser.db[user.uid]) {
-            continue;
-          }
-
-          // console.log(chat);
 
           chat['cUser'] = cUser;
           chat['refKey'] = con;
@@ -270,7 +251,7 @@ export default class ChatRqsts extends React.Component {
           rqsts.push(chat);
         }
 
-        rqsts.sort((a, b) => a.lm.lT * 1000 - b.lm.lT * 1000);
+        rqsts.sort((a, b) => b.lm.tp * 1000 - a.lm.tp * 1000);
 
         // console.log('regular: ', regular.length, 'filtered: ', filtered.length);
         this._isMounted &&
@@ -350,7 +331,10 @@ export default class ChatRqsts extends React.Component {
           checked={tab == 0}
           _onPress={() => {
             this.setState({tab: 0});
-            navigation.dispatch(CommonActions.setParams({tab: 'Regular'}));
+            navigation.setParams({
+              tab: 'Regular',
+            });
+            // navigation.dispatch(CommonActions.setParams({tab: 'Regular'}));
           }}
           pressParam={0}
         />
@@ -360,7 +344,10 @@ export default class ChatRqsts extends React.Component {
           checked={!(tab == 0)}
           _onPress={() => {
             this.setState({tab: 1});
-            navigation.dispatch(CommonActions.setParams({tab: 'Filtered Out'}));
+            navigation.setParams({
+              tab: 'Filtered Out',
+            });
+            // navigation.dispatch(CommonActions.setParams({tab: 'Filtered Out'}));
           }}
           pressParam={1}
         />

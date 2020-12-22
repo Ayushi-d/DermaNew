@@ -72,8 +72,13 @@ export default class MsgBox extends React.Component {
         );
     } else {
       // console.log('test: ', chat.inR);
-      if (chat.inR && chat.inR.uid !== uid && !chat.isAcc) {
-        this.props._accept(refKey, ouid);
+      // console.log(chat.inR && chat.inR.uid !== uid);
+      if (
+        chat.inR &&
+        chat.inR.uid !== uid &&
+        (!chat.isAcc || chat.isAcc === -1)
+      ) {
+        this.props._accept(refKey, uid, ouid);
       }
       database()
         .ref(`messages/${refKey}`)

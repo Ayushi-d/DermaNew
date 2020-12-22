@@ -118,6 +118,10 @@ export default class Chats extends React.Component {
           }
           let chat = chatSnap.val();
 
+          if (chat.isAcc === -1) {
+            continue;
+          }
+
           if (chat.inR && chat.inR.uid !== user.uid) {
             if (!chat.isAcc) {
               continue;
@@ -144,18 +148,10 @@ export default class Chats extends React.Component {
           let cUser = cUserSnap.val();
           // console.log(cUser);
 
-          if (user.db && user.db[cUser.uid]) {
-            continue;
-          }
-
-          if (cUser.db && cUser.db[user.uid]) {
-            continue;
-          }
-
           chat['cUser'] = cUser;
           chat['refKey'] = con;
 
-          chats.sort((a, b) => a.lm.lT * 1000 - b.lm.lT * 1000);
+          chats.sort((a, b) => b.lm.tp * 1000 - a.lm.tp * 1000);
 
           chats.push(chat);
         }
@@ -256,7 +252,7 @@ function RenderChat(props) {
       </View>
       <View style={{...styles.chatBottomCon, marginLeft: 60, paddingRight: 5}}>
         <Text style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
-          {lm.sid === user.uid ? 'You: ' : `${cUser.nm.split(' ')[0]}:`} {lm.mg}
+          {lm.sid === user.uid ? 'You: ' : `${cUser.sn.split(' ')[0]}:`} {lm.mg}
         </Text>
         {chat[user.uid] && chat[user.uid].uc ? (
           <Text style={styles.countBubble}>{chat[user.uid].uc}</Text>

@@ -24,7 +24,7 @@ const UserConfig = {
   AgeRange: 'pa',
   Children: 'ch',
   'Do you have children': 'ch',
-  Diet: 'de',
+  Diet: 'dt',
   'State / Province': 's',
 };
 

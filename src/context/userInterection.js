@@ -113,11 +113,17 @@ class UserInterectionProvider extends React.Component {
 
           let oUser = userData.val();
 
-          if (user.db && user.db[oUser.uid]) {
-            return;
-          }
+          let uid = user.uid;
+          let ouid = oUser.uid;
 
-          if (oUser.db && oUser.db[user.uid]) {
+          let uid1 = uid < ouid ? uid : ouid;
+          let uid2 = uid > ouid ? uid : ouid;
+          let refKey = uid1 + uid2;
+          if (
+            oUser.con &&
+            oUser.con[refKey] &&
+            oUser.con[refKey].isAcc === -1
+          ) {
             return;
           }
 
@@ -157,11 +163,13 @@ class UserInterectionProvider extends React.Component {
           userData.val(),
         );
 
-        if (user.db && user.db[oUser.uid]) {
-          return;
-        }
+        let uid = user.uid;
+        let ouid = oUser.uid;
 
-        if (oUser.db && oUser.db[user.uid]) {
+        let uid1 = uid < ouid ? uid : ouid;
+        let uid2 = uid > ouid ? uid : ouid;
+        let refKey = uid1 + uid2;
+        if (oUser.con && oUser.con[refKey] && oUser.con[refKey].isAcc === -1) {
           return;
         }
 

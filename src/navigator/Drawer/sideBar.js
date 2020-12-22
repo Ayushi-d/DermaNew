@@ -40,6 +40,10 @@ const routes = [
   {
     name: 'Chat Requests',
     route: 'Chat Request',
+    params: {
+      tab: 'Regular',
+      from: 'ref',
+    },
   },
   {
     name: 'Messages',
@@ -244,10 +248,10 @@ function RenderExpanded(props) {
   if (cons) {
     let con = Object.keys(context.user.con);
     con.forEach((c) => {
-      if (!cons[c].sn) {
+      if (!cons[c].sn && cons[c].isAcc !== -1) {
         chatRequestCount += 1;
       } else {
-        if (cons[c].uc) {
+        if (cons[c].uc && cons[c].isAcc !== -1) {
           msgsCount += 1;
         }
       }
@@ -270,7 +274,9 @@ function RenderExpanded(props) {
         }}>
         <View style={style.itemContainer}>
           <TouchableOpacity
-            onPress={() => _navigateTo(route, {id: 'default', from: 'ref'})}
+            onPress={() =>
+              _navigateTo(route, {id: 'default', tab: 'Regular', from: 'ref'})
+            }
             style={{
               marginRight: 'auto',
               height: 50,
@@ -297,7 +303,9 @@ function RenderExpanded(props) {
           ? EXPAND[text].item.map((data) => (
               <View style={{height: 30}} key={data}>
                 <TouchableOpacity
-                  onPress={() => _navigateTo(route, {id: data, from: 'ref'})}>
+                  onPress={() =>
+                    _navigateTo(route, {id: data, tab: data, from: 'ref'})
+                  }>
                   <Text
                     style={{
                       height: 30,

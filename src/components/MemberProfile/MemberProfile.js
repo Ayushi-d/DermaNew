@@ -83,7 +83,7 @@ const aboutUser = {
     },
     {
       name: 'Diet',
-      props: 'de',
+      props: 'dt',
     },
   ],
 };

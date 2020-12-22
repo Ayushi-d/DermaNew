@@ -65,13 +65,20 @@ class MyMatchesJSX extends React.Component {
         for (let uk of uKeys) {
           let ouser = users[uk];
 
-          if (user.db && user.db[ouser.uid]) {
+          let uid = user.uid;
+          let ouid = ouser.uid;
+
+          let uid1 = uid < ouid ? uid : ouid;
+          let uid2 = uid > ouid ? uid : ouid;
+          let refKey = uid1 + uid2;
+          if (
+            ouser.con &&
+            ouser.con[refKey] &&
+            ouser.con[refKey].isAcc === -1
+          ) {
             continue;
           }
 
-          if (ouser.db && ouser.db[user.uid]) {
-            continue;
-          }
           newUsers[uk] = users[uk];
         }
         if (!Object.keys(newUsers).length) {
@@ -101,11 +108,13 @@ class MyMatchesJSX extends React.Component {
       let newUsers = {};
       for (let uk of uKeys) {
         let ouser = users[uk];
-        if (user.db && user.db[ouser.uid]) {
-          continue;
-        }
+        let uid = user.uid;
+        let ouid = ouser.uid;
 
-        if (ouser.db && ouser.db[user.uid]) {
+        let uid1 = uid < ouid ? uid : ouid;
+        let uid2 = uid > ouid ? uid : ouid;
+        let refKey = uid1 + uid2;
+        if (ouser.con && ouser.con[refKey] && ouser.con[refKey].isAcc === -1) {
           continue;
         }
         newUsers[uk] = users[uk];
@@ -145,11 +154,17 @@ class MyMatchesJSX extends React.Component {
         for (let uk of uKeys) {
           let ouser = users[uk];
 
-          if (user.db && user.db[ouser.uid]) {
-            continue;
-          }
+          let uid = user.uid;
+          let ouid = ouser.uid;
 
-          if (ouser.db && ouser.db[user.uid]) {
+          let uid1 = uid < ouid ? uid : ouid;
+          let uid2 = uid > ouid ? uid : ouid;
+          let refKey = uid1 + uid2;
+          if (
+            ouser.con &&
+            ouser.con[refKey] &&
+            ouser.con[refKey].isAcc === -1
+          ) {
             continue;
           }
           newUsers[uk] = users[uk];

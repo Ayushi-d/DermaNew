@@ -25,6 +25,8 @@ class SearchResult extends React.Component {
 
   componentDidMount() {
     let user = this.props.route.params.user;
+    let usr = this.props.context.user;
+    // console.log(user, usr);
     this.pp = new PP(2, user || {});
     this.fetchUser();
   }
@@ -43,17 +45,23 @@ class SearchResult extends React.Component {
         let newUsers = {};
         for (let uk of uKeys) {
           let ouser = users[uk];
-          if (user.db && user.db[ouser.uid]) {
-            continue;
-          }
+          let uid = user.uid;
+          let ouid = ouser.uid;
 
-          if (ouser.db && ouser.db[user.uid]) {
+          let uid1 = uid < ouid ? uid : ouid;
+          let uid2 = uid > ouid ? uid : ouid;
+          let refKey = uid1 + uid2;
+          if (
+            ouser.con &&
+            ouser.con[refKey] &&
+            ouser.con[refKey].isAcc === -1
+          ) {
             continue;
           }
           newUsers[uk] = users[uk];
         }
 
-        this.setData(users);
+        this.setData(newUsers);
       } else {
         this.setState({loading: false}, () => {
           alert('No Matching users found');
@@ -74,11 +82,13 @@ class SearchResult extends React.Component {
       let newUsers = {};
       for (let uk of uKeys) {
         let ouser = users[uk];
-        if (user.db && user.db[ouser.uid]) {
-          continue;
-        }
+        let uid = user.uid;
+        let ouid = ouser.uid;
 
-        if (ouser.db && ouser.db[user.uid]) {
+        let uid1 = uid < ouid ? uid : ouid;
+        let uid2 = uid > ouid ? uid : ouid;
+        let refKey = uid1 + uid2;
+        if (ouser.con && ouser.con[refKey] && ouser.con[refKey].isAcc === -1) {
           continue;
         }
         newUsers[uk] = users[uk];
@@ -86,7 +96,7 @@ class SearchResult extends React.Component {
       this.setData(newUsers);
     } else {
       Snackbar.show({
-        title: 'You have reached to the end of the matched users list.',
+        text: 'You have reached to the end of the matched users list.',
         duration: Snackbar.LENGTH_SHORT,
       });
     }
@@ -115,7 +125,27 @@ class SearchResult extends React.Component {
       this.pp = new PP(2, user || {});
       let users = await this.pp.getUsers();
       if (users && Object.keys(users).length != 0) {
-        this.setData(users);
+        let uKeys = Object.keys(users);
+        let newUsers = {};
+        for (let uk of uKeys) {
+          let ouser = users[uk];
+          let uid = user.uid;
+          let ouid = ouser.uid;
+
+          let uid1 = uid < ouid ? uid : ouid;
+          let uid2 = uid > ouid ? uid : ouid;
+          let refKey = uid1 + uid2;
+          if (
+            ouser.con &&
+            ouser.con[refKey] &&
+            ouser.con[refKey].isAcc === -1
+          ) {
+            continue;
+          }
+          newUsers[uk] = users[uk];
+        }
+
+        this.setData(newUsers);
       } else {
         this.setState({refreshing: false}, () => {
           alert('No Users Found!');

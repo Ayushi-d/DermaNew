@@ -285,12 +285,12 @@ export default class Msgr extends React.Component {
     return index.toString();
   };
 
-  _accept = (refKey, ouid) => {
+  _accept = (refKey, uid, ouid) => {
     let {fromPage} = this.props.route.params;
 
-    if (fromPage === 'Decline Profile') {
-      this._unDecline();
-    }
+    // if (fromPage === 'Decline Profile') {
+    //   this._unDecline();
+    // }
 
     database()
       .ref(`conversation/${refKey}`)
@@ -306,7 +306,7 @@ export default class Msgr extends React.Component {
 
     database()
       .ref(`Users/${ouid}/con/${refKey}`)
-      .set({sn: 1})
+      .update({sn: 1, isAcc: 1})
       .then(() => {
         let {chat} = this.state;
         chat.isAcc = 1;
@@ -314,6 +314,18 @@ export default class Msgr extends React.Component {
       })
       .catch((err) => {
         console.log('msgr.js _accept ouser con err: ', err);
+      });
+
+    database()
+      .ref(`Users/${uid}/con/${refKey}`)
+      .update({isAcc: 1})
+      .then(() => {
+        let {chat} = this.state;
+        chat.isAcc = 1;
+        this._isMounted && this.setState({chat});
+      })
+      .catch((err) => {
+        console.log('msgr.js _accept user con err: ', err);
       });
   };
 
@@ -326,82 +338,67 @@ export default class Msgr extends React.Component {
     let ouid = oUser.uid;
     let onid = oUser.nid;
     console.log('undecline!');
-    database()
-      .ref('Users')
-      .child(uid)
-      .child('rf')
-      .child(onid.toString())
-      .remove();
+    // database()
+    //   .ref('Users')
+    //   .child(uid)
+    //   .child('rf')
+    //   .child(onid.toString())
+    //   .remove();
 
-    // move the data to dt node of current user
+    // // move the data to dt node of current user
 
-    database()
-      .ref('Users')
-      .child(uid)
-      .child('dt')
-      .child(onid.toString())
-      .remove();
+    // database()
+    //   .ref('Users')
+    //   .child(uid)
+    //   .child('dt')
+    //   .child(onid.toString())
+    //   .remove();
 
-    // add data to the db node of other user
-    database().ref('Users').child(ouid).child('db').child(uid).remove();
+    // // add data to the db node of other user
+    // database().ref('Users').child(ouid).child('db').child(uid).remove();
   };
 
-  _declineChat = () => {
+  _declineChat = async () => {
     let {context, route, navigation} = this.props;
     let {user} = context;
     let {refKey} = route.params.data;
     let oUser = route.params.data.otheruser;
     let uid = user.uid;
     let ouid = oUser.uid;
-    let onid = oUser.nid;
 
     // delete from rf node of current user
 
     database()
-      .ref('Users')
-      .child(uid)
-      .child('rf')
-      .child(onid.toString())
-      .set(null);
-
-    // move the data to dt node of current user
-
-    database()
-      .ref('Users')
-      .child(uid)
-      .child('dt')
-      .child(onid.toString())
-      .set(ouid);
-
-    // add data to the db node of other user
-    database()
-      .ref('Users')
-      .child(ouid)
-      .child('db')
-      .child(uid)
-      .set(1)
-      .then(() => {
-        database()
-          .ref(`Users/${user.uid}/con/${refKey}`)
-          .update({
-            lT: new Date().getTime() / 1000,
-          })
-          .then(() => {})
-          .catch((err) => {
-            console.log('msgr.js _declineChat user/con remove err: ', err);
-          });
-
-        database()
-          .ref(`Users/${ouid}/con/${refKey}`)
-          .update({
-            lT: new Date().getTime() / 1000,
-          })
-          .then(() => {})
-          .catch((err) => {
-            console.log('msgr.js _declineChat ouser/con remove err: ', err);
-          });
+      .ref(`Users/${uid}/con/${refKey}`)
+      .update({
+        lT: new Date().getTime() / 1000,
+        uc: 0,
+        isAcc: -1,
       })
-      .catch((err) => console.log('msg.js _declineCHat err: ', err));
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/con remove err: ', err);
+      });
+    database()
+      .ref(`conversation/${refKey}`)
+      .update({
+        isAcc: -1,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/con remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/con/${refKey}`)
+      .update({
+        lT: new Date().getTime() / 1000,
+        isAcc: -1,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/con remove err: ', err);
+      });
 
     this._isMounted && this.setState({declined: true});
   };
@@ -456,7 +453,7 @@ export default class Msgr extends React.Component {
     // if (fromPage === 'Decline Profile') {
     //   return <></>;
     // }
-    if (user.dt && user.dt[ouser.nid]) {
+    if (chat.inR && chat.inR.uid !== user.uid && chat.isAcc === -1) {
       return (
         <View
           style={{
@@ -478,7 +475,7 @@ export default class Msgr extends React.Component {
       );
     }
 
-    if (user.db && user.db[ouser.uid]) {
+    if (chat.inR && chat.inR.uid === user.uid && chat.isAcc === -1) {
       return (
         <View
           style={{
@@ -602,7 +599,9 @@ export default class Msgr extends React.Component {
           </View>
         ) : (
           <>
-            {user.db && user.db[ouser.uid] ? null : (
+            {chat.inR &&
+            chat.inR.uid === user.uid &&
+            chat.isAcc === -1 ? null : (
               <MsgBox
                 chatCheck={chatCheck}
                 chatExists={chatExists}

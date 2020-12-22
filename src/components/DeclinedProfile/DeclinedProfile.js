@@ -12,9 +12,7 @@ import moment from 'moment';
 import {CommonActions} from '@react-navigation/native';
 class DeclinedProfileJSX extends React.Component {
   state = {
-    declinedUserData: {},
-    declinedMessage: {},
-    dKeys: [],
+    declinedUsers: [],
     tab: 0,
   };
 
@@ -43,99 +41,67 @@ class DeclinedProfileJSX extends React.Component {
 
   _getDec = () => {
     if (this.dtRef) {
-      this.dtRef.off('child_added');
-      this.dtRef.off('child_removed');
+      this.dtRef.off('value');
     }
 
     this.uid = this.props.context.user.uid;
     this.dtRef = database()
       .ref('Users/' + this.uid)
-      .child('dt');
+      .child('con')
+      .orderByChild('lT');
 
-    this.dtRef.on('child_added', (snap) => {
-      this.fetchData(snap.key, snap.val());
-    });
-
-    this.dtRef.on('child_removed', (snap) => {
-      let declinedUserData = {...this.state.declinedUserData};
-      delete declinedUserData[snap.val()];
-
-      let declinedMessage = {...this.state.declinedMessage};
-      delete declinedMessage[snap.val()];
-
-      let dKeys = this.state.dKeys;
-
-      let kIdx = dKeys.indexOf(snap.val());
-      if (kIdx > -1) {
-        dKeys.splice(kIdx, 1);
+    this.dtRef.on('value', async (snap) => {
+      // console.log(snap.val());
+      let allChats = [];
+      let chats = snap.val();
+      let dKeys = Object.keys(chats);
+      for (let dk of dKeys) {
+        let c = chats[dk];
+        let cht = await database().ref(`conversation/${dk}`).once('value');
+        if (!cht.exists || cht.val() === null) {
+          continue;
+        }
+        let chat = cht.val();
+        if (
+          (chat.isAcc && chat.isAcc !== -1) ||
+          (chat.inR && chat.inR.uid === this.uid)
+        ) {
+          continue;
+        }
+        let ouid = dk.split(this.uid).join('');
+        let cUser = await database().ref(`Users/${ouid}`).once('value');
+        if (!cUser.exists || cUser.val() === null) {
+          continue;
+        }
+        chat['cUser'] = cUser.val();
+        allChats.push(chat);
       }
-
-      this.setState({dKeys, declinedMessage, declinedUserData});
+      allChats.sort((a, b) => b.lm.tp * 1000 - a.lm.tp * 1000);
+      this.setState({declinedUsers: allChats});
+      // this.fetchData(snap.key, snap.val());
     });
-  };
-
-  fetchData = async (nid, ouid) => {
-    let {user} = this.props.context;
-    let uid = user.uid;
-
-    let uid1 = uid < ouid ? uid : ouid;
-    let uid2 = uid > ouid ? uid : ouid;
-
-    let refKey = uid1 + uid2;
-
-    let data = await database()
-      .ref('Users/' + ouid)
-      .once('value');
-    let message = await database()
-      .ref('Users/' + this.uid)
-      .child('rm')
-      .child(nid)
-      .once('value');
-
-    let chat = await database().ref(`conversation/${refKey}`).once('value');
-    if (!chat.exists || chat.val() === null) {
-      return;
-    }
-
-    let declinedUserData = {...this.state.declinedUserData};
-    declinedUserData[ouid] = data.val();
-    declinedUserData[ouid]['chat'] = chat.val();
-
-    let declinedMessage = {...this.state.declinedMessage};
-    declinedMessage[ouid] = message.val();
-
-    // declinedUserData.sort((a, b) => a.chat.lm.lT - b.chat.lm.lT);
-    let dKeys = Object.keys(declinedUserData);
-    if (dKeys.length !== 0) {
-      dKeys.sort(
-        (a, b) =>
-          declinedUserData[a].chat.lm.lT - declinedUserData[b].chat.lm.lT,
-      );
-    }
-
-    this.setState({declinedMessage, declinedUserData, dKeys: dKeys.reverse()});
   };
 
   renderMessageReq = () => {
-    let data = this.state.declinedUserData;
-    let {dKeys} = this.state;
+    let {declinedUsers} = this.state;
+    // let {dKeys} = this.state;
     // console.log(dKeys);
 
-    if (dKeys.length == 0) return null;
+    if (declinedUsers.length == 0) return null;
     return (
       <FlatList
-        data={dKeys}
+        data={declinedUsers}
         renderItem={({item}) => {
-          let chat = this.state.declinedUserData[item].chat;
+          let chat = item;
           return (
             <Cards
-              data={data[item]}
+              data={chat.cUser}
               hideButton={true}
               sent={this.state.tab == 1}
               message={chat.lm.mg}
               fromDeclined={true}
               navigation={this.props.navigation}
-              likesMe={this.LikesMe(data[item])}
+              likesMe={this.LikesMe(chat.cUser)}
               dateToShow={moment(new Date(chat.lm.tp * 1000)).calendar()}
               messageRefKey={chat.refKey}
               fromPage={'Decline Profile'}
@@ -158,8 +124,8 @@ class DeclinedProfileJSX extends React.Component {
 
   componentWillUnmount() {
     if (this.dtRef) {
-      this.dtRef.off('child_added');
-      this.dtRef.off('child_removed');
+      this.dtRef.off('value');
+      // this.dtRef.off('child_removed');
     }
     this.didFocusSubscription && this.didFocusSubscription();
     this.didBlurSubscription && this.didBlurSubscription();
