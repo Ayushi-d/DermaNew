@@ -113,6 +113,13 @@ class UserInterectionProvider extends React.Component {
 
           let oUser = userData.val();
 
+          let lt = {...this.state.lt};
+          if (this.state.lbu_data) {
+            lbu_data = {...this.state.lbu_data};
+          } else {
+            lbu_data = {};
+          }
+
           let uid = user.uid;
           let ouid = oUser.uid;
 
@@ -124,17 +131,16 @@ class UserInterectionProvider extends React.Component {
             oUser.con[refKey] &&
             oUser.con[refKey].isAcc === -1
           ) {
+            if (lt[res.key]) {
+              delete lt[res.key];
+              delete lbu_data[res.key];
+              this.setState({lbu_data, lt});
+            }
             return;
           }
 
-          if (this.state.lbu_data) {
-            lbu_data = {...this.state.lbu_data};
-          } else {
-            lbu_data = {};
-          }
-
           lbu_data[res.key] = oUser;
-          let lt = {...this.state.lt};
+
           lt[res.key] = res;
           this.setState({lbu_data, lt});
         }
@@ -163,15 +169,7 @@ class UserInterectionProvider extends React.Component {
           userData.val(),
         );
 
-        let uid = user.uid;
-        let ouid = oUser.uid;
-
-        let uid1 = uid < ouid ? uid : ouid;
-        let uid2 = uid > ouid ? uid : ouid;
-        let refKey = uid1 + uid2;
-        if (oUser.con && oUser.con[refKey] && oUser.con[refKey].isAcc === -1) {
-          return;
-        }
+        let lf = {...this.state.lf};
 
         lu_data = this.state.lu_data ? {...this.state.lu_data} : {};
 
@@ -179,13 +177,31 @@ class UserInterectionProvider extends React.Component {
           ? {...this.state.lu_filtered_data}
           : {};
 
+        let uid = user.uid;
+        let ouid = oUser.uid;
+
+        let uid1 = uid < ouid ? uid : ouid;
+        let uid2 = uid > ouid ? uid : ouid;
+        let refKey = uid1 + uid2;
+        if (oUser.con && oUser.con[refKey] && oUser.con[refKey].isAcc === -1) {
+          console.log('lf', res.key, lf[res.key]);
+          if (lf[res.key]) {
+            delete lf[res.key];
+            delete lu_data[res.key];
+            if (lu_filtered_data[res.key]) {
+              delete lu_filtered_data[res.key];
+            }
+            this.setState({lu_data, lu_filtered_data, lf});
+          }
+          return;
+        }
+
         if (isMyType) {
           lu_data[res.key] = userData.val();
         } else {
           lu_filtered_data[res.key] = userData.val();
         }
 
-        let lf = {...this.state.lf};
         lf[res.key] = res;
 
         this.setState({lu_data, lu_filtered_data, lf});

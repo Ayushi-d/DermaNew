@@ -164,14 +164,19 @@ class Cards extends React.Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity
-            style={[style.button, style.reply]}
-            onPress={this.replyToMessage}>
-            <Text
-              style={{color: THEME.GRADIENT_BG.END_COLOR, fontWeight: 'bold'}}>
-              REPLY
-            </Text>
-          </TouchableOpacity>
+          {!this.props.declinedRef ? (
+            <TouchableOpacity
+              style={[style.button, style.reply]}
+              onPress={this.replyToMessage}>
+              <Text
+                style={{
+                  color: THEME.GRADIENT_BG.END_COLOR,
+                  fontWeight: 'bold',
+                }}>
+                REPLY
+              </Text>
+            </TouchableOpacity>
+          ) : null}
 
           {!this.props.fromDeclined ? (
             <TouchableOpacity
@@ -199,6 +204,9 @@ class Cards extends React.Component {
     let data = {
       otheruser: {...this.props.data},
     };
+    if (this.props.declinedRef) {
+      return;
+    }
 
     this.props.navigation.navigate('Message', {
       data: {
@@ -248,6 +256,9 @@ class Cards extends React.Component {
   navigateToMember = (data) => {
     if (!this.props.navigation) {
       return null;
+    }
+    if (this.props.declinedRef) {
+      return;
     }
     this.props.navigation.navigate('Member Profile', {
       ...data,

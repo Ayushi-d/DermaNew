@@ -62,10 +62,7 @@ class DeclinedProfileJSX extends React.Component {
           continue;
         }
         let chat = cht.val();
-        if (
-          (chat.isAcc && chat.isAcc !== -1) ||
-          (chat.inR && chat.inR.uid === this.uid)
-        ) {
+        if (chat.isAcc && chat.isAcc !== -1) {
           continue;
         }
         let ouid = dk.split(this.uid).join('');
@@ -83,11 +80,23 @@ class DeclinedProfileJSX extends React.Component {
   };
 
   renderMessageReq = () => {
-    let {declinedUsers} = this.state;
+    let {declinedUsers, tab} = this.state;
     // let {dKeys} = this.state;
     // console.log(dKeys);
 
     if (declinedUsers.length == 0) return null;
+
+    // console.log(tab);
+
+    if (!tab) {
+      declinedUsers = declinedUsers.filter(
+        (u) => u.inR && u.inR.uid !== this.uid,
+      );
+    } else {
+      declinedUsers = declinedUsers.filter(
+        (u) => u.inR && u.inR.uid === this.uid,
+      );
+    }
     return (
       <FlatList
         data={declinedUsers}
@@ -100,6 +109,7 @@ class DeclinedProfileJSX extends React.Component {
               sent={this.state.tab == 1}
               message={chat.lm.mg}
               fromDeclined={true}
+              declinedRef={tab}
               navigation={this.props.navigation}
               likesMe={this.LikesMe(chat.cUser)}
               dateToShow={moment(new Date(chat.lm.tp * 1000)).calendar()}
