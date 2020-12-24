@@ -17,6 +17,8 @@ import {CommonActions} from '@react-navigation/native';
 
 import moment from 'moment';
 
+import Loader from '../modals/loaders';
+
 moment.updateLocale('en', {
   calendar: {
     lastDay: '[Yesterday]',
@@ -129,15 +131,6 @@ export default class Chats extends React.Component {
           }
           let ouid = con.split(user.uid).join('');
 
-          // check if blocked by ouser!
-          if (user.bb && user.bb[ouid]) {
-            continue;
-          }
-          // check if blocked by user!
-          if (user.bt && user.bt[ouid]) {
-            continue;
-          }
-
           let cUserSnap = await database()
             .ref(`Users/${ouid}`)
             .once('value')
@@ -147,6 +140,15 @@ export default class Chats extends React.Component {
           }
           let cUser = cUserSnap.val();
           // console.log(cUser);
+
+          // check if blocked by ouser!
+          if (cUser.bb && cUser.bb[user.uid]) {
+            continue;
+          }
+          // check if blocked by user!
+          if (cUser.bt && cUser.bt[user.uid]) {
+            continue;
+          }
 
           chat['cUser'] = cUser;
           chat['refKey'] = con;
@@ -187,19 +189,20 @@ export default class Chats extends React.Component {
     return (
       <View style={styles.container}>
         <Header title={'Messages'} type {...this.props} />
-        {loading ? (
+        {/* {loading ? (
           <ActivityIndicator
             size={27}
             color={THEME.ACTIVE_COLOR}
             style={{marginTop: 5, marginBottom: 5}}
           />
-        ) : null}
+        ) : null} */}
         <FlatList
           data={chats}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderChat}
           style={{flex: 1}}
         />
+        {loading ? <Loader isVisible={loading} /> : null}
       </View>
     );
   }
@@ -251,7 +254,10 @@ function RenderChat(props) {
         </View>
       </View>
       <View style={{...styles.chatBottomCon, marginLeft: 60, paddingRight: 5}}>
-        <Text style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}>
+        <Text
+          style={{...styles.lMsg, fontWeight: unRead ? 'bold' : 'normal'}}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}>
           {lm.sid === user.uid ? 'You: ' : `${cUser.sn.split(' ')[0]}:`} {lm.mg}
         </Text>
         {chat[user.uid] && chat[user.uid].uc ? (

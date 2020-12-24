@@ -9,6 +9,7 @@ import DateHelpers from '../../helpers/datehelpers';
 import database from '@react-native-firebase/database';
 import moment from 'moment';
 import {CommonActions} from '@react-navigation/native';
+import Loader from '../modals/loaders';
 
 class Likes extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class Likes extends React.Component {
     this.state = {
       tab: 0,
       scrollPosition: [0, 0],
+      focused: false,
     };
   }
 
@@ -57,6 +59,8 @@ class Likes extends React.Component {
       (payload) => {
         let {route} = this.props;
         if (route.params && route.params.from === 'ref') {
+          this.setState({focused: true});
+
           this.props.context.getUserLikeData();
           this.props.context.childRemoved();
           console.log('likes.js return!');
@@ -67,6 +71,7 @@ class Likes extends React.Component {
     this.didBlurSubscription = this.props.navigation.addListener(
       'blur',
       (payload) => {
+        this.setState({focused: false});
         this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );
@@ -101,6 +106,12 @@ class Likes extends React.Component {
       }
     }
   }
+
+  _getLikes = () => {
+    let {user} = this.props.context;
+    let likesRef = database().ref(`Users/`);
+  };
+  _getLikesRemoved = () => {};
 
   _changeCount() {
     // update like notifications
@@ -213,12 +224,15 @@ class Likes extends React.Component {
   };
 
   render() {
+    let {focused} = this.state;
+    let loading = this.props.context.loadingF;
     return (
       <View style={{flex: 1}}>
         <HeaderMain routeName="Likes Received" {...this.props} />
 
         {this.renderTab()}
         {this.renderCards()}
+        {loading && focused ? <Loader isVisible={loading} /> : null}
       </View>
     );
   }

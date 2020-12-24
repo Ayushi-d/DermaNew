@@ -6,9 +6,14 @@ import DateHelpers from '../../helpers/datehelpers';
 import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import moment from 'moment';
+import Loader from '../modals/loaders';
+
 class LikeSent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      focused: true,
+    };
   }
 
   componentDidMount() {
@@ -19,6 +24,7 @@ class LikeSent extends React.Component {
         if (route.params && route.params.from === 'ref') {
           this.props.context.getUserLikeData();
           this.props.context.childRemoved();
+          this.setState({focused: true});
           console.log('likesSent.js return!');
         }
       },
@@ -26,6 +32,7 @@ class LikeSent extends React.Component {
     this.didBlurSubscription = this.props.navigation.addListener(
       'blur',
       (payload) => {
+        this.setState({focused: false});
         this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );
@@ -76,11 +83,15 @@ class LikeSent extends React.Component {
   };
 
   render() {
+    let {focused} = this.state;
+    let loading = this.props.context.loadingT;
     return (
       <View style={{flex: 1}}>
         <HeaderMain routeName="Like Sent" {...this.props} />
 
         {this.renderCards()}
+
+        {loading && focused ? <Loader isVisible={loading} /> : null}
       </View>
     );
   }

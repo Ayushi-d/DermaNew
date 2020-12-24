@@ -22,10 +22,14 @@ class UserInterectionProvider extends React.Component {
       lu_filtered_data: null,
       lt: {},
       lf: {},
+      loadingT: false,
+      loadingF: false,
     };
+    this._isMounted = false;
   }
 
   async componentDidMount() {
+    this._isMounted = true;
     if (auth().currentUser) {
       this.uid = auth().currentUser.uid;
       // console.log(this.uid);
@@ -98,55 +102,81 @@ class UserInterectionProvider extends React.Component {
       this.lfRef.off('child_added');
       this.lfRef.off('child_removed');
     }
+
+    this.setState({loadingT: true, loadingF: true});
+
     this.ltRef = this.currentUserRef.child('lt');
     let lu_data;
     let lu_filtered_data;
     let lbu_data;
 
-    this.ltRef.on(
-      'child_added',
-      async (res) => {
-        if (res) {
-          this.setState({lt: {...this.state.lt, [res.key]: res.val()}});
+    if (user.lt) {
+      this.ltRef.on(
+        'child_added',
+        async (res) => {
+          if (res) {
+            this.setState({lt: {...this.state.lt, [res.key]: res.val()}});
 
-          let userData = await this.userBase.child(res.key).once('value');
+            let userData = await this.userBase.child(res.key).once('value');
 
-          let oUser = userData.val();
+            let oUser = userData.val();
 
-          let lt = {...this.state.lt};
-          if (this.state.lbu_data) {
-            lbu_data = {...this.state.lbu_data};
-          } else {
-            lbu_data = {};
-          }
-
-          let uid = user.uid;
-          let ouid = oUser.uid;
-
-          let uid1 = uid < ouid ? uid : ouid;
-          let uid2 = uid > ouid ? uid : ouid;
-          let refKey = uid1 + uid2;
-          if (
-            oUser.con &&
-            oUser.con[refKey] &&
-            oUser.con[refKey].isAcc === -1
-          ) {
-            if (lt[res.key]) {
-              delete lt[res.key];
-              delete lbu_data[res.key];
-              this.setState({lbu_data, lt});
+            let lt = {...this.state.lt};
+            if (this.state.lbu_data) {
+              lbu_data = {...this.state.lbu_data};
+            } else {
+              lbu_data = {};
             }
-            return;
+
+            if (oUser === null) {
+              if (lt[res.key]) {
+                delete lt[res.key];
+                delete lbu_data[res.key];
+                this.setState({lbu_data, lt});
+              }
+              this.setState({loadingT: false});
+              return;
+            }
+
+            let uid = user.uid;
+            let ouid = oUser.uid;
+
+            let uid1 = uid < ouid ? uid : ouid;
+            let uid2 = uid > ouid ? uid : ouid;
+            let refKey = uid1 + uid2;
+            if (
+              (oUser.con &&
+                oUser.con[refKey] &&
+                oUser.con[refKey].isAcc === -1) ||
+              (oUser.bb && oUser.bb[user.uid]) ||
+              (oUser.bt && oUser.bt[user.uid])
+            ) {
+              if (lt[res.key]) {
+                delete lt[res.key];
+                delete lbu_data[res.key];
+                this.setState({lbu_data, lt});
+              }
+              this.setState({loadingT: false});
+              return;
+            }
+
+            lbu_data[res.key] = oUser;
+
+            lt[res.key] = res;
+            this.setState({lbu_data, lt, loadingT: false});
+          } else {
+            this.setState({loadingT: false});
           }
-
-          lbu_data[res.key] = oUser;
-
-          lt[res.key] = res;
-          this.setState({lbu_data, lt});
-        }
-      },
-      (error) => console.log('getUSerLikeData error: ', error),
-    );
+        },
+        (error) => {
+          console.log('userinteraction.js lt_ref error: ', error);
+          this.setState({loadingT: false});
+        },
+      );
+    } else {
+      this.setState({loadingT: false});
+      // console.log('stop loading!');
+    }
 
     this.lfRef = this.currentUserRef.child('lf');
 
@@ -154,59 +184,96 @@ class UserInterectionProvider extends React.Component {
     //   console.log(res);
     // });
 
-    this.lfRef.on('child_added', async (res) => {
-      if (res && res.key != 'c') {
-        let userData = await this.userBase.child(res.key).once('value');
-        // console.log(userData);
+    if (user.lf) {
+      this.lfRef.on(
+        'child_added',
+        async (res) => {
+          // console.log('res', res.key);
+          if (res && res.key != 'c') {
+            let userData = await this.userBase.child(res.key).once('value');
+            // console.log(userData);
 
-        let oUser = userData.val();
+            let oUser = userData.val();
 
-        if (userData.val() === null) {
-          return;
-        }
-        let isMyType = this.isMyType(
-          this.props.mainContext.user,
-          userData.val(),
-        );
+            let lf = {...this.state.lf};
 
-        let lf = {...this.state.lf};
+            lu_data = this.state.lu_data ? {...this.state.lu_data} : {};
 
-        lu_data = this.state.lu_data ? {...this.state.lu_data} : {};
+            lu_filtered_data = this.state.lu_filtered_data
+              ? {...this.state.lu_filtered_data}
+              : {};
 
-        lu_filtered_data = this.state.lu_filtered_data
-          ? {...this.state.lu_filtered_data}
-          : {};
+            // console.log(userData.val(), res.key);
 
-        let uid = user.uid;
-        let ouid = oUser.uid;
-
-        let uid1 = uid < ouid ? uid : ouid;
-        let uid2 = uid > ouid ? uid : ouid;
-        let refKey = uid1 + uid2;
-        if (oUser.con && oUser.con[refKey] && oUser.con[refKey].isAcc === -1) {
-          console.log('lf', res.key, lf[res.key]);
-          if (lf[res.key]) {
-            delete lf[res.key];
-            delete lu_data[res.key];
-            if (lu_filtered_data[res.key]) {
-              delete lu_filtered_data[res.key];
+            if (userData.val() === null) {
+              if (lf[res.key]) {
+                delete lf[res.key];
+                delete lu_data[res.key];
+                if (lu_filtered_data[res.key]) {
+                  delete lu_filtered_data[res.key];
+                }
+                this.setState({lu_data, lu_filtered_data, lf});
+              }
+              this.setState({loadingF: false});
+              return;
             }
-            this.setState({lu_data, lu_filtered_data, lf});
+
+            let uid = user.uid;
+            let ouid = oUser.uid;
+
+            let uid1 = uid < ouid ? uid : ouid;
+            let uid2 = uid > ouid ? uid : ouid;
+            let refKey = uid1 + uid2;
+            if (
+              (oUser.con &&
+                oUser.con[refKey] &&
+                oUser.con[refKey].isAcc === -1) ||
+              (oUser.bb && oUser.bb[user.uid]) ||
+              (oUser.bt && oUser.bt[user.uid])
+            ) {
+              // console.log('lf', res.key, lf[res.key]);
+              if (lf[res.key]) {
+                delete lf[res.key];
+                delete lu_data[res.key];
+                if (lu_filtered_data[res.key]) {
+                  delete lu_filtered_data[res.key];
+                }
+                this.setState({lu_data, lu_filtered_data, lf});
+              }
+              this.setState({loadingF: false});
+              return;
+            }
+
+            let isMyType = this.isMyType(
+              this.props.mainContext.user,
+              userData.val(),
+            );
+
+            if (isMyType) {
+              lu_data[res.key] = userData.val();
+            } else {
+              lu_filtered_data[res.key] = userData.val();
+            }
+
+            lf[res.key] = res;
+
+            this.setState({lu_data, lu_filtered_data, lf, loadingF: false});
+          } else {
+            if (user.lf && Object.keys(user.lf).length > 1) {
+              // console.log("don't stop leading!");
+              return;
+            }
+            this.setState({loadingF: false});
           }
-          return;
-        }
-
-        if (isMyType) {
-          lu_data[res.key] = userData.val();
-        } else {
-          lu_filtered_data[res.key] = userData.val();
-        }
-
-        lf[res.key] = res;
-
-        this.setState({lu_data, lu_filtered_data, lf});
-      }
-    });
+        },
+        (err) => {
+          console.log('userinteraction.js lf_ref err: ', err);
+          this.setState({loadingF: false});
+        },
+      );
+    } else {
+      this.setState({loadingF: false});
+    }
   };
 
   childRemoved = () => {
@@ -239,6 +306,7 @@ class UserInterectionProvider extends React.Component {
   };
 
   componentWillUnmount() {
+    this._isMounted = false;
     if (this.ltRef) {
       this.ltRef.off('child_added');
       this.ltRef.off('child_removed');
@@ -259,6 +327,8 @@ class UserInterectionProvider extends React.Component {
           filteredOut: this.state.lu_filtered_data,
           lt: this.state.lt,
           lf: this.state.lf,
+          loadingT: this.state.loadingT,
+          loadingF: this.state.loadingF,
           getUserLikeData: this.getUserLikeData,
           childRemoved: this.childRemoved,
         }}>

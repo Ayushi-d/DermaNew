@@ -7,10 +7,20 @@ import DEFAULT_BUTTON, {BUTTON_WITH_PARAM} from '../general/button';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
+import Loader from './loaders';
+
 class BlockUser extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+    };
+  }
   blockUser = async () => {
+    let {user} = this.props.context;
     let uid = auth().currentUser && auth().currentUser.uid;
     let blockuid = this.props.userToBlock;
+    this.setState({loading: true});
 
     let ref = await database()
       .ref('Users/' + uid)
@@ -50,11 +60,42 @@ class BlockUser extends React.Component {
       .child(uid)
       .set(null);
 
+    let ouid = blockuid;
+
+    let uid1 = uid < ouid ? uid : ouid;
+    let uid2 = uid > ouid ? uid : ouid;
+    let refKey = uid1 + uid2;
+
+    if (user.con && user.con[refKey]) {
+      console.log('updatingCon!');
+      await database()
+        .ref('Users/' + uid)
+        .child('con')
+        .child(refKey)
+        .update({
+          lT: new Date().getTime() / 1000,
+          uc: 0,
+          sn: 1,
+        });
+      await database()
+        .ref('Users/' + ouid)
+        .child('con')
+        .child(refKey)
+        .update({
+          lT: new Date().getTime() / 1000,
+          uc: 0,
+          sn: 1,
+        });
+    }
+
+    this.setState({loading: false});
+
     this.props.blockToggle();
     this.props.navigation.pop();
     alert('User Blocked!');
   };
   render() {
+    let {loading} = this.state;
     return (
       <ReactNativeModal
         isVisible={this.props.isVisible}
@@ -90,6 +131,7 @@ class BlockUser extends React.Component {
             </View>
           </View>
         </View>
+        {loading ? <Loader isVisible={loading} /> : null}
       </ReactNativeModal>
     );
   }

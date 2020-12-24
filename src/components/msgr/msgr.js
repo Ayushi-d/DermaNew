@@ -32,8 +32,17 @@ export default class Msgr extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     let {params} = this.props.route;
-    let oUser = params.data.otheruser;
+    let {user} = this.props.context;
+    let {navigation} = this.props;
+    let ouser = params.data.otheruser;
     let {refKey} = params.data;
+
+    if ((user.bb && user.bb[ouser.uid]) || (user.bt && user.bt[ouser.uid])) {
+      if (navigation.canGoBack()) {
+        navigation.pop();
+      }
+    }
+
     this._checkIfChatExists(refKey);
 
     this._chatListener(refKey);
@@ -658,7 +667,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   msgOut: {
-    maxWidth: '60%',
+    maxWidth: '75%',
   },
   msg: {
     flex: 1,

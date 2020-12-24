@@ -58,6 +58,14 @@ class SearchResult extends React.Component {
           ) {
             continue;
           }
+
+          if (user.bb && user.bb[ouid]) {
+            continue;
+          }
+          // check if blocked by user!
+          if (user.bt && user.bt[ouid]) {
+            continue;
+          }
           newUsers[uk] = users[uk];
         }
 
@@ -89,6 +97,13 @@ class SearchResult extends React.Component {
         let uid2 = uid > ouid ? uid : ouid;
         let refKey = uid1 + uid2;
         if (ouser.con && ouser.con[refKey] && ouser.con[refKey].isAcc === -1) {
+          continue;
+        }
+        if (user.bb && user.bb[ouid]) {
+          continue;
+        }
+        // check if blocked by user!
+        if (user.bt && user.bt[ouid]) {
           continue;
         }
         newUsers[uk] = users[uk];
@@ -140,6 +155,13 @@ class SearchResult extends React.Component {
             ouser.con[refKey] &&
             ouser.con[refKey].isAcc === -1
           ) {
+            continue;
+          }
+          if (user.bb && user.bb[ouid]) {
+            continue;
+          }
+          // check if blocked by user!
+          if (user.bt && user.bt[ouid]) {
             continue;
           }
           newUsers[uk] = users[uk];

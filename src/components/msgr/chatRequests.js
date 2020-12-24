@@ -14,6 +14,8 @@ import Cards from '../cards/cards';
 import moment from 'moment';
 import THEME from '../../config/theme';
 
+import Loader from '../modals/loaders';
+
 import {CommonActions} from '@react-navigation/native';
 
 export default class ChatRqsts extends React.Component {
@@ -165,7 +167,7 @@ export default class ChatRqsts extends React.Component {
     if (this.consListerner) {
       this.consListerner.off('value');
     }
-    // this._isMounted && this.setState({loading: true});
+    this._isMounted && this.setState({loading: true});
 
     // if (con && con.length) {
     // console.log('call ');
@@ -221,13 +223,6 @@ export default class ChatRqsts extends React.Component {
           let ouid = con.split(user.uid).join('');
           // check if blocked!
           // console.log(user.bt);
-          if (user.bb && user.bb[ouid]) {
-            continue;
-          }
-          // check if blocked by user!
-          if (user.bt && user.bt[ouid]) {
-            continue;
-          }
 
           let cUserSnap = await database()
             .ref(`Users/${ouid}`)
@@ -237,6 +232,14 @@ export default class ChatRqsts extends React.Component {
             continue;
           }
           let cUser = cUserSnap.val();
+
+          if (cUser.bb && cUser.bb[user.uid]) {
+            continue;
+          }
+          // check if blocked by user!
+          if (cUser.bt && cUser.bt[user.uid]) {
+            continue;
+          }
 
           chat['cUser'] = cUser;
           chat['refKey'] = con;
@@ -401,19 +404,20 @@ export default class ChatRqsts extends React.Component {
       <View style={styles.container}>
         <Header title={'Chat Requests'} type {...this.props} />
         {this._renderTab()}
-        {loading ? (
+        {/* {loading ? (
           <ActivityIndicator
             size={27}
             color={THEME.ACTIVE_COLOR}
             style={{marginTop: 5, marginBottom: 5}}
           />
-        ) : null}
+        ) : null} */}
         <FlatList
           data={data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderCard}
           style={{flex: 1}}
         />
+        {loading ? <Loader isVisible={loading} /> : null}
       </View>
     );
   }

@@ -17,6 +17,8 @@ import TextArea from '../Fields/TextArea';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
+import Loader from './loaders';
+
 const reasons = [
   {value: 'Fake / Misleading Profile Info'},
   {value: 'Photos are fake or obscene'},
@@ -37,6 +39,7 @@ class ReportModal extends React.Component {
       reason: '',
       desc: '',
       error: {},
+      loading: false,
     };
   }
 
@@ -54,10 +57,14 @@ class ReportModal extends React.Component {
   reportUser = () => {
     let {userToReport} = this.props;
     let user = auth().currentUser;
+    this.setState({loading: true});
 
     let error = this.validateValue();
     this.setState({error}, () => {
-      if (Object.keys(error).length != 0) return;
+      if (Object.keys(error).length != 0) {
+        this.setState({loading: false});
+        return;
+      }
       let {reason, desc} = this.state;
       let reportsRef = database().ref('Reports').push();
 
@@ -78,10 +85,12 @@ class ReportModal extends React.Component {
         )
         .then(() => {
           alert(`Thanks for your feedback. \nWe shall get back to you soon.`);
+          this.setState({loading: false});
           this.props.reportToggle();
         })
         .catch((err) => {
           console.log('report.js: err: ', err);
+          this.setState({loading: false});
           ToastAndroid.show(
             'Something went wrong. Please try again.',
             ToastAndroid.SHORT,
@@ -91,6 +100,7 @@ class ReportModal extends React.Component {
   };
 
   render() {
+    let {loading} = this.state;
     // console.log(this.props)
     return (
       <ReactNativeModal
@@ -144,6 +154,7 @@ class ReportModal extends React.Component {
             </View>
           </ScrollView>
         </View>
+        {loading ? <Loader isVisible={loading} /> : null}
       </ReactNativeModal>
     );
   }
