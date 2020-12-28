@@ -76,13 +76,6 @@ export default class ChatRqsts extends React.Component {
           database().ref(`Users/${user.uid}/con/${c}/sn`).set(1);
         }
       });
-      // cons.forEach((c) => {
-      //   // if(!c.sn) {
-      //   let key = Object.keys(c);
-      //   console.log(key);
-      //   // database().ref(`Users/${user.uid}/con/`)
-      //   // }
-      // });
     }
   };
 
@@ -126,6 +119,14 @@ export default class ChatRqsts extends React.Component {
     let ouid = ouser.uid;
     let onid = ouser.nid;
 
+    let {rqsts} = this.state;
+
+    let rIdx = rqsts.findIndex((r) => r.refKey === refKey);
+    if (rIdx > -1) {
+      rqsts.splice(rIdx, 1);
+      this.setState({rqsts});
+    }
+
     database()
       .ref(`conversation/${refKey}`)
       .update({
@@ -158,6 +159,30 @@ export default class ChatRqsts extends React.Component {
       .catch((err) => {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
       });
+
+    database()
+      .ref('Users/' + uid)
+      .child('lt')
+      .child(ouid)
+      .set(null);
+
+    database()
+      .ref('Users/' + uid)
+      .child('lf')
+      .child(ouid)
+      .set(null);
+
+    database()
+      .ref('Users/' + ouid)
+      .child('lt')
+      .child(uid)
+      .set(null);
+
+    database()
+      .ref('Users/' + ouid)
+      .child('lf')
+      .child(uid)
+      .set(null);
   };
 
   _getChatReqs = () => {
@@ -394,7 +419,7 @@ export default class ChatRqsts extends React.Component {
   };
 
   render() {
-    let {tab, regular, filtered, rqsts, loading} = this.state;
+    let {tab, rqsts, loading} = this.state;
     let data = rqsts.filter((r) => r.type === 'regular');
     if (tab) {
       data = rqsts.filter((r) => r.type === 'filtered');

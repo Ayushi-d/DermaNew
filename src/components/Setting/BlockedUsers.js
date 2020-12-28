@@ -40,7 +40,11 @@ class BlockedUsersJSX extends React.Component {
 
     let ref = database().ref('/Users');
 
-    Object.keys(data).map((item) => {
+    let keys = Object.keys(data).sort((a, b) => {
+      return data[b] - data[a];
+    });
+
+    keys.map((item) => {
       ref
         .child(item)
         .once('value')

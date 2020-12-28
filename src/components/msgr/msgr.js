@@ -409,6 +409,30 @@ export default class Msgr extends React.Component {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
       });
 
+    database()
+      .ref('Users/' + uid)
+      .child('lt')
+      .child(ouid)
+      .set(null);
+
+    database()
+      .ref('Users/' + uid)
+      .child('lf')
+      .child(ouid)
+      .set(null);
+
+    database()
+      .ref('Users/' + ouid)
+      .child('lt')
+      .child(uid)
+      .set(null);
+
+    database()
+      .ref('Users/' + ouid)
+      .child('lf')
+      .child(uid)
+      .set(null);
+
     this._isMounted && this.setState({declined: true});
   };
 
@@ -462,92 +486,95 @@ export default class Msgr extends React.Component {
     // if (fromPage === 'Decline Profile') {
     //   return <></>;
     // }
-    if (chat.inR && chat.inR.uid !== user.uid && chat.isAcc === -1) {
-      return (
-        <View
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-            padding: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            // backgroundColor: THEME.ACTIVE_COLOR,
-          }}>
-          <Text
+    if (!user.bb || (user.bb && !user.bb[ouser.uid])) {
+      if (chat.inR && chat.inR.uid !== user.uid && chat.isAcc === -1) {
+        return (
+          <View
             style={{
-              color: '#000',
+              width: '100%',
+              alignSelf: 'center',
+              padding: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              // backgroundColor: THEME.ACTIVE_COLOR,
             }}>
-            {`You have declined this user. \nSend a message to start conversation.`}
-          </Text>
-        </View>
-      );
+            <Text
+              style={{
+                color: '#000',
+              }}>
+              {`You have declined this user. \nSend a message to start conversation.`}
+            </Text>
+          </View>
+        );
+      }
+
+      if (chat.inR && chat.inR.uid === user.uid && chat.isAcc === -1) {
+        return (
+          <View
+            style={{
+              width: '100%',
+              alignSelf: 'center',
+              padding: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              // backgroundColor: THEME.ACTIVE_COLOR,
+            }}>
+            <Text
+              style={{
+                color: '#000',
+              }}>
+              {`${ouser.sn} has declined your chat request.`}
+            </Text>
+          </View>
+        );
+      }
+      if (loaded && !msgs.length) {
+        return (
+          <View
+            style={{
+              width: '100%',
+              alignSelf: 'center',
+              padding: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              // backgroundColor: THEME.ACTIVE_COLOR,
+            }}>
+            <Text
+              style={{
+                color: '#000',
+              }}>
+              {`Type a message to send chat request.`}
+            </Text>
+          </View>
+        );
+      }
+
+      if (chatExists && chat.inR && chat.inR.uid === user.uid && !chat.isAcc) {
+        return (
+          <View
+            style={{
+              width: '100%',
+              alignSelf: 'center',
+              padding: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              // backgroundColor: THEME.ACTIVE_COLOR,
+            }}>
+            <Text
+              style={{
+                color: '#000',
+              }}>
+              {`${ouser.sn} has not accepted your chat request yet.`}
+            </Text>
+          </View>
+        );
+      }
     }
 
-    if (chat.inR && chat.inR.uid === user.uid && chat.isAcc === -1) {
-      return (
-        <View
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-            padding: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            // backgroundColor: THEME.ACTIVE_COLOR,
-          }}>
-          <Text
-            style={{
-              color: '#000',
-            }}>
-            {`${ouser.sn} has declined your chat request.`}
-          </Text>
-        </View>
-      );
-    }
-    if (loaded && !msgs.length) {
-      return (
-        <View
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-            padding: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            // backgroundColor: THEME.ACTIVE_COLOR,
-          }}>
-          <Text
-            style={{
-              color: '#000',
-            }}>
-            {`Type a message to send chat request.`}
-          </Text>
-        </View>
-      );
-    }
-
-    if (chatExists && chat.inR && chat.inR.uid === user.uid && !chat.isAcc) {
-      return (
-        <View
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-            padding: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            // backgroundColor: THEME.ACTIVE_COLOR,
-          }}>
-          <Text
-            style={{
-              color: '#000',
-            }}>
-            {`${ouser.sn} has not accepted your chat request yet.`}
-          </Text>
-        </View>
-      );
-    }
     return (
       <>
         {!chatExists ||
@@ -608,54 +635,46 @@ export default class Msgr extends React.Component {
           </View>
         ) : (
           <>
-            {chat.inR &&
-            chat.inR.uid === user.uid &&
-            chat.isAcc === -1 ? null : (
-              <MsgBox
-                chatCheck={chatCheck}
-                chatExists={chatExists}
-                chat={chat}
-                _sendChatRequest={this._sendChatRequest}
-                _getMsgs={this._getMsgs}
-                _accept={this._accept}
-                {...this.props}
-              />
+            {user.bb && user.bb[ouser.uid] ? (
+              <View
+                style={{
+                  width: '100%',
+                  alignSelf: 'center',
+                  padding: 10,
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                  // backgroundColor: THEME.ACTIVE_COLOR,
+                }}>
+                <Text
+                  style={{
+                    color: '#000',
+                  }}>
+                  {`You can't reply to this conversation.`}
+                </Text>
+              </View>
+            ) : (
+              <>
+                {chat.inR &&
+                chat.inR.uid === user.uid &&
+                chat.isAcc === -1 ? null : (
+                  <MsgBox
+                    chatCheck={chatCheck}
+                    chatExists={chatExists}
+                    chat={chat}
+                    _sendChatRequest={this._sendChatRequest}
+                    _getMsgs={this._getMsgs}
+                    _accept={this._accept}
+                    {...this.props}
+                  />
+                )}
+              </>
             )}
           </>
         )}
       </View>
     );
   }
-}
-
-function ReplyOrDecline(props) {
-  return (
-    <View
-      style={{
-        width: '100%',
-        alignSelf: 'center',
-        padding: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: THEME.ACTIVE_COLOR,
-      }}>
-      <TouchableOpacity
-        style={[styles.button, styles.reply]}
-        onPress={props._replyToMessage}>
-        <Text style={{color: THEME.GRADIENT_BG.END_COLOR, fontWeight: 'bold'}}>
-          REPLY
-        </Text>
-      </TouchableOpacity>
-
-      {/* {!this.props.fromDeclined ? ( */}
-      <TouchableOpacity
-        style={[styles.button, styles.decline]}
-        onPress={props.declineMessage}>
-        <Text style={{color: THEME.WHITE, fontWeight: 'bold'}}>DECLINE</Text>
-      </TouchableOpacity>
-      {/* ) : null} */}
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({

@@ -266,6 +266,7 @@ class MemberProfile extends React.Component {
       <View style={{flex: 1, paddingBottom: !this.hideMessage ? 100 : 0}}>
         <Header
           right
+          hideRight={this.hideMessage}
           title={'Member Profile'}
           {...this.props}
           data={data}

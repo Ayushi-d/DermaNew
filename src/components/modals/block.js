@@ -4,7 +4,7 @@ import ReactNativeModal from 'react-native-modal';
 import LinearGradient from 'react-native-linear-gradient';
 import THEME from '../../config/theme';
 import DEFAULT_BUTTON, {BUTTON_WITH_PARAM} from '../general/button';
-import auth from '@react-native-firebase/auth';
+import auth, {firebase} from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
 import Loader from './loaders';
@@ -26,7 +26,7 @@ class BlockUser extends React.Component {
       .ref('Users/' + uid)
       .child('bt')
       .child(blockuid)
-      .set(1);
+      .set(database.ServerValue.TIMESTAMP);
 
     let likeToRef = await database()
       .ref('Users/' + uid)
@@ -46,7 +46,7 @@ class BlockUser extends React.Component {
       .ref('Users/' + blockuid)
       .child('bb')
       .child(uid)
-      .set(1);
+      .set(database.ServerValue.TIMESTAMP);
 
     await database()
       .ref('Users/' + blockuid)

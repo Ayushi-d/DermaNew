@@ -189,20 +189,24 @@ class Likes extends React.Component {
         <FlatList
           ref={(ref) => (this.flatListref = ref)}
           data={sortedKeys}
-          renderItem={({item}) => (
-            <Cards
-              data={data[item]}
-              fromLike={true}
-              sent={this.state.tab == 1}
-              likesMe={true}
-              likeOther={this.likeOther(data[item])}
-              dateToShow={moment(
-                new Date(data[item].lt[auth().currentUser.uid] * 1000),
-              ).calendar()}
-              fromPage={'Likes'}
-              {...this.props}
-            />
-          )}
+          renderItem={({item}) => {
+            let likeOther = this.likeOther(data[item]);
+            // console.log('likeOther: ', likeOther);
+            return (
+              <Cards
+                data={data[item]}
+                fromLike={true}
+                sent={this.state.tab == 1}
+                likesMe={true}
+                likeOther={likeOther}
+                dateToShow={moment(
+                  new Date(data[item].lt[auth().currentUser.uid] * 1000),
+                ).calendar()}
+                fromPage={'Likes'}
+                {...this.props}
+              />
+            );
+          }}
           keyExtractor={(item, index) => index.toString()}
           style={{flexGrow: 1}}
           onScroll={this.handleScroll}
@@ -214,10 +218,9 @@ class Likes extends React.Component {
   };
 
   likeOther = (data) => {
-    let lt = this.props.context.sent;
-
-    if (lt && data) {
-      return Object.keys(lt).includes(data.uid);
+    let {user} = this.props.appContext;
+    if (user.lt && data) {
+      return Object.keys(user.lt).includes(data.uid);
     }
 
     return false;

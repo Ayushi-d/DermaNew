@@ -58,6 +58,11 @@ class DeclinedProfileJSX extends React.Component {
       .child('con')
       .orderByChild('lT');
 
+    if (!user.con) {
+      this.setState({loading: false});
+      return;
+    }
+
     this.dtRef.on(
       'value',
       async (snap) => {
@@ -72,7 +77,7 @@ class DeclinedProfileJSX extends React.Component {
             continue;
           }
           let chat = cht.val();
-          if (chat.isAcc && chat.isAcc !== -1) {
+          if (!chat.isAcc || (chat.isAcc && chat.isAcc !== -1)) {
             continue;
           }
           let ouid = dk.split(this.uid).join('');

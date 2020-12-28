@@ -34,6 +34,10 @@ class Cards extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // console.log('this.props.likeOther', this.props.likeOther);
+  }
+
   onPressLike = () => {
     let likesMe = this.state.likedMe;
 
@@ -48,6 +52,12 @@ class Cards extends React.Component {
 
   UNSAFE_componentWillReceiveProps(props) {
     // this.setState({likedMe: props.likeOther});
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.likeOther !== this.props.likeOther) {
+      this.setState({likedMe: this.props.likeOther});
+    }
   }
 
   showMessageModal = () => {

@@ -92,13 +92,16 @@ export default class MsgHeader extends React.Component {
 
   render() {
     let {menuOpen, blockOpen, reportOpen} = this.state;
-    let {refr, type, title, right, route} = this.props;
+    let {refr, type, title, right, route, context, hideRight} = this.props;
+    let {user} = context;
     let oUser = {};
     if (refr) {
       oUser = route.params.data;
     } else {
       oUser = route.params.data.otheruser;
     }
+
+    // console.log('isBlocked!: ', user.bb[oUser.uid]);
 
     return (
       <View style={{...styles.header}}>
@@ -139,7 +142,7 @@ export default class MsgHeader extends React.Component {
               </Pressable>
             )}
 
-            {right ? (
+            {right && !hideRight ? (
               <Menu
                 visible={menuOpen}
                 onDismiss={this._closeMenu}
