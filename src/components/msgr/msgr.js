@@ -493,8 +493,6 @@ export default class Msgr extends React.Component {
 
     let ll = moment(new Date(msg.tp * 1000));
 
-    console.log(new Date().toLocaleDateString());
-
     let mTime = ll.format('LT');
     if (ll.isBefore(new Date().toLocaleDateString())) {
       mTime = ll.format('ll LT');
