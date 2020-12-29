@@ -101,8 +101,6 @@ export default class MsgHeader extends React.Component {
       oUser = route.params.data.otheruser;
     }
 
-    // console.log('isBlocked!: ', user.bb[oUser.uid]);
-
     return (
       <View style={{...styles.header}}>
         <LinearGradient
@@ -141,42 +139,46 @@ export default class MsgHeader extends React.Component {
                 </View>
               </Pressable>
             )}
-
-            {right && !hideRight ? (
-              <Menu
-                visible={menuOpen}
-                onDismiss={this._closeMenu}
-                anchor={
+            {!hideRight ? (
+              <>
+                {right ? (
+                  <Menu
+                    visible={menuOpen}
+                    onDismiss={this._closeMenu}
+                    anchor={
+                      <Pressable
+                        style={{
+                          ...styles.iconBtn,
+                          height: 50,
+                        }}
+                        onPress={this._openMenu}>
+                        <Entypo name={'block'} color={THEME.WHITE} size={24} />
+                      </Pressable>
+                    }>
+                    <Menu.Item
+                      onPress={() => {
+                        this._toggleBlockModal();
+                        this._closeMenu();
+                      }}
+                      title="BLOCK"
+                    />
+                    <Menu.Item
+                      onPress={() => {
+                        this._toggleReportModal();
+                        this._closeMenu();
+                      }}
+                      title="REPORT"
+                    />
+                  </Menu>
+                ) : (
                   <Pressable
-                    style={{
-                      ...styles.iconBtn,
-
-                      height: 50,
-                    }}
-                    onPress={this._openMenu}>
-                    <Entypo name={'block'} color={THEME.WHITE} size={24} />
+                    style={styles.iconBtn}
+                    onPress={this._goToDashboard}>
+                    <AntDesign name={'home'} color={THEME.WHITE} size={28} />
                   </Pressable>
-                }>
-                <Menu.Item
-                  onPress={() => {
-                    this._toggleBlockModal();
-                    this._closeMenu();
-                  }}
-                  title="BLOCK"
-                />
-                <Menu.Item
-                  onPress={() => {
-                    this._toggleReportModal();
-                    this._closeMenu();
-                  }}
-                  title="REPORT"
-                />
-              </Menu>
-            ) : (
-              <Pressable style={styles.iconBtn} onPress={this._goToDashboard}>
-                <AntDesign name={'home'} color={THEME.WHITE} size={28} />
-              </Pressable>
-            )}
+                )}
+              </>
+            ) : null}
           </View>
         </LinearGradient>
         {/* <StatusBar barStyle={'light-content'} /> */}

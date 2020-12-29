@@ -21,7 +21,7 @@ moment.updateLocale('en', {
     L: 'DD/MM/YYYY',
     l: 'D/M/YYYY',
     LL: 'Do MMMM YYYY',
-    ll: 'D MMM YYYY',
+    ll: 'D MMM',
     LLL: 'Do MMMM YYYY LT',
     lll: 'D MMM YYYY LT',
     LLLL: 'dddd, MMMM Do YYYY LT',

@@ -16,6 +16,54 @@ import THEME from '../../config/theme';
 
 import moment from 'moment';
 
+let localLocale = moment();
+
+localLocale.locale('en', {
+  calendar: {
+    lastDay: '[Yesterday] LT',
+    sameDay: 'LT',
+    nextDay: '[Tomorrow]',
+    lastWeek: 'dddd LT',
+    nextWeek: 'dddd LT',
+    sameElse: 'L',
+  },
+  longDateFormat: {
+    LT: 'h:mm A',
+    LTS: 'h:mm:ss A',
+    L: 'DD/MM/YYYY',
+    l: 'D/M/YYYY',
+    LL: 'Do MMMM YYYY',
+    ll: 'D MMM YYYY',
+    LLL: 'Do MMMM YYYY LT',
+    lll: 'D MMM YYYY LT',
+    LLLL: 'dddd, MMMM Do YYYY LT',
+    llll: 'ddd, MMM D YYYY LT',
+  },
+});
+
+let locale = {
+  calendar: {
+    lastDay: '[Yesterday] LT',
+    sameDay: 'LT',
+    nextDay: '[Tomorrow]',
+    lastWeek: 'dddd LT',
+    nextWeek: 'dddd LT',
+    sameElse: 'L',
+  },
+  longDateFormat: {
+    LT: 'h:mm A',
+    LTS: 'h:mm:ss A',
+    L: 'DD/MM/YYYY',
+    l: 'D/M/YYYY',
+    LL: 'Do MMMM YYYY',
+    ll: 'D MMM YYYY',
+    LLL: 'Do MMMM YYYY LT',
+    lll: 'D MMM YYYY LT',
+    LLLL: 'dddd, MMMM Do YYYY LT',
+    llll: 'ddd, MMM D YYYY LT',
+  },
+};
+
 export default class Msgr extends React.Component {
   constructor(props) {
     super(props);
@@ -442,6 +490,16 @@ export default class Msgr extends React.Component {
     // console.log(user.dp);
     let msg = item;
     let type = msg.sid === user.uid ? 0 : 1;
+
+    let ll = moment(new Date(msg.tp * 1000));
+
+    console.log(new Date().toLocaleDateString());
+
+    let mTime = ll.format('LT');
+    if (ll.isBefore(new Date().toLocaleDateString())) {
+      mTime = ll.format('ll LT');
+    }
+
     return (
       <View
         style={{
@@ -468,9 +526,7 @@ export default class Msgr extends React.Component {
             <Text style={{...styles.msgTxt}}>{msg.mg}</Text>
             {/* </View> */}
           </View>
-          <Text style={{...styles.msgTime}}>
-            {moment(new Date(msg.tp * 1000)).format('LT')}
-          </Text>
+          <Text style={{...styles.msgTime}}>{mTime}</Text>
         </View>
       </View>
     );

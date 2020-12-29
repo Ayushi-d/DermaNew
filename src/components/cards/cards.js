@@ -161,9 +161,9 @@ class Cards extends React.Component {
           }}>
           <Text
             style={{color: THEME.WHITE, fontStyle: 'italic'}}
-            onPress={
-              this.replyToMessage
-            }>{`Message - ${this.props.message}`}</Text>
+            onPress={this.replyToMessage}
+            numberOfLines={2}
+            ellipsizeMode={'tail'}>{`Message - ${this.props.message}`}</Text>
         </View>
 
         <View

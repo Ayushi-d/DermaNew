@@ -259,6 +259,8 @@ class ManagePhotosJSX extends React.Component {
 
     if (!approvedObj && !unapproved) return null;
 
+    // console.log(approvedObj, unapproved);
+
     let key = approvedObj && this.getKeyFromObject(dp, approvedObj);
 
     return (
@@ -276,7 +278,7 @@ class ManagePhotosJSX extends React.Component {
           ? null
           : Object.keys(approvedObj)
               .sort()
-              .reverse()
+              // .reverse()
               .map((item, i) =>
                 approvedObj[item] != dp ? (
                   <Photo
@@ -297,7 +299,7 @@ class ManagePhotosJSX extends React.Component {
           ? null
           : Object.keys(unapproved)
               .sort()
-              .reverse()
+              // .reverse()
               .map((item, i) => (
                 <Photo
                   uri={unapproved[item]}

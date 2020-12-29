@@ -186,10 +186,10 @@ class Dashboard extends React.Component {
     if (cons) {
       let con = Object.keys(user.con);
       con.forEach((c) => {
-        if (!cons[c].sn && cons[c].isAcc !== -1) {
+        if (!cons[c].sn && cons[c].isAcc === 0) {
           chatRequestCount += 1;
         } else {
-          if (cons[c].uc && cons[c].isAcc !== -1) {
+          if (cons[c].uc && cons[c].isAcc === 1) {
             // console.log(c);
             msgsCount += 1;
           }
