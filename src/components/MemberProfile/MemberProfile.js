@@ -66,6 +66,12 @@ const aboutUser = {
       props: 'p',
     },
   ],
+  Personal: [
+    {
+      name: 'Children',
+      props: 'ch',
+    },
+  ],
   Interest: [
     {
       name: 'Interest',
@@ -259,7 +265,7 @@ class MemberProfile extends React.Component {
   render() {
     let data = this.props.route.params.data;
     this.hideMessage = this.props.route.params.hideMessage;
-    console.log(this.props.route.params.hideMessage);
+    // console.log(this.props.route.params.hideMessage);
     this.fromPageHistory = this.props.route.params.fromPageHistory;
 
     return (

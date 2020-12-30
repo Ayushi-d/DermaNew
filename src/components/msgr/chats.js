@@ -244,7 +244,7 @@ function RenderChat(props) {
               <LinearGradient
                 colors={THEME.GRADIENT_BG.PAIR}
                 style={styles.tScoreCount}>
-                <Text style={styles.tScoreCountTxt}>20%</Text>
+                <Text style={styles.tScoreCountTxt}>{cUser.ts.ts}%</Text>
               </LinearGradient>
             </View>
             <Text style={styles.cTime}>

@@ -47,6 +47,8 @@ const getData = (obj, field, pp = false, edit = false) => {
 
   let ch = UserConfig[field];
 
+  // console.log(field, ch);
+
   if (ch == 'in') {
     return obj[ch].split(',').join(', ');
   }

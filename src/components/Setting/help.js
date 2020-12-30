@@ -223,7 +223,7 @@ class Help extends React.Component {
 
 Help.prototype.showSuccesMessage = () => {
   Snackbar.show({
-    title: 'You form has been submitted. We will respond withing 24 hours.',
+    text: 'You form has been submitted. We will respond withing 24 hours.',
     duration: Snackbar.LENGTH_INDEFINITE,
     action: {
       title: 'Ok',

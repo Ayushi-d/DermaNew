@@ -507,11 +507,13 @@ export default class Msgr extends React.Component {
         <View
           style={{
             ...styles.msgOut,
-            alignItems: !type ? 'flex-start' : 'flex-end',
+            // backgroundColor: '#000',
+            // alignItems: type ? 'flex-start' : 'flex-end',
           }}>
           <View
             style={{
               ...styles.msg,
+              alignSelf: type ? 'flex-start' : 'flex-end',
               flexDirection: type ? 'row' : 'row-reverse',
             }}>
             <Image

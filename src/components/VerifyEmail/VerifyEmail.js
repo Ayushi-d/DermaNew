@@ -66,7 +66,7 @@ class VerifyEmailJSX extends React.Component {
           if (res) {
             this.setState({loading: false, otpsent: true}, () => {
               Snackbar.show({
-                title: 'OTP SENT',
+                text: 'OTP SENT',
                 duration: Snackbar.LENGTH_SHORT,
               });
             });
@@ -74,7 +74,7 @@ class VerifyEmailJSX extends React.Component {
         })
         .catch((err) => {
           Snackbar.show({
-            title: err,
+            text: err,
             duration: Snackbar.LENGTH_SHORT,
           });
         });
@@ -121,7 +121,7 @@ class VerifyEmailJSX extends React.Component {
     } else {
       this.setState({loading: false}, () => {
         Snackbar.show({
-          title: 'WRONG OTP',
+          text: 'WRONG OTP',
           duration: Snackbar.LENGTH_SHORT,
         });
       });

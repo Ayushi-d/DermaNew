@@ -71,7 +71,7 @@ class VerifyPhoneJSX extends React.Component {
       .verifyPhoneNumber(phone)
       .then((res) => {
         Snackbar.show({
-          title: 'OTP SENT',
+          text: 'OTP SENT',
           duration: Snackbar.LENGTH_SHORT,
         });
 

@@ -152,7 +152,7 @@ Uploader.deletePhoto = async (key, url, type) => {
     if (op.exists) {
       let dat = op.val();
       if (dat) {
-        let ids = Object.keys(dat);
+        let ids = Object.keys(dat).reverse();
         if (ids && ids.length) {
           nextDp = dat[ids[0]];
           unAprooved = false;
@@ -164,7 +164,7 @@ Uploader.deletePhoto = async (key, url, type) => {
       if (aop.exists) {
         let dat = aop.val();
         if (dat) {
-          let ids = Object.keys(dat);
+          let ids = Object.keys(dat).reverse();
           if (ids && ids.length) {
             nextDp = dat[ids[0]];
             unAprooved = true;

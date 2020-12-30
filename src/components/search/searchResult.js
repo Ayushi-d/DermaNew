@@ -110,10 +110,10 @@ class SearchResult extends React.Component {
       }
       this.setData(newUsers);
     } else {
-      Snackbar.show({
-        text: 'You have reached to the end of the matched users list.',
-        duration: Snackbar.LENGTH_SHORT,
-      });
+      // Snackbar.show({
+      //   text: 'You have reached to the end of the matched users list.',
+      //   duration: Snackbar.LENGTH_SHORT,
+      // });
     }
     this.setState({loadMore: false, onEndReachedCalledDuringMomentum: true});
   };
