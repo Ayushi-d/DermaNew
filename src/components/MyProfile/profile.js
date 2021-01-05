@@ -279,61 +279,66 @@ class MyProfileJSX extends React.Component {
   renderTabContent = () => {
     return (
       <View style={tabContent.container}>
-        {myProfile[this.state.tab].map((item, i) => (
-          <View style={tabContent.block} key={i}>
-            {item.map((ch, index) => {
-              let d = getData(
-                this.props.context.user,
-                ch,
-                this.state.tab == 1 ? true : false,
-              );
-              if (d == '' && ch != 'Interest' && ch != 'About Me') return null;
-              return (
-                <View style={tabContent.blockItem} key={index}>
-                  <Text style={tabContent.ch}>{ch}</Text>
-                  {ch == 'About Me' ? (
-                    <AboutMe
-                      style={tabContent.value}
-                      data={getData(
-                        this.props.context.user,
-                        'ABOUT ME',
-                        this.state.tab == 1 ? true : false,
-                      )}
-                    />
-                  ) : (
-                    <Text style={tabContent.value}>
-                      {getData(
-                        this.props.context.user,
-                        ch,
-                        this.state.tab == 1 ? true : false,
-                      )}
-                    </Text>
-                  )}
-                </View>
-              );
-            })}
-            <TouchableOpacity
-              style={tabContent.edit}
-              onPress={() =>
-                this._onPressNavigate(
-                  this.state.tab == 0 ? 'Edit Profile' : 'Edit Preference',
-                  {
-                    data: item[0],
-                  },
-                )
-              }>
-              <Image
-                source={edit}
-                style={{
-                  width: 20,
-                  height: 20,
-                  resizeMode: 'contain',
-                  borderWidth: 1,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        ))}
+        {myProfile[this.state.tab].map((item, i) => {
+          return (
+            <View style={tabContent.block} key={i}>
+              {item.map((ch, index) => {
+                let d = getData(
+                  this.props.context.user,
+                  ch,
+                  this.state.tab == 1 ? true : false,
+                );
+                if (d == '' && ch != 'Interest' && ch != 'About Me')
+                  return null;
+                return (
+                  <View style={tabContent.blockItem} key={index}>
+                    <Text style={tabContent.ch}>{ch}</Text>
+                    {ch == 'About Me' ? (
+                      <AboutMe
+                        style={tabContent.value}
+                        data={getData(
+                          this.props.context.user,
+                          'ABOUT ME',
+                          this.state.tab == 1 ? true : false,
+                        )}
+                      />
+                    ) : (
+                      <Text style={tabContent.value}>
+                        {getData(
+                          this.props.context.user,
+                          ch,
+                          this.state.tab == 1 ? true : false,
+                        )}
+                      </Text>
+                    )}
+                  </View>
+                );
+              })}
+              {item[0] !== 'Religion' ? (
+                <TouchableOpacity
+                  style={tabContent.edit}
+                  onPress={() =>
+                    this._onPressNavigate(
+                      this.state.tab == 0 ? 'Edit Profile' : 'Edit Preference',
+                      {
+                        data: item[0],
+                      },
+                    )
+                  }>
+                  <Image
+                    source={edit}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      resizeMode: 'contain',
+                      borderWidth: 1,
+                    }}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          );
+        })}
       </View>
     );
   };

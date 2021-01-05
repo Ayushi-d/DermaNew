@@ -45,7 +45,7 @@ export default class DrawerStackHeader extends React.Component {
   };
 
   render() {
-    let {title, type} = this.props;
+    let {title, type, hideRight} = this.props;
     return (
       <View style={{...styles.header}}>
         {/* <DermaBg> */}
@@ -66,10 +66,11 @@ export default class DrawerStackHeader extends React.Component {
             <View style={styles.middleHead}>
               <Text style={styles.title}>{title ? title : ''}</Text>
             </View>
-
-            <Pressable style={styles.iconBtn} onPress={this._goToDashboard}>
-              <Entypo name={'home'} color={THEME.WHITE} size={28} />
-            </Pressable>
+            {!hideRight ? (
+              <Pressable style={styles.iconBtn} onPress={this._goToDashboard}>
+                <Entypo name={'home'} color={THEME.WHITE} size={28} />
+              </Pressable>
+            ) : null}
           </View>
         </LinearGradient>
 

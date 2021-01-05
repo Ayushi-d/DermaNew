@@ -87,7 +87,7 @@ class Registration extends React.Component {
     let error = {};
     for (let item of RegistrationForm[this.state.step - 1]) {
       if (values[item.name] == '') {
-        error[item.name] = 'This field is required';
+        error[item.name] = `${item.label} is required`;
       } else if (item.name == 'em') {
         let re = /\S+@\S+\.\S+/;
         if (!re.test(values[item.name])) {
@@ -113,7 +113,7 @@ class Registration extends React.Component {
 
     delete error[name];
 
-    if (value == '') error[name] = 'This field is required';
+    if (value == '') error[name] = `This field is required`;
 
     if (name == 'em' && !emailRegex.test(value))
       error[name] = 'This is not a valid email address.';
@@ -322,7 +322,7 @@ class Registration extends React.Component {
                     <Text
                       style={{color: THEME.BLUE}}
                       onPress={() =>
-                        this.props.navigation.navigate('Terms of Use', {
+                        this.props.navigation.navigate('TermsofUse', {
                           from: 'Registration',
                         })
                       }>
@@ -332,7 +332,7 @@ class Registration extends React.Component {
                     <Text
                       style={{color: THEME.BLUE}}
                       onPress={() =>
-                        this.props.navigation.navigate('Privacy Policy', {
+                        this.props.navigation.navigate('PrivacyPolicy', {
                           from: 'Registration',
                         })
                       }>

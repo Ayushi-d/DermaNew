@@ -85,9 +85,14 @@ class PrivacyPolicy extends React.Component {
     },
   };
   render() {
+    let {params} = this.props.route;
     return (
       <View>
-        <SettingsHeader title={'Privacy Policy'} {...this.props} />
+        <SettingsHeader
+          title={'Privacy Policy'}
+          hideRight={params && params.from === 'Registration'}
+          {...this.props}
+        />
         <ScrollView>
           <View style={style.container}>
             <Markdown style={mdStyle} rules={this.rules}>

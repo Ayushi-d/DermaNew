@@ -35,11 +35,9 @@ class DropModal extends React.Component {
         visible={this.props.show}
         style={style.modal}
         transparent={true}
-        onBackdropPress={this.props.closeModal}
-      >
+        onBackdropPress={this.props.closeModal}>
         <View
-          style={[style.container, this.getStyle(), this.props.dropModalStyle]}
-        >
+          style={[style.container, this.getStyle(), this.props.dropModalStyle]}>
           <FlatList
             style={style.flatList}
             data={this.props.data}
@@ -54,13 +52,15 @@ class DropModal extends React.Component {
                 index,
               };
             }}
-            renderItem={({item, index}) => (
-              <DropItem
-                value={item.value}
-                handleChange={this.props.handleChange}
-                isSelected={index == this.props.currentIndex}
-              />
-            )}
+            renderItem={({item, index}) => {
+              return (
+                <DropItem
+                  value={item.value}
+                  handleChange={this.props.handleChange}
+                  isSelected={index == this.props.currentIndex}
+                />
+              );
+            }}
           />
         </View>
       </ReactNativeModal>
@@ -70,12 +70,12 @@ class DropModal extends React.Component {
 
 class DropItem extends React.PureComponent {
   render() {
+    let {isSelected} = this.props;
     return (
       <TouchableOpacity
         style={style.item}
         activeOpacity={0.9}
-        onPress={() => this.props.handleChange(this.props.value)}
-      >
+        onPress={() => this.props.handleChange(this.props.value)}>
         <Text
           style={[
             style.itemText,
@@ -84,8 +84,7 @@ class DropItem extends React.PureComponent {
                 ? THEME.GRADIENT_BG.END_COLOR
                 : THEME.GRAY,
             },
-          ]}
-        >
+          ]}>
           {this.props.value}
         </Text>
       </TouchableOpacity>

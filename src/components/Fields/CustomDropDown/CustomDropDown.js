@@ -30,7 +30,7 @@ class CustomDropDown extends React.Component {
     this.flatListSize += 20;
   }
 
-  parseValue = value => {
+  parseValue = (value) => {
     if (value === 1) {
       return 'Show my name';
     }
@@ -40,7 +40,7 @@ class CustomDropDown extends React.Component {
     return value;
   };
 
-  _handleChange = val => {
+  _handleChange = (val) => {
     this.setState({showModal: false});
     let value = val;
 
@@ -56,7 +56,7 @@ class CustomDropDown extends React.Component {
     this.props.pushChange(this.props.name, value);
   };
 
-  showModal = e => {
+  showModal = (e) => {
     this.containerRef.measureInWindow((x, y, width, height) => {
       if (y + height + this.flatListSize > Dimensions.get('window').height) {
         this.setRightY(-1);
@@ -66,7 +66,7 @@ class CustomDropDown extends React.Component {
     });
   };
 
-  setRightY = position => {
+  setRightY = (position) => {
     this.containerRef.measureInWindow((x, y, width, height) => {
       this.setState({
         showModal: true,
@@ -84,7 +84,7 @@ class CustomDropDown extends React.Component {
   };
 
   getInitialIndex = () => {
-    let currentIndex = 0;
+    let currentIndex = -1;
     this.props.data.map((item, index) => {
       if (item.value === this.parseValue(this.props.value)) {
         currentIndex = index;
@@ -102,9 +102,8 @@ class CustomDropDown extends React.Component {
           this.props.style,
           {marginBottom: this.props.error ? 20 : 0},
         ]}
-        ref={ref => (this.containerRef = ref)}
-        onLayout={() => null}
-      >
+        ref={(ref) => (this.containerRef = ref)}
+        onLayout={() => null}>
         <TouchableOpacity
           style={[
             style.input,
@@ -116,8 +115,7 @@ class CustomDropDown extends React.Component {
               : {},
           ]}
           onPress={this.showModal}
-          disabled={this.props.disabled}
-        >
+          disabled={this.props.disabled}>
           {this.props.label ? (
             <Text style={style.label}>{this.props.label}</Text>
           ) : null}

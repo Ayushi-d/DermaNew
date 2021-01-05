@@ -83,10 +83,16 @@ class TermsOfUse extends React.Component {
   };
   render() {
     let {refr} = this.props;
+    let {params} = this.props.route;
+
     return (
       <View>
         {refr ? (
-          <SettingsHeader title={'Terms Of Use'} {...this.props} />
+          <SettingsHeader
+            title={'Terms Of Use'}
+            hideRight={params && params.from === 'Registration'}
+            {...this.props}
+          />
         ) : null}
         <ScrollView>
           <View style={style.container}>

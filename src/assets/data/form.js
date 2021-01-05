@@ -96,7 +96,7 @@ const RegistrationForm = [
     },
     {
       name: 'pnm',
-      label: 'Privact setting for name',
+      label: 'Privacy setting for name',
       component: CustomDropDown,
       data: ['Show my name', 'Hide my name'],
       parseData: {
@@ -151,7 +151,6 @@ const RegistrationForm = [
       label: 'Education Field',
       component: CustomDropDown,
       data: [
-        'Not Applicable',
         'Arts',
         'Administrative Services',
         'Architecture',
@@ -172,6 +171,7 @@ const RegistrationForm = [
         'Psychology',
         'Science',
         'Other',
+        'Not Applicable',
       ],
     },
     {
@@ -349,9 +349,6 @@ const RegistrationForm = [
         'Muslim',
         'Parsi',
         'Sikh',
-        'Spiritual',
-        'No religion',
-        'Other',
       ],
       dropDownPosition: true,
     },
