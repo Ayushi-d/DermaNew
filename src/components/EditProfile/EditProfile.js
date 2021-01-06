@@ -205,7 +205,9 @@ class EditProfileJSX extends React.Component {
         <View
           style={{flex: 1, padding: 20}}
           showsVerticalScrollIndicator={false}>
-          <ScrollView style={style.shadowBox}>
+          <ScrollView
+            style={style.shadowBox}
+            keyboardShouldPersistTaps={'always'}>
             {this.renderItems()}
             <View
               style={{

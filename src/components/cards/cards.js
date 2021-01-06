@@ -121,7 +121,10 @@ class Cards extends React.Component {
           flexDirection: 'row',
           justifyContent: 'space-around',
         }}>
-        <TouchableOpacity style={style.buttonLike} onPress={this.onPressLike}>
+        <TouchableOpacity
+          style={style.buttonLike}
+          onPress={this.onPressLike}
+          disabled={this.state.likedMe}>
           <Image
             source={this.state.likedMe ? liked : like}
             style={style.image}

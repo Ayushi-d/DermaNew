@@ -181,9 +181,9 @@ class RegistrationHOC extends React.Component {
 
     if (g == 'Male') {
       pp.a1 = age - 7 > 18 ? age - 7 : 18;
-      pp.a2 = age + 2;
+      pp.a2 = age + 3;
     } else {
-      pp.a1 = age - 2 > 18 ? age - 2 : 18;
+      pp.a1 = age - 3 > 18 ? age - 3 : 18;
       pp.a2 = age + 7;
     }
 

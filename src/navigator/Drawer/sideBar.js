@@ -78,8 +78,8 @@ class SidebarJSX extends React.Component {
     super(props);
 
     this.state = {
-      'Chat Requests': false,
-      Likes: false,
+      'Chat Requests': true,
+      Likes: true,
     };
   }
 
@@ -290,14 +290,14 @@ function RenderExpanded(props) {
               ) : null}
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => _setExpanded(text)}>
+          {/* <TouchableOpacity onPress={() => _setExpanded(text)}>
             <Image
               source={
                 pState[text] ? sidebar_icon['collapse'] : sidebar_icon['expand']
               }
               style={style.image}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {pState[text]
           ? EXPAND[text].item.map((data) => (
