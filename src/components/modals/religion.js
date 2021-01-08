@@ -16,6 +16,7 @@ import THEME from '../../config/theme';
 import check from '../../assets/general/ic_checkbox.png';
 import DEFAULT_BUTTON, {BUTTON_WITH_PARAM} from '../general/button';
 import {OptimizedFlatList} from 'react-native-optimized-flatlist';
+import {Chip} from 'react-native-paper';
 
 class MultiChoicePicker extends React.Component {
   constructor(props) {
@@ -108,6 +109,30 @@ class MultiChoicePicker extends React.Component {
     };
   };
 
+  _renderHeader = () => {
+    let {data} = this.state;
+    let chips = data.map((d) => {
+      return (
+        <Chip
+          style={style.chipStyle}
+          key={d}
+          onClose={() => this.handlePress(d)}
+          selected>
+          {d}
+        </Chip>
+      );
+    });
+    return (
+      <>
+        <COUNTNRY_HEADER
+          title={this.props.title}
+          handleClearAll={this.handleClearAll}
+        />
+        <View style={style.selectedCon}>{chips.length ? chips : null}</View>
+      </>
+    );
+  };
+
   render() {
     const {props} = this;
     return (
@@ -132,12 +157,7 @@ class MultiChoicePicker extends React.Component {
                 isChecked={this.state.data.includes(item)}
               />
             )}
-            ListHeaderComponent={
-              <COUNTNRY_HEADER
-                title={this.props.title}
-                handleClearAll={this.handleClearAll}
-              />
-            }
+            ListHeaderComponent={this._renderHeader}
             onLayout={this.onLayout}
           />
 
@@ -292,6 +312,16 @@ const style = StyleSheet.create({
   itemContainer: {
     padding: 20,
     marginBottom: 60,
+  },
+
+  selectedCon: {
+    padding: 10,
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  chipStyle: {
+    margin: 1,
   },
 });
 

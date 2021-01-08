@@ -28,6 +28,7 @@ import data from '../../assets/data/countryData';
 import AboutMe from '../general/AboutMe';
 import CustomBackAction from '../general/CustomBackAction';
 import Header from '../Headers/SettingsHeader';
+import {Chip} from 'react-native-paper';
 
 const icon = {
   sc: skin,
@@ -122,15 +123,17 @@ class MyProfileJSX extends React.Component {
 
     if (routeName == 'Edit Preference') {
       if (obj.data == 'Location') {
-        this.setState({location: true});
-        return;
+        // this.setState({location: true});
+        // return;
       }
 
       if (obj.data == 'Religion') {
-        this.setState({religion: true});
-        return;
+        // this.setState({religion: true});
+        // return;
       }
     }
+
+    console.log(routeName, obj);
 
     this.props.navigation.navigate(routeName, obj);
   };
@@ -290,6 +293,34 @@ class MyProfileJSX extends React.Component {
                 );
                 if (d == '' && ch != 'Interest' && ch != 'About Me')
                   return null;
+                if (ch === 'Interest') {
+                  let ins = getData(
+                    this.props.context.user,
+                    'Interest',
+                    this.state.tab == 1 ? true : false,
+                  );
+
+                  let chips = ins.map((d) => (
+                    <Chip style={{margin: 2, borderColor: '#222'}} key={d}>
+                      {d}
+                    </Chip>
+                  ));
+
+                  return (
+                    <View style={tabContent.blockItem} key={index}>
+                      <Text style={tabContent.ch}>{ch}</Text>
+                      <View
+                        style={{
+                          padding: 10,
+                          width: '100%',
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                        }}>
+                        {chips && chips.length ? chips : null}
+                      </View>
+                    </View>
+                  );
+                }
                 return (
                   <View style={tabContent.blockItem} key={index}>
                     <Text style={tabContent.ch}>{ch}</Text>
@@ -314,7 +345,7 @@ class MyProfileJSX extends React.Component {
                   </View>
                 );
               })}
-              {item[0] !== 'Religion' ? (
+              {item[0] === 'Religion' && this.state.tab === 0 ? null : (
                 <TouchableOpacity
                   style={tabContent.edit}
                   onPress={() =>
@@ -335,7 +366,7 @@ class MyProfileJSX extends React.Component {
                     }}
                   />
                 </TouchableOpacity>
-              ) : null}
+              )}
             </View>
           );
         })}
@@ -361,7 +392,7 @@ class MyProfileJSX extends React.Component {
               isVisible={this.state.interest}
               onCancel={() => this.hideModal('interest')}
               saveChanges={this.saveChanges}
-              data={getData(this.props.context.user, 'Interest')}
+              data={getData(this.props.context.user, 'Interest').join(', ')}
             />
           ) : null}
 

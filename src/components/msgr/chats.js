@@ -135,7 +135,11 @@ export default class Chats extends React.Component {
             .ref(`Users/${ouid}`)
             .once('value')
             .catch((err) => console.log('chats.js _getChats cUser err: ', err));
-          if (!cUserSnap.exists || cUserSnap.val() === null) {
+          if (
+            !cUserSnap.exists ||
+            cUserSnap.val() === null ||
+            cUserSnap.val().uid === undefined
+          ) {
             continue;
           }
           let cUser = cUserSnap.val();
@@ -189,13 +193,6 @@ export default class Chats extends React.Component {
     return (
       <View style={styles.container}>
         <Header title={'Messages'} type {...this.props} />
-        {/* {loading ? (
-          <ActivityIndicator
-            size={27}
-            color={THEME.ACTIVE_COLOR}
-            style={{marginTop: 5, marginBottom: 5}}
-          />
-        ) : null} */}
         <FlatList
           data={chats}
           keyExtractor={this._keyExtractor}

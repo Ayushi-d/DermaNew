@@ -457,29 +457,29 @@ export default class Msgr extends React.Component {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
       });
 
-    database()
-      .ref('Users/' + uid)
-      .child('lt')
-      .child(ouid)
-      .set(null);
+    // database()
+    //   .ref('Users/' + uid)
+    //   .child('lt')
+    //   .child(ouid)
+    //   .set(null);
 
-    database()
-      .ref('Users/' + uid)
-      .child('lf')
-      .child(ouid)
-      .set(null);
+    // database()
+    //   .ref('Users/' + uid)
+    //   .child('lf')
+    //   .child(ouid)
+    //   .set(null);
 
-    database()
-      .ref('Users/' + ouid)
-      .child('lt')
-      .child(uid)
-      .set(null);
+    // database()
+    //   .ref('Users/' + ouid)
+    //   .child('lt')
+    //   .child(uid)
+    //   .set(null);
 
-    database()
-      .ref('Users/' + ouid)
-      .child('lf')
-      .child(uid)
-      .set(null);
+    // database()
+    //   .ref('Users/' + ouid)
+    //   .child('lf')
+    //   .child(uid)
+    //   .set(null);
 
     this._isMounted && this.setState({declined: true});
   };

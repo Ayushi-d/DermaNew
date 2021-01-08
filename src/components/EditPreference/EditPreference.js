@@ -8,14 +8,61 @@ import Country from '../../helpers/country';
 import {Loader} from '../modals';
 import Header from '../Headers/SettingsHeader';
 
+import {TextIn, MultiSelect} from '../../components/Fields';
+import cdata from '../../assets/data/countryData';
+
 class EditPPJSX extends React.Component {
   constructor(props) {
     super(props);
     this.data = this.props.route.params.data;
+    console.log(this.data);
 
-    this.items = EP['pp'][this.data];
+    if (this.data === 'Religion') {
+      this.items = [
+        {
+          name: 'rl',
+          label: 'Religion',
+          component: MultiSelect,
+          getData: 'Religion',
+          data: [
+            "Doesn't matter",
+            'Atheist',
+            'Agnostic',
+            'Buddhist',
+            'Christian',
+            'Hindu',
+            'Jain',
+            'Jewish',
+            'Muslim',
+            'Parsi',
+            'Sikh',
+            'Spiritual',
+            'No religion',
+            'Other',
+          ],
+          DISABLED_COMPONENT: TextIn,
+        },
+      ];
+    } else if (this.data === 'Location') {
+      this.items = [
+        {
+          name: 'ct',
+          label: 'Location',
+          component: MultiSelect,
+          getData: 'Location',
+          data: ["Doesn't matter", ...cdata],
+          DISABLED_COMPONENT: TextIn,
+        },
+      ];
+    } else {
+      this.items = EP['pp'][this.data];
+    }
 
     let state = {};
+
+    // console.log(
+    //   getData(this.props.context.user, this.items[0].item.getData, true),
+    // );
 
     this.items.map(
       (item) =>
@@ -73,8 +120,40 @@ class EditPPJSX extends React.Component {
     this.setState({values});
   };
 
+  pushChangePP = (name, data) => {
+    this.setState({loading: true}, () => {
+      if (name == 'Location') {
+        this.props.context
+          .savePPToFirebase({c: this.state.values.ct})
+          .then((res) => {
+            this.setState({loading: false}, () => {
+              this.goback();
+            });
+          });
+      } else {
+        this.props.context
+          .savePPToFirebase({rl: this.state.values.rl})
+          .then((res) => {
+            this.setState({loading: false}, () => {
+              this.goback();
+            });
+          });
+      }
+    });
+  };
+
   saveChanges = () => {
+    if (this.props.route.params.data === 'Religion') {
+      this.pushChangePP('Religion');
+      return;
+    }
+
+    if (this.props.route.params.data === 'Location') {
+      this.pushChangePP('Location');
+      return;
+    }
     let error = this.validateValue();
+
     this.setState({error}, () => {
       if (Object.keys(this.state.error).length == 0) {
         this.setState({loading: true});
@@ -115,7 +194,7 @@ class EditPPJSX extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1, padding: 20}} showsVerticalScrollIndicator={false}>
+      <View style={{flex: 1}} showsVerticalScrollIndicator={false}>
         <Header title={'Edit Preference'} {...this.props} />
         <ScrollView style={style.shadowBox}>
           {this.renderItems()}

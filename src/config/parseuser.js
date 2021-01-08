@@ -50,7 +50,7 @@ const getData = (obj, field, pp = false, edit = false) => {
   // console.log(field, ch);
 
   if (ch == 'in') {
-    return obj[ch].split(',').join(', ');
+    return obj[ch] ? obj[ch].split(',') : [];
   }
 
   if (ch == 'pnm' && !edit) {

@@ -128,7 +128,7 @@ class UserInterectionProvider extends React.Component {
               lbu_data = {};
             }
 
-            if (oUser === null) {
+            if (oUser === null || oUser.uid === undefined) {
               if (lt[res.key]) {
                 delete lt[res.key];
                 delete lbu_data[res.key];
@@ -205,7 +205,7 @@ class UserInterectionProvider extends React.Component {
 
             // console.log(userData.val(), res.key);
 
-            if (userData.val() === null) {
+            if (userData.val() === null || userData.val().uid === undefined) {
               if (lf[res.key]) {
                 delete lf[res.key];
                 delete lu_data[res.key];

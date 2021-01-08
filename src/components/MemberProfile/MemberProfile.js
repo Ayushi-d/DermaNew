@@ -26,6 +26,8 @@ import CustomBackAction from '../general/CustomBackAction';
 
 import Header from '../Headers/msgHeader';
 
+import {Chip} from 'react-native-paper';
+
 const trustScoreObj = [
   ['em', verEmail, 'Email\nVerified'],
   ['f', verFacebook, 'Facebook\nLinked'],
@@ -189,9 +191,29 @@ class MemberProfile extends React.Component {
                       data={getData(user_data, 'About Me')}
                     />
                   ) : (
-                    <Text style={tabContent.value}>
-                      {getData(user_data, obj.name)}
-                    </Text>
+                    <>
+                      {obj.name === 'Interest' ? (
+                        <View
+                          style={{
+                            padding: 10,
+                            width: '100%',
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                          }}>
+                          {getData(user_data, obj.name).map((d) => (
+                            <Chip
+                              style={{margin: 2, borderColor: '#222'}}
+                              key={d}>
+                              {d}
+                            </Chip>
+                          ))}
+                        </View>
+                      ) : (
+                        <Text style={tabContent.value}>
+                          {getData(user_data, obj.name)}
+                        </Text>
+                      )}
+                    </>
                   )}
                 </View>
               );

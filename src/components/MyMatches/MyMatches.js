@@ -59,11 +59,13 @@ class MyMatchesJSX extends React.Component {
 
     this.setState({loading: true}, async () => {
       let users = await this.pp.getUsers();
+      // console.log(users);
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
         let newUsers = {};
         for (let uk of uKeys) {
           let ouser = users[uk];
+          // console.log(ouser.uid);
 
           let uid = user.uid;
           let ouid = ouser.uid;

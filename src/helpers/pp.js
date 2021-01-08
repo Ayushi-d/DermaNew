@@ -13,13 +13,25 @@ class PP {
   }
 
   getUsers = async () => {
+    // console.log('call');
     if (!this.lastItem) {
       try {
         let snap = await this.users
           .orderByChild('cat')
           .limitToFirst(100)
           .once('value');
-        let new_data = this.getPreferedUsers(snap.val());
+        let usrs = snap.val();
+        let users = [];
+        let ukeys = Object.keys(usrs);
+
+        for (let uk of ukeys) {
+          let usr = usrs[uk];
+          if (usr.uid !== undefined) {
+            users[uk] = usr;
+          }
+        }
+
+        let new_data = this.getPreferedUsers(users);
         if (new_data == null) {
           let returned_data = {...this.data};
           this.data = {};
@@ -36,7 +48,19 @@ class PP {
           .startAt(this.lastItem)
           .limitToFirst(this.pageSize)
           .once('value');
-        let new_data = this.getPreferedUsers(snap.val());
+
+        let usrs = snap.val();
+        let users = [];
+        let ukeys = Object.keys(usrs);
+
+        for (let uk of ukeys) {
+          let usr = usrs[uk];
+          if (usr.uid !== undefined) {
+            users[uk] = usr;
+          }
+        }
+
+        let new_data = this.getPreferedUsers(users);
         if (new_data == null) {
           let returned_data = {...this.data};
           this.data = {};

@@ -61,7 +61,7 @@ let data = [
   70,
 ];
 
-data = data.map(item => ({value: `${item}`}));
+data = data.map((item) => ({value: `${item}`}));
 
 class AgeRange extends React.Component {
   constructor(props) {
@@ -77,6 +77,15 @@ class AgeRange extends React.Component {
   _pushChange = (name, val) => {
     let value = {...this.state.value};
     value[name] = val;
+    if (name === 'a1') {
+      let a1 = parseInt(value.a1);
+      let a2 = parseInt(value.a2);
+      if (a1 + 4 >= 70) {
+        value['a2'] = 70;
+      } else if (a2 < a1 + 4) {
+        value['a2'] = a1 + 4;
+      }
+    }
     this.setState({value}, () => {
       this.saveChanges();
     });
@@ -90,6 +99,13 @@ class AgeRange extends React.Component {
   };
 
   render() {
+    let {a1} = this.state.value;
+    let data2 = data.filter((d) => {
+      if (parseInt(a1) + 4 >= 70) {
+        return d.value == 70;
+      }
+      return d.value >= parseInt(a1) + 4;
+    });
     return (
       <View>
         <View style={style.container}>
@@ -103,7 +119,7 @@ class AgeRange extends React.Component {
           />
           <Text style={{color: THEME.GRAY}}>To</Text>
           <CustomDropDown
-            data={data}
+            data={data2}
             label={'Age'}
             style={style.inp}
             pushChange={this._pushChange}
@@ -117,8 +133,7 @@ class AgeRange extends React.Component {
               color: THEME.ERROR_REG,
               paddingHorizontal: 15,
               marginTop: 5,
-            }}
-          >
+            }}>
             {this.props.error}
           </Text>
         ) : null}
