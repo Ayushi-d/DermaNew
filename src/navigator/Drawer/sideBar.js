@@ -238,10 +238,27 @@ function DefaultItem(props) {
 
 function RenderExpanded(props) {
   let {text, route, context, pState, _navigateTo, _setExpanded} = props;
-  let likesCount =
-    context && context.user && context.user.lf && context.user.lf.c;
+  let likesCount = 0;
+  let likesRegCount = 0;
+  let likesFilCount = 0;
+  if (context && context.user && context.user.lf && context.user.lf.c) {
+    let lf = context.user.lf;
+    likesCount = lf.c;
+
+    Object.keys(lf).forEach((lk) => {
+      if (lk !== 'c') {
+        if (lf[lk].pref) {
+          likesFilCount += 1;
+        } else {
+          likesRegCount += 1;
+        }
+      }
+    });
+  }
 
   let chatRequestCount = 0;
+  let chatReqRegCount = 0;
+  let chatReqFilCount = 0;
   let msgsCount = 0;
 
   let cons = context.user.con;
@@ -250,6 +267,11 @@ function RenderExpanded(props) {
     con.forEach((c) => {
       if (!cons[c].sn && cons[c].isAcc !== -1) {
         chatRequestCount += 1;
+        if (cons[c].pref) {
+          chatReqFilCount += 1;
+        } else {
+          chatReqRegCount += 1;
+        }
       } else {
         if (cons[c].uc && cons[c].isAcc !== -1) {
           msgsCount += 1;
@@ -257,8 +279,6 @@ function RenderExpanded(props) {
       }
     });
   }
-
-  let notification = text == 'Likes' ? likesCount : chatRequestCount;
 
   return (
     <View key={text} style={[style.item, {alignItems: 'flex-start'}]}>
@@ -285,9 +305,9 @@ function RenderExpanded(props) {
             }}>
             <View style={style.notificationContainer}>
               <Text style={style.route}>{text}</Text>
-              {notification ? (
+              {/* {notification ? (
                 <Text style={style.notification}>{notification}</Text>
-              ) : null}
+              ) : null} */}
             </View>
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => _setExpanded(text)}>
@@ -300,23 +320,48 @@ function RenderExpanded(props) {
           </TouchableOpacity> */}
         </View>
         {pState[text]
-          ? EXPAND[text].item.map((data) => (
-              <View style={{height: 30}} key={data}>
-                <TouchableOpacity
-                  onPress={() =>
-                    _navigateTo(route, {id: data, tab: data, from: 'ref'})
-                  }>
-                  <Text
-                    style={{
-                      height: 30,
-                      paddingLeft: 5,
-                      lineHeight: 30,
-                    }}>
-                    {data}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ))
+          ? EXPAND[text].item.map((data) => {
+              let cNoti = 0;
+
+              if (text === 'Chat Requests') {
+                if (data === 'Regular') {
+                  cNoti = chatReqRegCount;
+                } else {
+                  cNoti = chatReqFilCount;
+                }
+              }
+
+              if (text === 'Likes') {
+                if (data === 'Regular') {
+                  cNoti = likesRegCount;
+                } else {
+                  cNoti = likesFilCount;
+                }
+              }
+
+              return (
+                <View style={{height: 30}} key={data}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      _navigateTo(route, {id: data, tab: data, from: 'ref'})
+                    }
+                    style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text
+                      style={{
+                        flex: 1,
+                        height: 30,
+                        paddingLeft: 5,
+                        lineHeight: 30,
+                      }}>
+                      {data}
+                    </Text>
+                    {cNoti ? (
+                      <Text style={style.notification}>{cNoti}</Text>
+                    ) : null}
+                  </TouchableOpacity>
+                </View>
+              );
+            })
           : null}
       </View>
     </View>

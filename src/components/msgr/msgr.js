@@ -12,6 +12,8 @@ import MsgHeader from '../Headers/msgHeader';
 import MsgBox from './msgBox';
 import database from '@react-native-firebase/database';
 
+import DateHelpers from '../../helpers/datehelpers';
+
 import THEME from '../../config/theme';
 
 import moment from 'moment';
@@ -292,10 +294,13 @@ export default class Msgr extends React.Component {
         );
       sendRequest
         .then(() => {
+          let pref = this.isMyType(oUser, user);
+
           database()
             .ref(`Users/${ouid}/con/${refKey}`)
             .set({
               sn: 0,
+              pref: !pref,
               lT: new Date().getTime() / 1000,
             })
             .then(() => {
@@ -306,10 +311,13 @@ export default class Msgr extends React.Component {
               console.log('msgr.js _send con chat request err: ', err),
             );
 
+          let uPref = this.isMyType(user, oUser);
+
           database()
             .ref(`Users/${uid}/con/${refKey}`)
             .set({
               sn: 1,
+              pref: !uPref,
               lT: new Date().getTime() / 1000,
             })
             .then(() => {
@@ -330,6 +338,56 @@ export default class Msgr extends React.Component {
           reject(err);
         });
     });
+  };
+
+  isMyType = (user, data) => {
+    let preference = user.pp;
+
+    let minAge = preference.a1;
+    let maxAge = preference.a2;
+    let sc = preference.sc.split(',');
+    let rl = preference.rl.split(',');
+    let c = preference.c.split(',');
+    let ms = preference.ms.split(',');
+
+    userAge = DateHelpers.getAge(data.dob);
+
+    if (
+      parseInt(userAge) < parseInt(minAge) ||
+      parseInt(userAge) > parseInt(maxAge)
+    ) {
+      return false;
+    }
+
+    if (user.g == data.g) {
+      return false;
+    }
+
+    if (!sc.includes(data.sc) && preference.sc != "Doesn't matter") {
+      return false;
+    }
+
+    if (!rl.includes(data.rl) && preference.rl != "Doesn't matter") {
+      return false;
+    }
+
+    if (!c.includes(data.c) && preference.c != "Doesn't matter") {
+      return false;
+    }
+
+    if (!ms.includes(data.ms) && preference.ms != "Doesn't matter") {
+      return false;
+    }
+
+    if (user.bt && Object.keys(user.bt).includes(data.uid)) {
+      return false;
+    }
+
+    if (user.bb && Object.keys(user.bb).includes(data.uid)) {
+      return false;
+    }
+
+    return true;
   };
 
   componentWillUnmount() {

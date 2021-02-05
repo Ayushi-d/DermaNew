@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, Image, FlatList, Pressable, StyleSheet} from 'react-native';
 import Header from '../Headers/SettingsHeader';
 import database from '@react-native-firebase/database';
 import THEME from '../../config/theme';

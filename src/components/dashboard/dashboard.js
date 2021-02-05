@@ -197,6 +197,19 @@ class Dashboard extends React.Component {
       });
     }
 
+    let likesCount = 0;
+
+    if (user && user.lf && user.lf.c != 0) {
+      let lObj = Object.keys(user.lf);
+      lObj.forEach((l) => {
+        if (l !== 'c') {
+          if (!l.sn) {
+            likesCount += 1;
+          }
+        }
+      });
+    }
+
     return (
       <View style={userLinks.container}>
         <TouchableOpacity
@@ -209,9 +222,7 @@ class Dashboard extends React.Component {
           }>
           <View>
             <Image source={likes} style={userLinks.image} />
-            {this.props.context.user &&
-            this.props.context.user.lf &&
-            this.props.context.user.lf.c != 0 ? (
+            {likesCount ? (
               <View
                 style={{
                   position: 'absolute',
@@ -225,9 +236,7 @@ class Dashboard extends React.Component {
                   borderRadius: 10,
                 }}>
                 <Text style={{fontSize: 12, color: THEME.WHITE, padding: 5}}>
-                  {this.props.context.user.lf
-                    ? this.props.context.user.lf.c
-                    : null}
+                  {likesCount}
                 </Text>
               </View>
             ) : null}
