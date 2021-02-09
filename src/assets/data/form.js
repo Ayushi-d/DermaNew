@@ -331,7 +331,7 @@ const RegistrationForm = [
       name: 'ms',
       label: 'Marital Status',
       component: CustomDropDown,
-      data: ['Never Married', 'Divorced', 'Separated', 'Widowed', 'Married'],
+      data: ['Never Married', 'Divorced', 'Separated', 'Widowed'],
       dropDownPosition: true,
     },
     {

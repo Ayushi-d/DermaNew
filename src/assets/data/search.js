@@ -44,7 +44,6 @@ const searchData = [
       'Divorced',
       'Separated',
       'Widowed',
-      'Married',
     ],
   },
   {
