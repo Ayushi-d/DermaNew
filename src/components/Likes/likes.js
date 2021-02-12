@@ -203,7 +203,8 @@ class Likes extends React.Component {
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
       (a, b) =>
-        data[b].lt[auth().currentUser.uid] - data[a].lt[auth().currentUser.uid],
+        data[b].lt[auth().currentUser.uid].tp -
+        data[a].lt[auth().currentUser.uid].tp,
     );
 
     if (data) {
@@ -222,7 +223,7 @@ class Likes extends React.Component {
                 likesMe={true}
                 likeOther={likeOther}
                 dateToShow={moment(
-                  new Date(data[item].lt[auth().currentUser.uid] * 1000),
+                  new Date(data[item].lt[auth().currentUser.uid].tp * 1000),
                 ).calendar()}
                 fromPage={'Likes'}
                 {...this.props}

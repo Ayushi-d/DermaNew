@@ -182,16 +182,29 @@ class Dashboard extends React.Component {
     let chatRequestCount = 0;
     let msgsCount = 0;
 
+    // let cons = user.con;
+    // if (cons) {
+    //   let con = Object.keys(user.con);
+    //   con.forEach((c) => {
+    //     if (!cons[c].sn && !cons[c].isAcc) {
+    //       chatRequestCount += 1;
+    //     } else {
+    //       if (cons[c].uc && cons[c].isAcc === 1) {
+    //         // console.log(c);
+    //         msgsCount += 1;
+    //       }
+    //     }
+    //   });
+    // }
+
     let cons = user.con;
     if (cons) {
       let con = Object.keys(user.con);
       con.forEach((c) => {
-        if (!cons[c].sn && !cons[c].isAcc) {
-          chatRequestCount += 1;
-        } else {
-          if (cons[c].uc && cons[c].isAcc === 1) {
-            // console.log(c);
-            msgsCount += 1;
+        if (!cons[c].sn && cons[c].isAcc !== -1) {
+          // chatRequestCount += 1;
+          if (!cons[c].pref) {
+            chatRequestCount += 1;
           }
         }
       });
@@ -199,11 +212,12 @@ class Dashboard extends React.Component {
 
     let likesCount = 0;
 
-    if (user && user.lf && user.lf.c != 0) {
-      let lObj = Object.keys(user.lf);
-      lObj.forEach((l) => {
-        if (l !== 'c') {
-          if (!l.sn) {
+    if (user && user.lf && user.lf.c) {
+      let lf = user.lf;
+
+      Object.keys(lf).forEach((lk) => {
+        if (lk !== 'c') {
+          if (!lf[lk].pref) {
             likesCount += 1;
           }
         }

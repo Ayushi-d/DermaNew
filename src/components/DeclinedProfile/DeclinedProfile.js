@@ -98,7 +98,7 @@ class DeclinedProfileJSX extends React.Component {
           }
           allChats.push(chat);
         }
-        allChats.sort((a, b) => b.lm.tp * 1000 - a.lm.tp * 1000);
+        allChats.sort((a, b) => b.dlT * 1000 - a.dlT * 1000);
         this.setState({declinedUsers: allChats, loading: false});
         // this.fetchData(snap.key, snap.val());
       },
@@ -132,6 +132,7 @@ class DeclinedProfileJSX extends React.Component {
         data={declinedUsers}
         renderItem={({item}) => {
           let chat = item;
+          // console.log(chat);
           return (
             <Cards
               data={chat.cUser}
@@ -142,7 +143,7 @@ class DeclinedProfileJSX extends React.Component {
               declinedRef={tab}
               navigation={this.props.navigation}
               likesMe={this.LikesMe(chat.cUser)}
-              dateToShow={moment(new Date(chat.lm.tp * 1000)).calendar()}
+              dateToShow={moment(new Date(chat.dlT * 1000)).calendar()}
               messageRefKey={chat.refKey}
               fromPage={'Decline Profile'}
             />

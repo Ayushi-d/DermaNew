@@ -130,6 +130,7 @@ export default class ChatRqsts extends React.Component {
     database()
       .ref(`conversation/${refKey}`)
       .update({
+        dlT: new Date().getTime() / 1000,
         isAcc: -1,
       })
       .then(() => {})
