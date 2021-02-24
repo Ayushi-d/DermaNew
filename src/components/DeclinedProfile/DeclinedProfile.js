@@ -98,7 +98,9 @@ class DeclinedProfileJSX extends React.Component {
           }
           allChats.push(chat);
         }
-        allChats.sort((a, b) => b.dlT * 1000 - a.dlT * 1000);
+        allChats.sort((a, b) => {
+          console.log(b.dlt)
+          return b.dlT * 1000 - a.dlT * 1000});
         this.setState({declinedUsers: allChats, loading: false});
         // this.fetchData(snap.key, snap.val());
       },

@@ -183,6 +183,10 @@ class SidebarJSX extends React.Component {
           forceInset={{top: 'always', horizontal: 'never'}}>
           {this.renderDrawerItems()}
         </View>
+
+        <TouchableOpacity style={style.memberBtn} onPress={() => rootNav.navigate('Membership')}>
+          <Text style={style.memberBtnTxt}>MEMBERSHIP</Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   }
@@ -440,6 +444,17 @@ const style = StyleSheet.create({
   notificationContainer: {
     flexDirection: 'row',
   },
+  memberBtn: {
+    backgroundColor: THEME.GRADIENT_BG.END_COLOR,
+    alignItems: 'center',
+    paddingVertical: 10,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 4
+  },
+  memberBtnTxt: {
+    color:'#fff'
+  }
 });
 
 export default SidebarJSX;

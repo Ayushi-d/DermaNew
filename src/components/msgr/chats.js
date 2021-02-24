@@ -18,7 +18,7 @@ moment.updateLocale('en', {
     nextDay: '[Tomorrow]',
     lastWeek: 'll',
     nextWeek: 'll',
-    sameElse: 'L',
+    sameElse: 'll',
   },
   longDateFormat: {
     LT: 'h:mm A',
@@ -229,7 +229,7 @@ function RenderChat(props) {
               {cUser.sn}
             </Text>
             <View style={styles.tScore}>
-              <Text style={styles.tScoreTxt}>TRUST SCORE</Text>
+              <Text style={styles.tScoreTxt}>Trust Score</Text>
               <LinearGradient
                 colors={THEME.GRADIENT_BG.PAIR}
                 style={styles.tScoreCount}>

@@ -63,9 +63,6 @@ const searchData = [
       'Muslim',
       'Parsi',
       'Sikh',
-      'Spiritual',
-      'No religion',
-      'Other',
     ],
   },
   {

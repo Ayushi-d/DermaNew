@@ -20,51 +20,7 @@ import moment from 'moment';
 
 let localLocale = moment();
 
-localLocale.locale('en', {
-  calendar: {
-    lastDay: '[Yesterday] LT',
-    sameDay: 'LT',
-    nextDay: '[Tomorrow]',
-    lastWeek: 'dddd LT',
-    nextWeek: 'dddd LT',
-    sameElse: 'L',
-  },
-  longDateFormat: {
-    LT: 'h:mm A',
-    LTS: 'h:mm:ss A',
-    L: 'DD/MM/YYYY',
-    l: 'D/M/YYYY',
-    LL: 'Do MMMM YYYY',
-    ll: 'D MMM YYYY',
-    LLL: 'Do MMMM YYYY LT',
-    lll: 'D MMM YYYY LT',
-    LLLL: 'dddd, MMMM Do YYYY LT',
-    llll: 'ddd, MMM D YYYY LT',
-  },
-});
 
-let locale = {
-  calendar: {
-    lastDay: '[Yesterday] LT',
-    sameDay: 'LT',
-    nextDay: '[Tomorrow]',
-    lastWeek: 'dddd LT',
-    nextWeek: 'dddd LT',
-    sameElse: 'L',
-  },
-  longDateFormat: {
-    LT: 'h:mm A',
-    LTS: 'h:mm:ss A',
-    L: 'DD/MM/YYYY',
-    l: 'D/M/YYYY',
-    LL: 'Do MMMM YYYY',
-    ll: 'D MMM YYYY',
-    LLL: 'Do MMMM YYYY LT',
-    lll: 'D MMM YYYY LT',
-    LLLL: 'dddd, MMMM Do YYYY LT',
-    llll: 'ddd, MMM D YYYY LT',
-  },
-};
 
 export default class Msgr extends React.Component {
   constructor(props) {

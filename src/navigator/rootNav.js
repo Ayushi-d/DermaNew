@@ -46,6 +46,9 @@ import FAQs from '../components/Setting/faqs';
 import About from '../components/Setting/About';
 import BetterMatches from '../components/Setting/BetterMatches';
 
+// MemberShip
+import MemberShip from '../components/Membership';
+
 // Profile
 import MyProfile from '../components/MyProfile';
 import ManagePhotos from '../components/ManagePhotos';
@@ -647,6 +650,9 @@ class RootNav extends React.Component {
 
             {this._profileStack(context)}
             {this._msgrStack(context)}
+            <Stack.Screen name="Membership">
+              {(props) => <MemberShip context={context} {...props} />}
+            </Stack.Screen>
           </>
         )}
 
