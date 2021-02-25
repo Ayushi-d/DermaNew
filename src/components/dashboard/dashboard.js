@@ -206,6 +206,11 @@ class Dashboard extends React.Component {
           if (!cons[c].pref) {
             chatRequestCount += 1;
           }
+        } else {
+          if (cons[c].uc && cons[c].isAcc === 1) {
+            // console.log(c);
+            msgsCount += 1;
+          }
         }
       });
     }

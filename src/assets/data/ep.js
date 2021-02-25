@@ -220,7 +220,6 @@ const EP = {
         label: 'Education Field',
         component: CustomDropDown,
         data: [
-          'Not Applicable',
           'Arts',
           'Administrative Services',
           'Architecture',
@@ -241,6 +240,7 @@ const EP = {
           'Psychology',
           'Science',
           'Other',
+          'Not Applicable',
         ],
       },
       {

@@ -197,14 +197,16 @@ class Likes extends React.Component {
       this.state.tab == 0
         ? this.props.context.regular
         : this.props.context.filteredOut;
+    let {user} = this.props.appContext;
 
     // sort by like recieved time
 
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
-      (a, b) =>
-        data[b].lt[auth().currentUser.uid].tp -
-        data[a].lt[auth().currentUser.uid].tp,
+      (a, b) =>{
+        console.log(data[a])
+        return user.lf[data[b].uid].tp - user.lf[data[a].uid].tp
+      }
     );
 
     if (data) {
@@ -223,7 +225,7 @@ class Likes extends React.Component {
                 likesMe={true}
                 likeOther={likeOther}
                 dateToShow={moment(
-                  new Date(data[item].lt[auth().currentUser.uid].tp * 1000),
+                  new Date(user.lf[data[item].uid].tp * 1000),
                 ).calendar()}
                 fromPage={'Likes'}
                 {...this.props}

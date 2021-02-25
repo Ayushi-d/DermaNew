@@ -3,6 +3,7 @@ import {View, Text, Pressable, TextInput, StyleSheet} from 'react-native';
 import THEME from '../../config/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import database from '@react-native-firebase/database';
+import {MembershipModal} from '../modals/';
 
 function myTrim(x) {
   return x.replace(/^\s+|\s+$/gm, '');
@@ -13,6 +14,7 @@ export default class MsgBox extends React.Component {
     super(props);
     this.state = {
       msg: '',
+      showMemModal: false
     };
     this._isMounted = false;
   }
@@ -45,6 +47,11 @@ export default class MsgBox extends React.Component {
       tp: new Date().getTime() / 1000,
       x: 0,
     };
+
+    if(!chatExists && (!user.prem || (user.prem && !user.prem.up))) {
+      this._isMounted && this.setState({showMemModal: true});
+      return;
+    }
 
     this.setState({msg: ''});
 
@@ -163,6 +170,8 @@ export default class MsgBox extends React.Component {
           disabled={disabled}>
           <Ionicons name={'ios-send-sharp'} color={THEME.WHITE} size={27} />
         </Pressable>
+
+        <MembershipModal show={this.state.showMemModal} content={"Upgrade now for INR 299 to send unlimited chat messages"} close={() => this.setState({showMemModal: false})} {...this.props} />
       </View>
     );
   }

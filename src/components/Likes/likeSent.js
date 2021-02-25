@@ -45,10 +45,11 @@ class LikeSent extends React.Component {
 
   renderCards = () => {
     let data = this.props.context.sent;
+    let {user} = this.props.appContext;
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
       (a, b) =>
-        data[b].lf[auth().currentUser.uid] - data[a].lf[auth().currentUser.uid],
+      user.lt[data[b].uid].tp - user.lt[data[a].uid].tp,
     );
     return (
       <FlatList
@@ -59,7 +60,7 @@ class LikeSent extends React.Component {
             fromLike={true}
             sent={true}
             dateToShow={moment(
-              new Date(data[item].lf[auth().currentUser.uid] * 1000),
+              new Date(user.lt[data[item].uid].tp * 1000),
             ).calendar()}
             likesMe={this.LikesMe(data[item])}
             likeOther={true}
