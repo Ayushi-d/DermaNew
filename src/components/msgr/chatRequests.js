@@ -171,8 +171,6 @@ export default class ChatRqsts extends React.Component {
     }
     this._isMounted && this.setState({loading: true});
 
-    // if (con && con.length) {
-    // console.log('call ');
     this.consListerner = database()
       .ref(`Users/${user.uid}`)
       .child('con')
@@ -271,7 +269,7 @@ export default class ChatRqsts extends React.Component {
         this.setState({loading: false});
       },
     );
-    // }
+
   };
 
   _isMyType = (user_data, data) => {
@@ -343,7 +341,6 @@ export default class ChatRqsts extends React.Component {
             navigation.setParams({
               tab: 'Regular',
             });
-            // navigation.dispatch(CommonActions.setParams({tab: 'Regular'}));
           }}
           pressParam={0}
         />
@@ -356,7 +353,6 @@ export default class ChatRqsts extends React.Component {
             navigation.setParams({
               tab: 'Filtered Out',
             });
-            // navigation.dispatch(CommonActions.setParams({tab: 'Filtered Out'}));
           }}
           pressParam={1}
         />
@@ -410,13 +406,6 @@ export default class ChatRqsts extends React.Component {
       <View style={styles.container}>
         <Header title={'Chat Requests'} type {...this.props} />
         {this._renderTab()}
-        {/* {loading ? (
-          <ActivityIndicator
-            size={27}
-            color={THEME.ACTIVE_COLOR}
-            style={{marginTop: 5, marginBottom: 5}}
-          />
-        ) : null} */}
         <FlatList
           data={data}
           keyExtractor={this._keyExtractor}

@@ -17,6 +17,8 @@ import {
   CustomHeaderStack,
 } from '../../components/general/Header';
 
+import database from '@react-native-firebase/database';
+
 // import {HeaderBackButton} from 'react-navigation-stack';
 
 class Registration extends React.Component {
@@ -204,6 +206,13 @@ class Registration extends React.Component {
           return 0;
         }
 
+        let usr = {...this.props.context.user, ...this.state.values};
+
+        database()
+          .ref(`SubFill/${usr.uid}`)
+          .set(usr)
+          .catch((err) => console.log('save half data! err!: ', err));
+
         this.setState({step: 2}, () => {
           this.scroll.scrollTo({x: 0, y: 0, animated: false});
         });
@@ -222,6 +231,10 @@ class Registration extends React.Component {
         if (res) this.setState({loading: false});
         this.props.context._setLoginUser(usr);
         this.props.context._checkAuth();
+        database()
+          .ref(`SubFill/${usr.uid}`)
+          .remove()
+          .catch((err) => console.log('delete half saved data! err!: ', err));
         // this.props.navigation.navigate('Drawer');
       });
   };
