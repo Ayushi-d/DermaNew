@@ -26,11 +26,6 @@ const RegistrationForm = [
       label: 'Height',
       component: CustomDropDown,
       data: [
-        '4\' 0" (122 cms)',
-        '4\' 1" (124 cms)',
-        '4\' 2" (127 cms)',
-        '4\' 3" (130 cms)',
-        '4\' 4" (132 cms)',
         '4\' 5" (135 cms)',
         '4\' 6" (137 cms)',
         '4\' 7" (140 cms)',
