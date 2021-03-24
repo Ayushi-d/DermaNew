@@ -25,6 +25,7 @@ import Splash from '../components/splash';
 
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import messaging from '@react-native-firebase/messaging';
 
 import MyMatches from '../components/MyMatches';
 import LikesScreen from '../screens/DrawerStack/LikeScreen';
@@ -62,7 +63,6 @@ import MemberProfile from '../components/MemberProfile';
 
 // MSGR
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
-import ChatScreen from '../screens/ChatScreen';
 
 const DUMMY_DP =
   'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
@@ -70,6 +70,14 @@ const DUMMY_DP =
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
+
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  console.log('Message handled in the background!', remoteMessage);
+});
+
+messaging().onMessage(async (remoteMessage) => {
+  console.log('Message handled in the foreground!', remoteMessage);
+});
 
 class RootNav extends React.Component {
   constructor(props) {
@@ -107,7 +115,7 @@ class RootNav extends React.Component {
         let isRegistered = await CheckUser.isRegistered(user.uid);
         let isDeleted = await CheckUser.isDeleted(user.uid);
 
-        console.log(isRegistered, isDeleted);
+        // console.log(isRegistered, isDeleted);
 
         if (isDeleted) {
           await auth().signOut();
@@ -146,6 +154,8 @@ class RootNav extends React.Component {
   _setLoginUser = (userDat) => {
     let user = {...this.state.user, ...userDat};
 
+    this._getSetToken(userDat);
+
     return new Promise((resolve, reject) => {
       this.setState({user}, () => {
         CheckUser.isRegistered(userDat.uid)
@@ -177,6 +187,28 @@ class RootNav extends React.Component {
             reject(err);
           });
       });
+    });
+  };
+
+  _getSetToken = (user) => {
+    if (!user.token) {
+      messaging()
+        .getToken()
+        .then((token) => {
+          database()
+            .ref(`Users/${user.uid}/token`)
+            .set(token)
+            .catch((Err) =>
+              console.log('unable to setToken when not found: ', Err),
+            );
+        });
+    }
+
+    messaging().onTokenRefresh((token) => {
+      database()
+        .ref(`Users/${user.uid}/token`)
+        .set(token)
+        .catch((Err) => console.log('unable to setToken onRefresh: ', Err));
     });
   };
 
@@ -323,7 +355,7 @@ class RootNav extends React.Component {
     const uid = auth().currentUser.uid;
     let keys = Object.keys(data);
 
-    console.log(keys);
+    // console.log(keys);
 
     for (let index = 0; index < keys.length; index++) {
       let key = keys[index];
