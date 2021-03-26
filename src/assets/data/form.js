@@ -72,6 +72,7 @@ const RegistrationForm = [
         'Dermatitis',
         'Scleroderma',
         'Albinism',
+        'Alopecia',
         'Burn',
         'Scar',
         'Birthmark',
@@ -81,6 +82,7 @@ const RegistrationForm = [
         'Lichen Planus',
         'Melanoma',
         'Others',
+        'No Skin Condition',
       ],
     },
     {

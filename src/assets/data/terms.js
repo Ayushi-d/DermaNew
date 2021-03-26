@@ -349,6 +349,24 @@ its users from any misuse, DermaCupid reserves the right to restrict the
 number of chat requests/messages/likes a user may send to other user(s)
 in any 24-hour period.
 
+# Premium Membership
+
+To create an account, build own user profile and browse through other profiles is offered for free. But, to avail certain value-added features which can be used for soliciting a connection with other DermaCupid app users, premium membership subscription is required by paying a certain amount of money. The details of premium membership plans, that includes membership fee, validity and the list of premium features offered, is displayed on the application. DermaCupid app reserves the right to modify its premium membership subscription plans(s) at any time. Any such changes to its membership plans will be notified to you.
+
+The validity period of various premium (paid) membership plans is calculated considering 30 days in a month. Hence, the total validity period should be calculated by multiplying the number of months with 30.
+
+Your premium membership begins on the day DermaCupid app receives confirmation of successful transaction from the payment processors. However, in case of national holidays/public holidays/bank holidays or any technical issue, membership activation may take some more time.
+
+# Payment Policy
+
+Payments for various premium services offered on DermaCupid app will be on 100% advance basis. All the payments, once paid, are final and non-refundable in any circumstances. DermaCupid app is not obliged to refund any part of your premium membership fee if you or DermaCupid terminate your membership and/or your account for any reason. In any such event of membership and/or account termination by the DermaCupid app, DermaCupid app is not bound to justify its decision to terminate to the user.
+
+The third party payment processor will take all necessary steps to ensure a trouble free, smooth user experience while processing the payments. However, the payment service provider doesn’t guarantee that the service will be 100% error free and uninterrupted. By making a payment for the services at DermaCupid app, you agree to all the terms and conditions of use. Every payment transaction you do on the DermaCupid app is processed using highly secured third-party payment gateway(s). DermaCupid app doesn’t collect and store any payment data like credit card, debit card, net banking, and other related financial information. DermaCupid app is not responsible for any failure in payment gateway(s) functioning and any such incident will be communicated to the users as it is. Any sort of error issues/extra deductions/ currency conversion charges related to payment gateways will not be the responsibility of the DermaCupid app.
+
+For any further clarification regarding payment policy and membership fees, please contact the customer support of DermaCupid app.
+
+Note: Order return and cancellation and Shipping/Delivery policies are not applicable as Derma Cupid app provides dating and matchmaking services only and doesn’t sell any physical goods.
+
 # User Disputes
 
 You are solely responsible for your interactions with other users.
@@ -412,7 +430,6 @@ or any third party, for any amendment, suspension or discontinuation
 # Need further clarifications?
 
 For any queries regarding terms of use, please contact us at
-<support@dermacupid.com>.`
+<support@dermacupid.com>.`;
 
-
-export default data
+export default data;

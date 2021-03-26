@@ -18,7 +18,7 @@ comfortable to have a partner with a chronic skin condition.
 A: Derma Cupid is one of its kind dating app for people with skin
 conditions. Here, you will find numerous profiles of males and females,
 dealing with various skin conditions such as Vitiligo, Psoriasis, Acne,
-Albinism, Eczema, Dermatitis, Burn, Scar, Birthmark, Scleroderma,
+Albinism, Alopecia, Eczema, Dermatitis, Burn, Scar, Birthmark, Scleroderma,
 Ichthyosis, Neurofibroma, Rosacea and other chronic skin challenges.
 Moreover, it is absolutely free to sign up. So, why don't you try
 yourself and discover if it serves your purpose.

@@ -17,7 +17,7 @@ comfortable to have a partner with a chronic skin condition.
 A: Derma Cupid is one of its kind dating app for people with skin
 conditions. Here, you will find numerous profiles of males and females,
 dealing with various skin conditions such as Vitiligo, Psoriasis, Acne,
-Albinism, Eczema, Dermatitis, Burn, Scar, Birthmark, Scleroderma,
+Albinism, Alopecia, Eczema, Dermatitis, Burn, Scar, Birthmark, Scleroderma,
 Ichthyosis, Neurofibroma, Rosacea and other chronic skin challenges.
 Moreover, it is absolutely free to sign up. So, why don't you try
 yourself and discover if it serves your purpose.
@@ -51,20 +51,20 @@ as much as you do.
 
 A: Follow the below steps to discover the right match quickly:
 
--   Complete your profile properly by providing all the information
-    accurately
+- Complete your profile properly by providing all the information
+  accurately
 
--   Add photo(s) to your profile. More the photos, better will be the
-    responses.
+- Add photo(s) to your profile. More the photos, better will be the
+  responses.
 
--   Update your partner preference criteria so that relevant profiles
-    can be shown to you.
+- Update your partner preference criteria so that relevant profiles
+  can be shown to you.
 
--   Improve the trust score to enhance authenticity and credibility of
-    your profile. Genuine profiles with a high trust score (80% and
-    higher) attract more likes, chat requests and responses.
+- Improve the trust score to enhance authenticity and credibility of
+  your profile. Genuine profiles with a high trust score (80% and
+  higher) attract more likes, chat requests and responses.
 
--   Log in regularly and respond to new interests and messages.
+- Log in regularly and respond to new interests and messages.
 
 **Q: How to connect with customer support team?**
 
@@ -125,13 +125,13 @@ details are used to create a verified and credible profile only.
 
 A: After sign up, you cannot change the below 4 critical fields:
 
--   Profile name
+- Profile name
 
--   Date of birth
+- Date of birth
 
--   Marital status
+- Marital status
 
--   Religion (it can be changed only once)
+- Religion (it can be changed only once)
 
 This restriction helps to avoid misuse or fraud.
 
@@ -280,44 +280,44 @@ responses. Why so?**
 A: There can be numerous reasons for it. Go through the below list of
 most probable reasons for not getting enough responses:
 
--   You have not uploaded a photo yet. Many users prefer to respond
-    after seeing the picture of the other user.
+- You have not uploaded a photo yet. Many users prefer to respond
+  after seeing the picture of the other user.
 
--   You do not fit in the partner preference criteria of the other user.
-    In that case, your chat request will go into the 'Filtered out'
-    folder of the inbox and it reduces the chances of getting a
-    response.
+- You do not fit in the partner preference criteria of the other user.
+  In that case, your chat request will go into the 'Filtered out'
+  folder of the inbox and it reduces the chances of getting a
+  response.
 
--   Your profile bio ('About me' section) is not properly drafted. The
-    profile bio gives an impression of your personality. Hence, a poorly
-    written bio with too many grammatical errors or spelling mistakes
-    will leave a bad impression. Also, writing a very long profile bio
-    is not recommended because no one will read it. Keep it precise,
-    brief and to the point.
+- Your profile bio ('About me' section) is not properly drafted. The
+  profile bio gives an impression of your personality. Hence, a poorly
+  written bio with too many grammatical errors or spelling mistakes
+  will leave a bad impression. Also, writing a very long profile bio
+  is not recommended because no one will read it. Keep it precise,
+  brief and to the point.
 
--   Your profile is incomplete with many fields left blank such as
-    profile bio, interests and lifestyle choices. Fully complete profile
-    with correct information attracts more responses.
+- Your profile is incomplete with many fields left blank such as
+  profile bio, interests and lifestyle choices. Fully complete profile
+  with correct information attracts more responses.
 
--   In some cases, users prefer to respond later if they are not sure
-    whether to accept or decline a chat request. **In such a scenario,
-    it is better to move on and connect with other matching profiles.**
+- In some cases, users prefer to respond later if they are not sure
+  whether to accept or decline a chat request. **In such a scenario,
+  it is better to move on and connect with other matching profiles.**
 
 **Q: How to receive more Likes and Chat requests?**
 
 **A: Please consider the below guidelines to receive more responses:**
 
--   **Add photo(s) to your profile**
+- **Add photo(s) to your profile**
 
--   **Complete your profile. Do not leave too many fields blank, such as
-    Profile bio (About Me), interests and lifestyle habits.**
+- **Complete your profile. Do not leave too many fields blank, such as
+  Profile bio (About Me), interests and lifestyle habits.**
 
--   **Set a broaden partner preference criteria to see more users in the
-    'My Matches' page**
+- **Set a broaden partner preference criteria to see more users in the
+  'My Matches' page**
 
--   **Be proactive and approach new matching profiles.**
+- **Be proactive and approach new matching profiles.**
 
--   **Do not delay in responding to received Likes and Chat requests**
+- **Do not delay in responding to received Likes and Chat requests**
 
 **Block profiles & Report misuse**
 

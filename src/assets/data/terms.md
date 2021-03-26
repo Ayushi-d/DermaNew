@@ -177,27 +177,27 @@ Without limiting the foregoing, if you believe that your work has been
 copied and posted on the app in a way that constitutes copyright
 infringement, please contact us with:
 
--   an electronic or physical signature of the person authorized to act
-    on behalf of the owner of the copyright interest;
+- an electronic or physical signature of the person authorized to act
+  on behalf of the owner of the copyright interest;
 
--   a description of the copyrighted work that you claim has been
-    infringed;
+- a description of the copyrighted work that you claim has been
+  infringed;
 
--   a description of where the material that you claim is infringing is
-    located on the app (and such description must be reasonably
-    sufficient to enable DermaCupid to find the alleged infringing
-    material);
+- a description of where the material that you claim is infringing is
+  located on the app (and such description must be reasonably
+  sufficient to enable DermaCupid to find the alleged infringing
+  material);
 
--   your address, telephone number and email address;
+- your address, telephone number and email address;
 
--   a written statement by you that you have a good faith belief that
-    the disputed use is not authorized by the copyright owner, its
-    agent, or the law; and
+- a written statement by you that you have a good faith belief that
+  the disputed use is not authorized by the copyright owner, its
+  agent, or the law; and
 
--   a statement by you, made under penalty of perjury, that the above
-    information in your notice is accurate and that you are the
-    copyright owner or authorized to act on the copyright owner's
-    behalf.
+- a statement by you, made under penalty of perjury, that the above
+  information in your notice is accurate and that you are the
+  copyright owner or authorized to act on the copyright owner's
+  behalf.
 
 Notice of claims of copyright infringement should be provided to us at
 <support@dermacupid.com>.
@@ -298,40 +298,40 @@ provided by this app. Any violation of these community policies will
 result in termination of the account and the user might be banned from
 DermaCupid.
 
--   Users must not upload nude/semi-nude photos. Users should be
-    properly in all photos. Every photo uploaded by the user will go
-    live after moderation.
+- Users must not upload nude/semi-nude photos. Users should be
+  properly in all photos. Every photo uploaded by the user will go
+  live after moderation.
 
--   Users must not upload any obscene/objectionable material.
+- Users must not upload any obscene/objectionable material.
 
--   Users must not share sexually
-    explicit/hateful/derogatory/abusive/objectionable content in their
-    profile bio and/or chat messages.
+- Users must not share sexually
+  explicit/hateful/derogatory/abusive/objectionable content in their
+  profile bio and/or chat messages.
 
--   Users must not engage in harassment/abuse/threat against other
-    users.
+- Users must not engage in harassment/abuse/threat against other
+  users.
 
--   No hate speech. Any content that promotes hatred, violence or racism
-    against other users on the basis of race, nationality, gender,
-    religious belief or sexual orientation will not be tolerated at all.
+- No hate speech. Any content that promotes hatred, violence or racism
+  against other users on the basis of race, nationality, gender,
+  religious belief or sexual orientation will not be tolerated at all.
 
--   Be real. Users must provide correct information to create their
-    profiles. The fake/misleading profile info or photo(s) will result
-    in termination of the account at the earliest.
+- Be real. Users must provide correct information to create their
+  profiles. The fake/misleading profile info or photo(s) will result
+  in termination of the account at the earliest.
 
--   Minors not allowed. DermaCupid is for adults only, 18 years old and
-    above.
+- Minors not allowed. DermaCupid is for adults only, 18 years old and
+  above.
 
--   Users must not ask for financial benefits/donation from other users
-    while using the app. To offer monetary benefits to other users on
-    the app is also prohibited.
+- Users must not ask for financial benefits/donation from other users
+  while using the app. To offer monetary benefits to other users on
+  the app is also prohibited.
 
--   Users must not use DermaCupid to advertise their businesses,
-    services or products.
+- Users must not use DermaCupid to advertise their businesses,
+  services or products.
 
--   DermaCupid must solely be used for dating and matchmaking purposes
-    only. To offer escort services and/or promoting prostitution on the
-    app is strictly not allowed.
+- DermaCupid must solely be used for dating and matchmaking purposes
+  only. To offer escort services and/or promoting prostitution on the
+  app is strictly not allowed.
 
 In short, be honest, respectful and kind to others and have a nice time
 connecting with like-minded people here. Please check the **[community
@@ -348,6 +348,24 @@ without their prior explicit consent. In order to protect DermaCupid and
 its users from any misuse, DermaCupid reserves the right to restrict the
 number of chat requests/messages/likes a user may send to other user(s)
 in any 24-hour period.
+
+**Premium Membership**
+
+To create an account, build own user profile and browse through other profiles is offered for free. But, to avail certain value-added features which can be used for soliciting a connection with other DermaCupid app users, premium membership subscription is required by paying a certain amount of money. The details of premium membership plans, that includes membership fee, validity and the list of premium features offered, is displayed on the application. DermaCupid app reserves the right to modify its premium membership subscription plans(s) at any time. Any such changes to its membership plans will be notified to you.
+
+The validity period of various premium (paid) membership plans is calculated considering 30 days in a month. Hence, the total validity period should be calculated by multiplying the number of months with 30.
+
+Your premium membership begins on the day DermaCupid app receives confirmation of successful transaction from the payment processors. However, in case of national holidays/public holidays/bank holidays or any technical issue, membership activation may take some more time.
+
+**Payment Policy**
+
+Payments for various premium services offered on DermaCupid app will be on 100% advance basis. All the payments, once paid, are final and non-refundable in any circumstances. DermaCupid app is not obliged to refund any part of your premium membership fee if you or DermaCupid terminate your membership and/or your account for any reason. In any such event of membership and/or account termination by the DermaCupid app, DermaCupid app is not bound to justify its decision to terminate to the user.
+
+The third party payment processor will take all necessary steps to ensure a trouble free, smooth user experience while processing the payments. However, the payment service provider doesn’t guarantee that the service will be 100% error free and uninterrupted. By making a payment for the services at DermaCupid app, you agree to all the terms and conditions of use. Every payment transaction you do on the DermaCupid app is processed using highly secured third-party payment gateway(s). DermaCupid app doesn’t collect and store any payment data like credit card, debit card, net banking, and other related financial information. DermaCupid app is not responsible for any failure in payment gateway(s) functioning and any such incident will be communicated to the users as it is. Any sort of error issues/extra deductions/ currency conversion charges related to payment gateways will not be the responsibility of the DermaCupid app.
+
+For any further clarification regarding payment policy and membership fees, please contact the customer support of DermaCupid app.
+
+Note: Order return and cancellation and Shipping/Delivery policies are not applicable as Derma Cupid app provides dating and matchmaking services only and doesn’t sell any physical goods.
 
 **User Disputes**
 

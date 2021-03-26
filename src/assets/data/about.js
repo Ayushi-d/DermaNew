@@ -13,6 +13,7 @@ Whatever be your skin condition, age and location, we have got matching profiles
 - Acne
 - Eczema
 - Albinism
+- Alopecia
 - Birthmark
 - Dermatitis
 - Scleroderma
@@ -20,6 +21,7 @@ Whatever be your skin condition, age and location, we have got matching profiles
 - Neurofibroma
 - Scar (Burn)
 - Others
+- No Skin Condition
 
 **We care for your privacy and safety**
 

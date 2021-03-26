@@ -103,6 +103,7 @@ const EP = {
           'Dermatitis',
           'Scleroderma',
           'Albinism',
+          'Alopecia',
           'Burn',
           'Scar',
           'Birthmark',
@@ -112,6 +113,7 @@ const EP = {
           'Lichen Planus',
           'Melanoma',
           'Others',
+          'No Skin Condition',
         ],
       },
 

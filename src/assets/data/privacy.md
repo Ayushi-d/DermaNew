@@ -18,12 +18,13 @@ this policy document.
 > information and your partner preferences. Our matching algorithm would
 > use that information to show you relevant matching profiles.
 >
-> **Information collected automatically:** 
+> **Information collected automatically:**
 >
 > When you signup/login to DermaCupid, we collect and store information
 > about your mobile device, including:
 
 1.  Your mobile device\'s unique ID number, type of device, IP address
+
     > and time zone settings.
 
 2.  Your mobile device\'s geographic location
@@ -200,7 +201,10 @@ your friend is interested in this invitation and hence, DermaCupid shall
 not be responsible for any claims related to direct, indirect or
 consequential damages arising out of your invitation.
 
-8.  **Changes to this Privacy Policy**
+8. **Information regarding payment details**
+   When you subscribe to our services or make a purchase from us (rather than via a platform such as iOS or Android), the payment processing is handled by third party payment service providers, and is covered by their terms of use and privacy policies. DermaCupid app does not have access to your credit card details, debit card details, bank account details and related financial information that you provide to the third party payment gateway at the time of purchase. DermaCupid app may collect payment details from the payment processor and append it to your information, to maintain your membership with DermaCupid app.
+
+9. **Changes to this Privacy Policy**
 
 > DermaCupid believes in continuous improvement to help you in a better
 > way. Hence, this privacy policy may get updated over the time.
@@ -210,7 +214,7 @@ consequential damages arising out of your invitation.
 > to the privacy policy. The latest, updated version of privacy policy
 > is available at all times.
 
-9.  **Do you have concerns?**
+10. **Do you have concerns?**
 
 > If you need more clarifications regarding our Privacy Policy, please
 > contact us

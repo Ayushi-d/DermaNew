@@ -22,6 +22,7 @@ const searchData = [
       'Dermatitis',
       'Scleroderma',
       'Albinism',
+      'Alopecia',
       'Burn',
       'Scar',
       'Birthmark',
@@ -31,6 +32,7 @@ const searchData = [
       'Lichen Planus',
       'Melanoma',
       'Others',
+      'No Skin Condition',
     ],
   },
   {
