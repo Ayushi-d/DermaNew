@@ -25,6 +25,11 @@ import Snackbar from 'react-native-snackbar';
 import {Loader} from '../modals';
 import LinkAccount from '../../helpers/linkAccount';
 
+let countryCodes = [
+  {name: 'ISD', value: 'SELECT', code: 'ISD'},
+  ...countryData,
+];
+
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
 class Phone extends React.Component {
@@ -39,7 +44,7 @@ class Phone extends React.Component {
     // this.fromfb = this.props.route.params.linkingFromFB;
     this.phoneNumber = null;
     this.state = {
-      code: '+91',
+      code: 'ISD',
       phoneNumber: '',
       otpsent: false,
       otp: new Array(6).fill(''),
@@ -62,6 +67,10 @@ class Phone extends React.Component {
   };
 
   loginWithOtpFixed = () => {
+    if (this.state.code == 'ISD') {
+      alert('Please Select Your Country Code');
+      return;
+    }
     if (this.state.phoneNumber == '') {
       alert('Please Enter Phone Number');
       return;
@@ -351,7 +360,7 @@ const PhoneJSX = (props) => (
         <View style={style.inputs} onStartShouldSetResponder={() => true}>
           <CountryDrop
             style={{width: '30%', height: 40}}
-            data={countryData}
+            data={countryCodes}
             defaultValue={props.defaultCode}
             pushChange={props.codeChange}
           />

@@ -20,8 +20,6 @@ import moment from 'moment';
 
 let localLocale = moment();
 
-
-
 export default class Msgr extends React.Component {
   constructor(props) {
     super(props);
@@ -470,6 +468,20 @@ export default class Msgr extends React.Component {
       .then(() => {})
       .catch((err) => {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${uid}/lt/${ouid}`)
+      .remove()
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/lt remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/lf/${uid}`)
+      .remove()
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/lf remove err: ', err);
       });
 
     // database()

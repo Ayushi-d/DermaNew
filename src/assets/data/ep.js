@@ -95,6 +95,7 @@ const EP = {
         name: 'sc',
         label: 'Skin Condition',
         component: CustomDropDown,
+        disabled: true,
         data: [
           'Vitiligo',
           'Psoriasis',
@@ -410,6 +411,7 @@ const EP = {
           'Dermatitis',
           'Scleroderma',
           'Albinism',
+          'Alopecia',
           'Burn',
           'Scar',
           'Birthmark',
@@ -419,6 +421,7 @@ const EP = {
           'Lichen Planus',
           'Melanoma',
           'Others',
+          'No Skin Condition',
         ],
       },
       {

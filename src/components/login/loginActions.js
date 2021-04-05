@@ -113,9 +113,9 @@ const ContactUs = (props) => (
     <Text
       style={{...loginAction.loginText, ...loginAction.underline}}
       onPress={() =>
-        props.navigateTo('Contact Us Login', {
+        props.navigateTo('Help Screen', {
           hideHeader: true,
-          from: 'Contact Us Login',
+          from: 'Login',
         })
       }>
       Contact Us

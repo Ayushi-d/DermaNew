@@ -160,6 +160,20 @@ export default class ChatRqsts extends React.Component {
       .catch((err) => {
         console.log('msgr.js _declineChat ouser/con remove err: ', err);
       });
+
+    database()
+      .ref(`Users/${uid}/lt/${ouid}`)
+      .remove()
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/lt remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/lf/${uid}`)
+      .remove()
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/lf remove err: ', err);
+      });
   };
 
   _getChatReqs = () => {
@@ -269,7 +283,6 @@ export default class ChatRqsts extends React.Component {
         this.setState({loading: false});
       },
     );
-
   };
 
   _isMyType = (user_data, data) => {

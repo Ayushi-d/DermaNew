@@ -13,18 +13,17 @@ class TermsOfUse extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('unmounting');
+    // console.log('unmounting');
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   navigateTo = (screen) => {
-    console.log(screen);
     this.props.navigation.navigate(screen);
   };
 
   handleBackButton = () => {
     this.props.navigation.goBack();
-    return;
+    return true;
   };
 
   rules = {
@@ -47,7 +46,7 @@ class TermsOfUse extends React.Component {
     ),
     em: (node, children, parent, styles) => {
       // implement navigation here
-      console.log(children[0].props.children, 'strings');
+      // console.log(children[0].props.children, 'strings');
       return (
         <Text
           key={node.key}
