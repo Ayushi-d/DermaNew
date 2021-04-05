@@ -12,7 +12,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
-      android:screenOrientation="portrait">
+      android:screenOrientation="portrait"
+      android:usesCleartextTraffic="true">
       <meta-data android:name="com.facebook.sdk.ApplicationId" 
         android:value="@string/facebook_app_id"/>
     
