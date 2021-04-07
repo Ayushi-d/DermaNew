@@ -205,7 +205,7 @@ class Help extends React.Component {
             <View style={{flex: 1, alignItems: 'center'}}>
               <Text style={style.email}>support@dermacupid.com</Text>
               <Text style={{color: THEME.GRAY, fontSize: 12}}>
-                (We will respond withing 24 hours)
+                (We will respond withing 1 working day.)
               </Text>
             </View>
           </TouchableOpacity>

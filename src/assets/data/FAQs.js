@@ -118,6 +118,35 @@ A: Yes. We will never share your private information (Email address,
 mobile number, Facebook account details) with other users. All these
 details are used to create a verified and credible profile only.
 
+# Premium Membership
+
+**Q: What are the benefits of Premium membership?**
+
+A: To create an account, build your own profile and browse through profile details and photos
+of other users is free of cost.
+
+However, to avail certain value-added features such as initiating a personalized chat message
+with other users would require a premium membership. To know more about the benefits of
+premium membership, please visit the ‘Membership’ page in the navigation menu.
+
+**Q: What are the different premium membership subscription plans?**
+
+A: As explained above, sign up is absolutely free. So, please create an account for free and visit
+the ‘Membership’ page in the navigation menu to check out various subscription plans offered.
+
+**Q: How can I upgrade to premium membership?**
+
+A: You can easily upgrade your membership by making an online transaction using credit card,
+debit card, net banking and other online fund transfer options. Please visit the ‘Membership’
+page in navigation menu for more details. For help, please email us at
+<support@dermacupid.com>.
+
+**Q: I am facing problem with making the payment. What should I do?**
+
+A: For assistance, please drop a message to <support@dermacupid.com> and we would get back
+to you within 1 working day. You may also visit the ‘help’ page in the navigation menu to
+submit a ticket by filling the enquiry form.
+
 # My Profile & Photo
 
 **Q: Why I am not able to change my profile name or date of birth?**

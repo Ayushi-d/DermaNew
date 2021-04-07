@@ -19,6 +19,9 @@ import {
 
 import database from '@react-native-firebase/database';
 
+import {SENDGRID_API_KEY} from 'react-native-dotenv';
+import sendGridEmail from '../../helpers/sendgrid';
+import WelcomeEmail from '../../assets/data/welcomeEmail';
 // import {HeaderBackButton} from 'react-navigation-stack';
 
 class Registration extends React.Component {
@@ -184,6 +187,30 @@ class Registration extends React.Component {
     );
   };
 
+  _sendWelcomEmail = () => {
+    let email = this.state.values.em;
+    let re = /\S+@\S+\.\S+/;
+    if (!re.test(email)) {
+      alert('This is not a valid email address.');
+      return;
+    }
+
+    let TheEmail = WelcomeEmail.replace('{name}', this.state.values.nm);
+
+    sendGridEmail(
+      SENDGRID_API_KEY,
+      email,
+      'verification@dermacupid.com',
+      'Welcome to Derma Cupid',
+      TheEmail,
+      'text/html',
+    )
+      .then((res) => {
+        console.log('email sent!: ', res);
+      })
+      .catch((err) => console.log('Test email err: ', err));
+  };
+
   _nextStep = () => {
     let err = this.validateValue();
     this.setState(
@@ -203,6 +230,7 @@ class Registration extends React.Component {
 
         if (this.state.step == 2) {
           this._saveData();
+          this._sendWelcomEmail();
           return 0;
         }
 

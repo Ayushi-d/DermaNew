@@ -1,16 +1,11 @@
 import React from 'react';
 import {
-  ScrollView,
   View,
   Text,
   StyleSheet,
-  Image,
   TextInput,
   TouchableOpacity,
   Keyboard,
-  Picker,
-  KeyboardAvoidingView,
-  Modal,
 } from 'react-native';
 import DermaBackground from '../general/background';
 import THEME from '../../config/theme';
@@ -54,6 +49,10 @@ class Phone extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    this.subscribe && this.subscribe();
+  }
+
   setRefToPhone = (input) => {
     this.phoneNumber = input;
   };
@@ -75,6 +74,8 @@ class Phone extends React.Component {
       alert('Please Enter Phone Number');
       return;
     }
+
+    // auth().onAuthStateChanged(this._onAuthChange);
     this.setState({loading: true, otp: new Array(6).fill('')});
 
     let phone = this.state.code + this.state.phoneNumber;
@@ -84,6 +85,7 @@ class Phone extends React.Component {
       .on(
         'state_changed',
         (phoneAuthSnapshot) => {
+          console.log('state: ', phoneAuthSnapshot.state);
           switch (phoneAuthSnapshot.state) {
             // ------------------------
             //  IOS AND ANDROID EVENTS
@@ -172,25 +174,6 @@ class Phone extends React.Component {
           console.log('phoneAuthSnap: ', phoneAuthSnapshot.state);
         },
       );
-  };
-
-  loginWithOtp = () => {
-    if (this.state.phoneNumber == '') {
-      alert('Please Enter Phone Number');
-      return;
-    }
-    this.setState({loading: false, otp: new Array(6).fill('')});
-
-    let phone = this.state.code + this.state.phoneNumber;
-
-    auth()
-      .signInWithPhoneNumber(phone, true)
-      .then((res) => {
-        this.setState({auth: res, otpsent: true, loading: false});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   confirmOtp = () => {

@@ -64,6 +64,8 @@ import MemberProfile from '../components/MemberProfile';
 // MSGR
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
 
+import TestScreen from '../screens/TestScreen';
+
 const DUMMY_DP =
   'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
 
@@ -651,6 +653,9 @@ class RootNav extends React.Component {
             // backgroundColor: appTheme.bg,
           },
         }}>
+        {/* <Stack.Screen name={'Test'}>
+          {(props) => <TestScreen context={context} {...props} />}
+        </Stack.Screen> */}
         {!loginCheck ? (
           <Stack.Screen name="Splash">
             {(props) => (
