@@ -7,6 +7,8 @@ import {
   ScrollView,
   PermissionsAndroid,
   Alert,
+  Modal,
+  Pressable,
 } from 'react-native';
 import React from 'react';
 import check from '../../assets/managePhotos/ic_check.png';
@@ -28,6 +30,20 @@ const data = [
   'Prefer solo / selfie pics with nobody else in photo.',
   'Photos will go live after screening by our team.',
 ];
+
+const dos = `
+- Please upload your recent Pictures.
+- Your face should be clearly visible in the picture.
+- Upload Solo/Selfie with no one else in the picture.
+- You should be dresses appropriately in the picture.
+`;
+
+const donts = `
+- Avoid group photos.
+- No photos in bikinis/swimwear.
+- No pictures in underwear.
+- No Shirtless/Underwear mirror selfies.
+`;
 
 /**
  * 1. aop - unapproved ones
@@ -75,6 +91,7 @@ class ManagePhotosJSX extends React.Component {
       uploadModal: false,
       loading: false,
       progress: 0,
+      showGuide: false,
     };
   }
 
@@ -197,6 +214,20 @@ class ManagePhotosJSX extends React.Component {
             <Text style={photos.ruleText}>{item}</Text>
           </View>
         ))}
+        <TouchableOpacity
+          style={{padding: 7, marginBottom: 10}}
+          onPress={() => {
+            this.setState({showGuide: true});
+          }}>
+          <Text
+            style={{
+              color: THEME.GRADIENT_BG.END_COLOR,
+              fontWeight: 'bold',
+              textDecorationLine: 'underline',
+            }}>
+            PHOTO GUIDELINES
+          </Text>
+        </TouchableOpacity>
         <DEFAULT_BUTTON
           text={'UPLOAD PHOTO'}
           style={{
@@ -204,6 +235,68 @@ class ManagePhotosJSX extends React.Component {
           }}
           _onPress={this._onPressUpload}
         />
+
+        <Modal
+          visible={this.state.showGuide}
+          onDismiss={() => this.setState({showGuide: false})}
+          transparent
+          animationType={'fade'}>
+          <Pressable
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={() => this.setState({showGuide: false})}>
+            <Pressable
+              style={{
+                backgroundColor: '#fff',
+                width: '90%',
+                padding: 15,
+                borderRadius: 4,
+              }}
+              onPress={() => false}>
+              <Text style={{lineHeight: 30, fontSize: 14.3}}>
+                <Text
+                  style={{
+                    fontSize: 21,
+                    lineHeight: 45,
+                    fontWeight: 'bold',
+                    color: THEME.GRADIENT_BG.END_COLOR,
+                  }}>
+                  Do's
+                </Text>
+                {dos}
+
+                <Text
+                  style={{
+                    fontSize: 21,
+                    lineHeight: 45,
+                    fontWeight: 'bold',
+                    color: THEME.GRADIENT_BG.END_COLOR,
+                  }}>
+                  Do's
+                </Text>
+                {donts}
+              </Text>
+              <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: THEME.GRADIENT_BG.END_COLOR,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 4,
+                    padding: 10,
+                    width: 100,
+                  }}
+                  onPress={() => this.setState({showGuide: false})}>
+                  <Text style={{color: '#fff', fontWeight: 'bold'}}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </Pressable>
+          </Pressable>
+        </Modal>
       </View>
     );
   };

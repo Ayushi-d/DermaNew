@@ -14,7 +14,7 @@ export default class MsgBox extends React.Component {
     super(props);
     this.state = {
       msg: '',
-      showMemModal: false
+      showMemModal: false,
     };
     this._isMounted = false;
   }
@@ -48,7 +48,7 @@ export default class MsgBox extends React.Component {
       x: 0,
     };
 
-    if(!chatExists && (!user.prem || (user.prem && !user.prem.up))) {
+    if (!chatExists && (!user.prem || (user.prem && !user.prem.up))) {
       this._isMounted && this.setState({showMemModal: true});
       return;
     }
@@ -151,7 +151,12 @@ export default class MsgBox extends React.Component {
 
   render() {
     let {msg} = this.state;
+    let {user} = this.props.context;
     let disabled = !myTrim(msg);
+    let price = '₹399';
+    if (user.c !== 'India') {
+      price = '$5.39';
+    }
     return (
       <View style={{...styles.container}}>
         <View style={styles.txtInpCon}>
@@ -171,7 +176,12 @@ export default class MsgBox extends React.Component {
           <Ionicons name={'ios-send-sharp'} color={THEME.WHITE} size={27} />
         </Pressable>
 
-        <MembershipModal show={this.state.showMemModal} content={"Upgrade now for INR 299 to send unlimited chat messages"} close={() => this.setState({showMemModal: false})} {...this.props} />
+        <MembershipModal
+          show={this.state.showMemModal}
+          content={`Upgrade now for ${price} to send unlimited chat messages`}
+          close={() => this.setState({showMemModal: false})}
+          {...this.props}
+        />
       </View>
     );
   }

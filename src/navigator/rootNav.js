@@ -164,6 +164,7 @@ class RootNav extends React.Component {
           .then((res) => {
             if (res.exists) {
               let userDat = {...this.state.user, ...res.user};
+              this._checkPrem(userDat);
               this.setState({user: userDat, isLoggedIn: true});
               this._callListeners(userDat);
             } else {
@@ -190,6 +191,29 @@ class RootNav extends React.Component {
           });
       });
     });
+  };
+
+  _checkPrem = (user) => {
+    let prem = user.prem;
+    if (!prem) {
+      return;
+    }
+    if (prem.up) {
+      let tp = prem.tp;
+      let dtp = new Date(tp);
+      let dt = new Date(dtp.setMonth(dtp.getMonth() + 1));
+
+      let cDt = new Date();
+
+      if (dt.getTime() <= cDt.getTime()) {
+        console.log('membership over!');
+        database()
+          .ref(`Users/${user.uid}/prem/`)
+          .child('up')
+          .set(false)
+          .catch((err) => console.log('rootNav.js err _checkPrem: ', err));
+      }
+    }
   };
 
   _getSetToken = (user) => {

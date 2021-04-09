@@ -464,7 +464,7 @@ const profile = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 10,
-    width: '80%',
+    width: '90%',
   },
   gridItem: {
     flexDirection: 'row',

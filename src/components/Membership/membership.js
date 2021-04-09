@@ -107,6 +107,12 @@ export default class MemberShip extends React.Component {
         </View>
       );
     }
+    let price = '₹399';
+    let payout = `http://13.233.150.95/atom/core/Core PHP OTS AES/payout.php?uid=${user.uid}`;
+    if (user.c !== 'India') {
+      price = '$5.39';
+      payout = `https://derma-cupid-94d0a.web.app/${user.uid}`;
+    }
     return (
       <View style={styles.container}>
         <Header title={'MEMBERSHIP'} {...this.props} />
@@ -116,7 +122,7 @@ export default class MemberShip extends React.Component {
             interesting profiles instantly!
           </Text>
           <View style={styles.upgradeCon}>
-            <Text style={styles.upgradeTxt}>₹299 for 1 month</Text>
+            <Text style={styles.upgradeTxt}>{price} for 1 month</Text>
             <TouchableOpacity style={styles.upgradeBtn} onPress={this._upgrade}>
               <Text style={styles.upgradeBtnTxt}>UPGRADE</Text>
             </TouchableOpacity>
@@ -218,7 +224,7 @@ export default class MemberShip extends React.Component {
             {showPayout ? (
               <WebView
                 source={{
-                  uri: `http://13.233.150.95/atom/core/Core PHP OTS AES/payout.php?uid=${user.uid}`,
+                  uri: payout,
                 }}
                 onMessage={(event) => {
                   let data = event.nativeEvent.data;
