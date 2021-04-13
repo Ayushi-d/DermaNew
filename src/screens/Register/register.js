@@ -100,7 +100,9 @@ class Registration extends React.Component {
         }
       } else if (item.name == 'nm') {
         let re = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
-        if (!re.test(values[item.name])) {
+        // let nmt = values[item.name].trim();
+        console.log(values[item.name]);
+        if (!re.test(values[item.name]) || values[item.name] == null) {
           error[item.name] = 'This is not a valid name';
         }
       }

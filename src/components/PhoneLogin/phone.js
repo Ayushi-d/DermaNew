@@ -20,10 +20,7 @@ import Snackbar from 'react-native-snackbar';
 import {Loader} from '../modals';
 import LinkAccount from '../../helpers/linkAccount';
 
-let countryCodes = [
-  {name: 'ISD', value: 'SELECT', code: 'ISD'},
-  ...countryData,
-];
+let countryCodes = [{name: 'ISD', value: 'ISD', code: 'ISD'}, ...countryData];
 
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
@@ -66,7 +63,7 @@ class Phone extends React.Component {
   };
 
   loginWithOtpFixed = () => {
-    if (this.state.code == 'ISD') {
+    if (this.state.code === 'ISD') {
       alert('Please Select Your Country Code');
       return;
     }

@@ -32,17 +32,17 @@ const data = [
 ];
 
 const dos = `
-- Please upload your recent Pictures.
+- Please upload your recent pictures.
 - Your face should be clearly visible in the picture.
-- Upload Solo/Selfie with no one else in the picture.
-- You should be dresses appropriately in the picture.
+- Upload Solo/Selfie pictures with no one else in the picture.
+- You should be properly dressed in the photos.
 `;
 
 const donts = `
 - Avoid group photos.
 - No photos in bikinis/swimwear.
 - No pictures in underwear.
-- No Shirtless/Underwear mirror selfies.
+- No Shirtless/underwear Mirror Selfies.
 `;
 
 /**
@@ -276,7 +276,7 @@ class ManagePhotosJSX extends React.Component {
                     fontWeight: 'bold',
                     color: THEME.GRADIENT_BG.END_COLOR,
                   }}>
-                  Do's
+                  Dont's
                 </Text>
                 {donts}
               </Text>

@@ -162,17 +162,31 @@ export default class ChatRqsts extends React.Component {
       });
 
     database()
-      .ref(`Users/${uid}/lt/${ouid}`)
+      .ref(`Users/${uid}/lf/${ouid}`)
       .remove()
       .catch((err) => {
-        console.log('msgr.js _declineChat user/lt remove err: ', err);
+        console.log('chatRequests.js _declineChat user/lf remove err: ', err);
       });
 
     database()
       .ref(`Users/${ouid}/lf/${uid}`)
       .remove()
       .catch((err) => {
-        console.log('msgr.js _declineChat ouser/lf remove err: ', err);
+        console.log('chatRequests.js _declineChat ouser/lf remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${uid}/lt/${ouid}`)
+      .remove()
+      .catch((err) => {
+        console.log('chatRequests.js _declineChat user/lt remove err: ', err);
+      });
+
+    database()
+      .ref(`Users/${ouid}/lt/${uid}`)
+      .remove()
+      .catch((err) => {
+        console.log('chatRequests.js _declineChat ouser/lt remove err: ', err);
       });
   };
 

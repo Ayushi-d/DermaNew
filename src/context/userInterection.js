@@ -92,6 +92,7 @@ class UserInterectionProvider extends React.Component {
 
   getUserLikeData = async () => {
     let {user} = this.props.mainContext;
+    let {page} = this.props;
 
     if (this.ltRef) {
       this.ltRef.off('child_added');
@@ -276,6 +277,61 @@ class UserInterectionProvider extends React.Component {
     }
   };
 
+  _changeCount = (page) => {
+    let {user} = this.props.mainContext;
+    let lf = user.lf;
+    let lfKeys = Object.keys(lf);
+    let rC = 0;
+
+    if (page === 'Regular' || page === 'default') {
+      lfKeys.forEach((k) => {
+        let l = lf[k];
+        if (!l.pref) {
+          database()
+            .ref(`Users/${user.uid}/lf/${k}`)
+            .child('sn')
+            .set(1)
+            .catch((err) =>
+              console.log(
+                'userinteractions.js _changeCount regular err: ',
+                err,
+              ),
+            );
+          rC += 1;
+        }
+      });
+    } else {
+      lfKeys.forEach((k) => {
+        let l = lf[k];
+        if (l.pref) {
+          database()
+            .ref(`Users/${user.uid}/lf/${k}`)
+            .child('sn')
+            .set(1)
+            .catch((err) =>
+              console.log(
+                'userinteractions.js _changeCount filtered err: ',
+                err,
+              ),
+            );
+          rC += 1;
+        }
+      });
+    }
+    let newC = user.lf.c - rC;
+    if (newC < 0) {
+      newC = 0;
+    }
+
+    database()
+      .ref(`Users/${user.uid}/lf`)
+      .child('c')
+      .set(newC)
+      .catch((err) =>
+        console.log('userinteractions.js _changeCount count err: ', err),
+      );
+  };
+
   childRemoved = () => {
     this.ltRef = this.currentUserRef.child('lt');
 
@@ -331,6 +387,7 @@ class UserInterectionProvider extends React.Component {
           loadingF: this.state.loadingF,
           getUserLikeData: this.getUserLikeData,
           childRemoved: this.childRemoved,
+          _changeCount: this._changeCount,
         }}>
         {this.props.children}
       </UserInterectionContext.Provider>

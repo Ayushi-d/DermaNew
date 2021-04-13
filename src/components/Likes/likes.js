@@ -58,14 +58,16 @@ class Likes extends React.Component {
       'focus',
       (payload) => {
         let {route} = this.props;
+        let page = route.params.id;
         if (route.params && route.params.from === 'ref') {
           this.setState({focused: true});
 
-          this.props.context.getUserLikeData();
+          this.props.context.getUserLikeData(page);
           this.props.context.childRemoved();
           console.log('likes.js return!');
+          this.props.context._changeCount(page);
         }
-        this._changeCount();
+        // this._changeCount(route);
       },
     );
     this.didBlurSubscription = this.props.navigation.addListener(
@@ -113,10 +115,10 @@ class Likes extends React.Component {
   };
   _getLikesRemoved = () => {};
 
-  _changeCount() {
+  _changeCount(page) {
     // update like notifications
     let uid = auth().currentUser.uid;
-    database().ref(`Users/${uid}`).child('lf').child('c').set(0);
+    // database().ref(`Users/${uid}`).child('lf').child('c').set(0);
     database()
       .ref(`Users/${uid}`)
       .child('lf')
@@ -202,12 +204,10 @@ class Likes extends React.Component {
     // sort by like recieved time
 
     if (!data) return;
-    let sortedKeys = Object.keys(data).sort(
-      (a, b) =>{
-        console.log(data[a])
-        return user.lf[data[b].uid].tp - user.lf[data[a].uid].tp
-      }
-    );
+    let sortedKeys = Object.keys(data).sort((a, b) => {
+      // console.log(data[a]);
+      return user.lf[data[b].uid].tp - user.lf[data[a].uid].tp;
+    });
 
     if (data) {
       return (

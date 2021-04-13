@@ -184,7 +184,9 @@ class SidebarJSX extends React.Component {
           {this.renderDrawerItems()}
         </View>
 
-        <TouchableOpacity style={style.memberBtn} onPress={() => rootNav.navigate('Membership')}>
+        <TouchableOpacity
+          style={style.memberBtn}
+          onPress={() => rootNav.navigate('Membership')}>
           <Text style={style.memberBtnTxt}>MEMBERSHIP</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -252,9 +254,13 @@ function RenderExpanded(props) {
     Object.keys(lf).forEach((lk) => {
       if (lk !== 'c') {
         if (lf[lk].pref) {
-          likesFilCount += 1;
+          if (!lf[lk].sn) {
+            likesFilCount += 1;
+          }
         } else {
-          likesRegCount += 1;
+          if (!lf[lk].sn) {
+            likesRegCount += 1;
+          }
         }
       }
     });
@@ -450,11 +456,11 @@ const style = StyleSheet.create({
     paddingVertical: 10,
     marginHorizontal: 10,
     marginVertical: 10,
-    borderRadius: 4
+    borderRadius: 4,
   },
   memberBtnTxt: {
-    color:'#fff'
-  }
+    color: '#fff',
+  },
 });
 
 export default SidebarJSX;

@@ -471,10 +471,10 @@ export default class Msgr extends React.Component {
       });
 
     database()
-      .ref(`Users/${uid}/lt/${ouid}`)
+      .ref(`Users/${uid}/lf/${ouid}`)
       .remove()
       .catch((err) => {
-        console.log('msgr.js _declineChat user/lt remove err: ', err);
+        console.log('msgr.js _declineChat user/lf remove err: ', err);
       });
 
     database()
@@ -484,29 +484,19 @@ export default class Msgr extends React.Component {
         console.log('msgr.js _declineChat ouser/lf remove err: ', err);
       });
 
-    // database()
-    //   .ref('Users/' + uid)
-    //   .child('lt')
-    //   .child(ouid)
-    //   .set(null);
+    database()
+      .ref(`Users/${uid}/lt/${ouid}`)
+      .remove()
+      .catch((err) => {
+        console.log('msgr.js _declineChat user/lt remove err: ', err);
+      });
 
-    // database()
-    //   .ref('Users/' + uid)
-    //   .child('lf')
-    //   .child(ouid)
-    //   .set(null);
-
-    // database()
-    //   .ref('Users/' + ouid)
-    //   .child('lt')
-    //   .child(uid)
-    //   .set(null);
-
-    // database()
-    //   .ref('Users/' + ouid)
-    //   .child('lf')
-    //   .child(uid)
-    //   .set(null);
+    database()
+      .ref(`Users/${ouid}/lt/${uid}`)
+      .remove()
+      .catch((err) => {
+        console.log('msgr.js _declineChat ouser/lt remove err: ', err);
+      });
 
     this._isMounted && this.setState({declined: true});
   };

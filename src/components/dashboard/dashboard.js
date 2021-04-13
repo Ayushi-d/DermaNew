@@ -222,7 +222,7 @@ class Dashboard extends React.Component {
 
       Object.keys(lf).forEach((lk) => {
         if (lk !== 'c') {
-          if (!lf[lk].pref) {
+          if (!lf[lk].pref && !lf[lk].sn) {
             likesCount += 1;
           }
         }
