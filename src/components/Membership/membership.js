@@ -110,7 +110,7 @@ export default class MemberShip extends React.Component {
     let price = '₹399';
     let payout = `http://13.233.150.95/atom/core/Core PHP OTS AES/payout.php?uid=${user.uid}`;
     if (user.c !== 'India') {
-      price = '$5.39';
+      price = 'USD 5.39';
       payout = `https://derma-cupid-94d0a.web.app/${user.uid}`;
     }
     return (

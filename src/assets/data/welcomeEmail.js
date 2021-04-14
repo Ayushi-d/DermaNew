@@ -2,7 +2,7 @@ let WelcomeEmail = `
 <p><strong><u><img src="https://firebasestorage.googleapis.com/v0/b/derma-cupid-94d0a.appspot.com/o/assets%2Ffab-icon.png?alt=media&token=cc281c1e-301e-4abc-87f6-78eafb5c7bea" alt="Derma Cupid logo" width="116" height="116" /><br /></u></strong></p>
 <p><strong>&nbsp;</strong></p>
 <p style="text-align: center;"><span style="color: #ff0000;"><strong>Date with confidence in a judgement-free zone!</strong></span></p>
-<p>Hi &lsquo;Name&rsquo;,</p>
+<p>Hi {name},</p>
 <p>We are so glad to have you as part of our growing online community of people with skin conditions seeking dating and matchmaking opportunities.</p>
 <p>Enlisted below a quick list of 4 steps that we highly recommend to enjoy a satisfying and fulfilling dating experience.</p>
 <ul>
