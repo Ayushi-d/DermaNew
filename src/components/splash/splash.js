@@ -1,6 +1,6 @@
 import React from 'react';
-import SplashBackground from '../../assets/splash/ic_bg.png';
-import DermaLogo from '../../assets/splash/ic_logo.png';
+import SplashBackground from '../../assets/splash/splash_screen.png';
+import DermaLogo from '../../assets/splash/dc_logo.png';
 import Name from './name';
 import {
   View,
@@ -64,9 +64,9 @@ class Splash extends React.Component {
     return (
       <ImageBackground source={SplashBackground} style={style.image}>
         <StatusBar barStyle="dark-content" backgroundColor="#FC6E4F" />
-        <Image source={DermaLogo} style={style.logo} />
-        <View style={style.horizontalLine} />
-        <Name />
+        {/* <Image source={DermaLogo} style={style.logo} /> */}
+        {/* <View style={style.horizontalLine} /> */}
+        {/* <Name /> */}
       </ImageBackground>
     );
   }

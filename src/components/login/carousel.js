@@ -8,13 +8,14 @@ import {
   Dimensions,
   Animated,
 } from 'react-native';
-import DermaLogo from '../../assets/splash/ic_logo.png';
+import DermaLogo from '../../assets/splash/dc_logo.png';
 import THEME from '../../config/theme';
 import {normalize} from './getScale';
 
 const Info = [
   'Dating and Matchmaking App for people with skin condition.',
   'Discover a partner with similar life experiences for better understanding, comfort & mutual respect',
+  'People without any skin condition are welcome to join in if they are open to date someone with a skin condition.',
   'Yola baby',
 ];
 
@@ -49,6 +50,7 @@ class Carousel extends React.Component {
             <AppInfoText key={1} text={Info[0]} />,
             <AppInfoText key={2} text={Info[1]} />,
             <Tags key={3} />,
+            <AppInfoText key={4} text={Info[2]} />,
           ]}
         </ScrollView>
       </View>
@@ -82,7 +84,7 @@ const Tags = () => (
     </View>
     <View style={carousel.sameHeight}>
       <Text style={carousel.tag}>Albinism</Text>
-      <Text style={carousel.tag}>Birthmark</Text>
+      <Text style={carousel.tag}>Alopecia</Text>
     </View>
     <View style={carousel.sameHeight}>
       <Text style={{...carousel.tag, ...carousel.expanded}}>
@@ -144,8 +146,9 @@ const carousel = StyleSheet.create({
   },
 
   logo: {
-    width: '30%',
-    resizeMode: 'contain',
+    width: '70%',
+    height: 120,
+    resizeMode: 'cover',
   },
   pager: {
     // position: 'absolute',
