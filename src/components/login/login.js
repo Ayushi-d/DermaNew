@@ -86,10 +86,9 @@ class Login extends React.Component {
   firebaseFbAuthentication = (accessToken) => {
     console.log('test!');
     auth()
-      .signInWithCredential(
-        firebase.auth.FacebookAuthProvider.credential(accessToken),
-      )
+      .signInWithCredential(auth.FacebookAuthProvider.credential(accessToken))
       .then((res) => {
+        console.log('FB Res: ', res);
         let {providerId} = res.additionalUserInfo;
         let {displayName, email, uid} = res.user;
         this.props.context
@@ -102,7 +101,7 @@ class Login extends React.Component {
               auth()
                 .signOut()
                 .then((res) => {
-                  this.props.context._logOut();
+                  this.props.context._logout();
                 });
               return;
             }
