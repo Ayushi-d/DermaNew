@@ -164,21 +164,21 @@ export default class Msgr extends React.Component {
       // console.log('ref', user.con[refKey]);
     }
 
-    if (user.con && Object.keys(user.con).indexOf(refKey) > -1) {
-      // console.log(user.uid, 'sent to me!');
-      database()
-        .ref(`Users/${uid}/con/${refKey}`)
-        .update({
-          sn: 1,
-          uc: 0,
-        })
-        .then(() => {
-          console.log('msgs seen!');
-        })
-        .catch((err) => {
-          console.log('msgr.js _seen request error', err);
-        });
-    }
+    // if (user.con && Object.keys(user.con).indexOf(refKey) > -1) {
+    // console.log(user.uid, 'sent to me!');
+    database()
+      .ref(`Users/${uid}/con/${refKey}`)
+      .update({
+        sn: 1,
+        uc: 0,
+      })
+      .then(() => {
+        console.log('msgs seen!');
+      })
+      .catch((err) => {
+        console.log('msgr.js _seen request error', err);
+      });
+    // }
 
     database()
       .ref(`conversation/${refKey}/${uid}`)
