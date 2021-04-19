@@ -110,7 +110,7 @@ export default class MemberShip extends React.Component {
     let price = '₹399';
     let payout = `https://admin.dermacupid.com/gateway/payout.php?uid=${user.uid}`;
     if (user.c !== 'India') {
-      price = 'USD 5.39';
+      price = 'USD 5.99';
       payout = `https://derma-cupid-94d0a.web.app/${user.uid}`;
     }
     return (

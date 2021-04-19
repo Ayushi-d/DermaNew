@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StatusBar, Text} from 'react-native';
+import {Text, AppState} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
@@ -64,7 +64,7 @@ import MemberProfile from '../components/MemberProfile';
 // MSGR
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
 
-import TestScreen from '../screens/TestScreen';
+import PushNotification from 'react-native-push-notification';
 
 const DUMMY_DP =
   'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
@@ -91,10 +91,13 @@ class RootNav extends React.Component {
     };
     this._isMounted = false;
     this._msgListeners = [];
+    this.appState = AppState.currentState;
   }
 
   componentDidMount() {
     this._isMounted = true;
+    PushNotification.cancelAllLocalNotifications();
+    AppState.addEventListener('change', this._handleAppStateChange);
     let user = auth().currentUser;
     if (user) {
       // console.log(user);
@@ -108,6 +111,17 @@ class RootNav extends React.Component {
     this._isMounted = false;
     this._removeListeners();
   }
+
+  _handleAppStateChange = (nextAppState) => {
+    if (
+      this.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      console.log('App has come to the foreground!');
+      PushNotification.cancelAllLocalNotifications();
+    }
+    this.appState = nextAppState;
+  };
 
   checkAuthentication = async () => {
     let user = auth().currentUser;
@@ -217,18 +231,22 @@ class RootNav extends React.Component {
   };
 
   _getSetToken = (user) => {
-    if (!user.token) {
-      messaging()
-        .getToken()
-        .then((token) => {
-          database()
-            .ref(`Users/${user.uid}/token`)
-            .set(token)
-            .catch((Err) =>
-              console.log('unable to setToken when not found: ', Err),
-            );
-        });
-    }
+    // if (!user.token) {
+    messaging()
+      .getToken()
+      .then((token) => {
+        console.log(token);
+        if (user.token === token) {
+          return;
+        }
+        database()
+          .ref(`Users/${user.uid}/token`)
+          .set(token)
+          .catch((Err) =>
+            console.log('unable to setToken when not found: ', Err),
+          );
+      });
+    // }
 
     messaging().onTokenRefresh((token) => {
       database()

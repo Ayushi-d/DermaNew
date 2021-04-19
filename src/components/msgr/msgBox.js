@@ -155,7 +155,7 @@ export default class MsgBox extends React.Component {
     let disabled = !myTrim(msg);
     let price = '₹399';
     if (user.c !== 'India') {
-      price = 'USD 5.39';
+      price = 'USD 5.99';
     }
     return (
       <View style={{...styles.container}}>
