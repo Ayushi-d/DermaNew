@@ -179,6 +179,7 @@ class RootNav extends React.Component {
             if (res.exists) {
               let userDat = {...this.state.user, ...res.user};
               this._checkPrem(userDat);
+              this._checkFB(userDat);
               this.setState({user: userDat, isLoggedIn: true});
               this._callListeners(userDat);
             } else {
@@ -204,6 +205,22 @@ class RootNav extends React.Component {
             reject(err);
           });
       });
+    });
+  };
+
+  _checkFB = (user) => {
+    let usrDat = auth().currentUser;
+    usrDat.providerData.forEach((p) => {
+      if (p.providerId === 'facebook.com') {
+        if (!user.FBurl) {
+          console.log('no FB url yet!');
+          database()
+            .ref(`Users/${user.uid}`)
+            .child('FBurl')
+            .set(`https://www.facebook.com/${p.uid}`)
+            .catch((err) => console.log('error updating fb profile!: ', err));
+        }
+      }
     });
   };
 
