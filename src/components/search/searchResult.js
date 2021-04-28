@@ -27,7 +27,8 @@ class SearchResult extends React.Component {
     let user = this.props.route.params.user;
     let usr = this.props.context.user;
     // console.log(user, usr);
-    this.pp = new PP(2, user || {});
+    console.log(user.pp);
+    this.pp = new PP(20, user || {});
     this.fetchUser();
   }
 
@@ -39,7 +40,7 @@ class SearchResult extends React.Component {
     let {user} = this.props.context;
 
     this.setState({loading: true}, async () => {
-      let users = await this.pp.getUsers();
+      let users = await this.pp._getUsers(null, true);
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
         let newUsers = {};
@@ -51,6 +52,9 @@ class SearchResult extends React.Component {
           let uid1 = uid < ouid ? uid : ouid;
           let uid2 = uid > ouid ? uid : ouid;
           let refKey = uid1 + uid2;
+          if (user.g === ouser.g) {
+            continue;
+          }
           if (
             ouser.con &&
             ouser.con[refKey] &&
@@ -83,8 +87,13 @@ class SearchResult extends React.Component {
     if (this.state.onEndReachedCalledDuringMomentum) return null;
 
     this.setState({loadMore: true});
+    let {data} = this.state;
+    let dKeys = Object.keys(data);
+    let lastItem = data[dKeys[dKeys.length - 1]].cat;
+    // console.log(lastItem);
 
-    let users = await this.pp.getUsers();
+    let users = await this.pp._getUsers(lastItem, true);
+
     if (users && Object.keys(users).length != 0) {
       let uKeys = Object.keys(users);
       let newUsers = {};
@@ -96,6 +105,9 @@ class SearchResult extends React.Component {
         let uid1 = uid < ouid ? uid : ouid;
         let uid2 = uid > ouid ? uid : ouid;
         let refKey = uid1 + uid2;
+        if (user.g === ouser.g) {
+          continue;
+        }
         if (ouser.con && ouser.con[refKey] && ouser.con[refKey].isAcc === -1) {
           continue;
         }
@@ -107,7 +119,11 @@ class SearchResult extends React.Component {
           continue;
         }
         newUsers[uk] = users[uk];
+        // console.log(users[uk].nm);
       }
+      // this.setData(newUsers);
+      // console.log(newUsers);
+      // console.log(Object.keys(data).length);
       this.setData(newUsers);
     } else {
       // Snackbar.show({
@@ -118,10 +134,14 @@ class SearchResult extends React.Component {
     this.setState({loadMore: false, onEndReachedCalledDuringMomentum: true});
   };
 
-  setData = (obj) => {
+  setData = (obj, refresh) => {
     let keys = Object.keys(obj);
 
-    let data = {...this.state.data};
+    let data = {};
+
+    if (!refresh) {
+      data = {...this.state.data};
+    }
 
     let list = Object.keys(data); // 0
 
@@ -137,8 +157,8 @@ class SearchResult extends React.Component {
     let user = this.props.route.params.user;
 
     this.setState({refreshing: true, data: {}}, async () => {
-      this.pp = new PP(2, user || {});
-      let users = await this.pp.getUsers();
+      this.pp = new PP(20, user || {});
+      let users = await this.pp._getUsers(null, true);
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
         let newUsers = {};
@@ -150,6 +170,9 @@ class SearchResult extends React.Component {
           let uid1 = uid < ouid ? uid : ouid;
           let uid2 = uid > ouid ? uid : ouid;
           let refKey = uid1 + uid2;
+          if (user.g === ouser.g) {
+            continue;
+          }
           if (
             ouser.con &&
             ouser.con[refKey] &&
@@ -167,7 +190,7 @@ class SearchResult extends React.Component {
           newUsers[uk] = users[uk];
         }
 
-        this.setData(newUsers);
+        this.setData(newUsers, true);
       } else {
         this.setState({refreshing: false}, () => {
           alert('No Users Found!');

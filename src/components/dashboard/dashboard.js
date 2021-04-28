@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
     this.didFocusSubscription = this.props.navigation.addListener(
       'focus',
       (payload) => {
-        this.fetchUsers();
+        // this.fetchUsers();
       },
     );
   }
@@ -60,11 +60,11 @@ class Dashboard extends React.Component {
 
   refreshList = async () => {
     this.setState({data: null}, async () => {
-      this.pp = new PP(2, this.props.context.user || {});
-      let users = await this.pp.getUsers();
-      if (users && Object.keys(users).length != 0) {
-        this.setData(users);
-      }
+      // this.pp = new PP(2, this.props.context.user || {});
+      // let users = await this.pp.getUsers();
+      // if (users && Object.keys(users).length != 0) {
+      //   this.setData(users);
+      // }
     });
   };
 

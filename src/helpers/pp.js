@@ -12,13 +12,40 @@ class PP {
     this.user = user;
   }
 
+  _getUsers = async (lastItem, fromSearch) => {
+    if (!lastItem) {
+      console.log('fistCall');
+      let snap = await this.users
+        .orderByChild('cat')
+        .limitToLast(20)
+        .once('value');
+
+      let new_data = this.getPreferedUsers(snap.val());
+
+      return new_data;
+    } else {
+      console.log('newCall');
+      let snap = await this.users
+        .orderByChild('cat')
+        .endAt(lastItem)
+        .limitToLast(20)
+        .once('value');
+
+      let new_data = this.getPreferedUsers(snap.val());
+
+      // console.log('newcCall: ', snap.val());
+      return new_data;
+    }
+  };
+
   getUsers = async () => {
-    // console.log('call');
+    console.log('call');
     if (!this.lastItem) {
+      console.log('notlastitem');
       try {
         let snap = await this.users
           .orderByChild('cat')
-          .limitToFirst(100)
+          .limitToFirst(20)
           .once('value');
         let usrs = snap.val();
         let users = [];
@@ -42,12 +69,15 @@ class PP {
         console.error(error);
       }
     } else {
+      console.log('last item: ', this.lastItem, this.pageSize);
       try {
         let snap = await this.users
           .orderByChild('cat')
           .startAt(this.lastItem)
           .limitToFirst(this.pageSize)
           .once('value');
+
+        console.log('chek thi sout!', Object.keys(snap.val()).length);
 
         let usrs = snap.val();
         let users = [];
@@ -74,7 +104,25 @@ class PP {
 
     // if (Object.keys(this.data).length <= this.numOfItem) {
     let returned_data = {...this.data};
+    let dt = Object.keys(returned_data);
+    console.log('lat user: ', returned_data[dt[dt.length - 1]].nm);
+    this.lastItem = returned_data[dt[dt.length - 1]].cat;
     this.data = {};
+    // let d = dt.sort(
+    //   (a, b) => returned_data[a].cat * 1000 - returned_data[a].cat * 1000,
+    // );
+    let all = [];
+    dt.forEach((k) => {
+      let t = returned_data[k];
+      all.push({
+        uid: t.uid,
+        cat: t.cat,
+        date: new Date(t.cat * 1000).toDateString(),
+        nm: t.nm,
+      });
+    });
+    console.log(all);
+    // console.log()
     return returned_data;
     // } else {
     // let data = await this.getUsers();
@@ -89,11 +137,19 @@ class PP {
       return null;
     }
     let new_data = {};
-    keys.map((item) => {
+    keys.map((item, idx) => {
       let isMyType = this.isMyType(this.user, data[item]);
-      if (isMyType) new_data[item] = data[item];
-      this.lastItem = data[item].cat;
+      // console.log('after Change: ', isMyType);
+      if (isMyType) {
+        // console.log('add this!');
+        new_data[item] = data[item];
+      }
+      if (keys.length - 1 === idx) {
+        // this.lastItem = data[item].cat;
+        // console.log('lastItem: ', data[item].cat, data[item].nm);
+      }
     });
+    // console.log(Object.keys(new_data).length);
     return new_data;
   };
 
@@ -119,6 +175,7 @@ class PP {
     if (user.g == data.g) {
       return false;
     }
+    // console.log(data.sc, preference.sc);
 
     if (!sc.includes(data.sc) && preference.sc != "Doesn't matter") {
       return false;

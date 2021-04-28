@@ -24,7 +24,7 @@ class MyMatchesJSX extends React.Component {
   }
 
   componentDidMount() {
-    this.pp = new PP(2, this.props.context.user || {});
+    this.pp = new PP(20, this.props.context.user || {});
     this.fetchUser();
 
     this.didFocusSubscription = this.props.navigation.addListener(
@@ -58,7 +58,7 @@ class MyMatchesJSX extends React.Component {
     let {user} = this.props.context;
 
     this.setState({loading: true}, async () => {
-      let users = await this.pp.getUsers();
+      let users = await this.pp._getUsers();
       // console.log(users);
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
@@ -73,6 +73,11 @@ class MyMatchesJSX extends React.Component {
           let uid1 = uid < ouid ? uid : ouid;
           let uid2 = uid > ouid ? uid : ouid;
           let refKey = uid1 + uid2;
+
+          if (user.g === ouser.g) {
+            continue;
+          }
+
           if (
             ouser.con &&
             ouser.con[refKey] &&
@@ -112,7 +117,11 @@ class MyMatchesJSX extends React.Component {
     if (this.state.onEndReachedCalledDuringMomentum) return null;
     this.setState({loadMore: true});
 
-    let users = await this.pp.getUsers();
+    let {data} = this.state;
+    let dKeys = Object.keys(data);
+    let lastItem = data[dKeys[dKeys.length - 1]].cat;
+
+    let users = await this.pp._getUsers(lastItem);
     if (users && Object.keys(users).length != 0) {
       let uKeys = Object.keys(users);
       let newUsers = {};
@@ -124,6 +133,11 @@ class MyMatchesJSX extends React.Component {
         let uid1 = uid < ouid ? uid : ouid;
         let uid2 = uid > ouid ? uid : ouid;
         let refKey = uid1 + uid2;
+
+        if (user.g === ouser.g) {
+          continue;
+        }
+
         if (ouser.con && ouser.con[refKey] && ouser.con[refKey].isAcc === -1) {
           continue;
         }
@@ -164,7 +178,7 @@ class MyMatchesJSX extends React.Component {
     let {user} = this.props.context;
     this.setState({refreshing: true, data: {}}, async () => {
       this.pp = new PP(2, this.props.context.user || {});
-      let users = await this.pp.getUsers();
+      let users = await this.pp._getUsers();
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
         let newUsers = {};
@@ -177,6 +191,9 @@ class MyMatchesJSX extends React.Component {
           let uid1 = uid < ouid ? uid : ouid;
           let uid2 = uid > ouid ? uid : ouid;
           let refKey = uid1 + uid2;
+          if (user.g === ouser.g) {
+            continue;
+          }
           if (
             ouser.con &&
             ouser.con[refKey] &&
