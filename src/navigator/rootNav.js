@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, AppState} from 'react-native';
+import {Text, AppState, Platform} from 'react-native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
@@ -65,6 +65,7 @@ import MemberProfile from '../components/MemberProfile';
 import Msgr, {ChatRqsts, Chats} from '../components/msgr';
 
 import PushNotification from 'react-native-push-notification';
+import UpdateModal from './updateModal';
 
 const DUMMY_DP =
   'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
@@ -88,16 +89,20 @@ class RootNav extends React.Component {
       loginCheck: false,
       isLoggedIn: false,
       user: {},
+      updatedversion: true,
+      url: '',
     };
     this._isMounted = false;
     this._msgListeners = [];
     this.appState = AppState.currentState;
+    this.appversion = '1.5.1';
   }
 
   componentDidMount() {
     this._isMounted = true;
     PushNotification.cancelAllLocalNotifications();
     AppState.addEventListener('change', this._handleAppStateChange);
+    this._checkUpdate();
     let user = auth().currentUser;
     if (user) {
       // console.log(user);
@@ -111,6 +116,20 @@ class RootNav extends React.Component {
     this._isMounted = false;
     this._removeListeners();
   }
+
+  _checkUpdate = async () => {
+    try {
+      let snap = await database().ref('appStatus').once('value');
+      let version = snap.val();
+      if (Platform.OS === 'android') {
+        if (this.appversion !== version?.appversion) {
+          this.setState({updatedversion: false, url: version?.androidUrl});
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   _handleAppStateChange = (nextAppState) => {
     if (
@@ -684,7 +703,11 @@ class RootNav extends React.Component {
   );
 
   render() {
-    let {loginCheck, isLoggedIn, user} = this.state;
+    let {loginCheck, isLoggedIn, user, updatedversion, url} = this.state;
+    console.log(updatedversion);
+    if (!updatedversion) {
+      return <UpdateModal visible={!updatedversion} url={url} />;
+    }
     let context = {
       user,
       _setLoginUser: this._setLoginUser,
