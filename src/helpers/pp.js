@@ -17,24 +17,44 @@ class PP {
       console.log('fistCall');
       let snap = await this.users
         .orderByChild('cat')
-        .limitToLast(20)
+        .limitToLast(200)
         .once('value');
 
-      let new_data = this.getPreferedUsers(snap.val());
+      let dat = snap.val();
 
-      return new_data;
+      let new_data = this.getPreferedUsers(dat);
+
+      let lItem = '';
+
+      if (snap.exists && dat) {
+        let ks = Object.keys(dat);
+        let it = dat[ks[ks.length - 1]];
+        lItem = it ? it.cat : '';
+      }
+
+      return {users: new_data, lItem};
     } else {
-      console.log('newCall');
+      console.log('newCall: ', lastItem);
       let snap = await this.users
         .orderByChild('cat')
         .endAt(lastItem)
-        .limitToLast(20)
+        .limitToLast(200)
         .once('value');
 
-      let new_data = this.getPreferedUsers(snap.val());
+      let dat = snap.val();
+
+      let new_data = this.getPreferedUsers(dat);
+
+      let lItem = '';
+
+      if (snap.exists && dat) {
+        let ks = Object.keys(dat);
+        let it = dat[ks[ks.length - 1]];
+        lItem = it ? it.cat : '';
+      }
 
       // console.log('newcCall: ', snap.val());
-      return new_data;
+      return {users: new_data, lItem};
     }
   };
 
@@ -175,7 +195,7 @@ class PP {
     if (user.g == data.g) {
       return false;
     }
-    // console.log(data.sc, preference.sc);
+    console.log(data.rl, rl);
 
     if (!sc.includes(data.sc) && preference.sc != "Doesn't matter") {
       return false;

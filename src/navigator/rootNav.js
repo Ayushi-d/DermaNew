@@ -122,7 +122,8 @@ class RootNav extends React.Component {
       let snap = await database().ref('appStatus').once('value');
       let version = snap.val();
       if (Platform.OS === 'android') {
-        if (this.appversion !== version?.appversion) {
+        if (this.appversion !== version?.androidversion) {
+          console.log('appversion: ', this.appversion, version?.androidversion);
           this.setState({updatedversion: false, url: version?.androidUrl});
         }
       }
@@ -271,7 +272,7 @@ class RootNav extends React.Component {
     messaging()
       .getToken()
       .then((token) => {
-        console.log(token);
+        // console.log(token);
         if (user.token === token) {
           return;
         }

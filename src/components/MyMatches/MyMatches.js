@@ -20,6 +20,7 @@ class MyMatchesJSX extends React.Component {
       endReached: false,
       loadMore: false,
       onEndReachedCalledDuringMomentum: true,
+      lastItem: '',
     };
   }
 
@@ -58,7 +59,8 @@ class MyMatchesJSX extends React.Component {
     let {user} = this.props.context;
 
     this.setState({loading: true}, async () => {
-      let users = await this.pp._getUsers();
+      let {users, lItem} = await this.pp._getUsers();
+      this.setState({lastItem: lItem});
       // console.log(users);
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
@@ -102,6 +104,12 @@ class MyMatchesJSX extends React.Component {
           );
         }
         this.setData(newUsers);
+
+        if (Object.keys(newUsers).length === 1) {
+          this.setState({onEndReachedCalledDuringMomentum: false});
+          this.loadMore();
+          console.log('calling for more!', lItem);
+        }
       } else {
         this.setState({loading: false}, () => {
           alert(
@@ -117,11 +125,13 @@ class MyMatchesJSX extends React.Component {
     if (this.state.onEndReachedCalledDuringMomentum) return null;
     this.setState({loadMore: true});
 
-    let {data} = this.state;
-    let dKeys = Object.keys(data);
-    let lastItem = data[dKeys[dKeys.length - 1]].cat;
+    let {lastItem, data} = this.state;
+    // let dKeys = Object.keys(data);
+    // let lastItem = data[dKeys[dKeys.length - 1]].cat;
 
-    let users = await this.pp._getUsers(lastItem);
+    let {users, lItem} = await this.pp._getUsers(lastItem);
+    this.setState({lastItem: lItem});
+
     if (users && Object.keys(users).length != 0) {
       let uKeys = Object.keys(users);
       let newUsers = {};
@@ -178,7 +188,9 @@ class MyMatchesJSX extends React.Component {
     let {user} = this.props.context;
     this.setState({refreshing: true, data: {}}, async () => {
       this.pp = new PP(2, this.props.context.user || {});
-      let users = await this.pp._getUsers();
+      let {users, lItem} = await this.pp._getUsers();
+      this.setState({lastItem: lItem});
+
       if (users && Object.keys(users).length != 0) {
         let uKeys = Object.keys(users);
         let newUsers = {};

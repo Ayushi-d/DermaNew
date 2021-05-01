@@ -31,7 +31,7 @@ class EditProfileJSX extends React.Component {
 
     this.state = {values: {...state}, error: {}, s: [], ct: [], loading: false};
 
-    console.log(this.state, 'check');
+    // console.log(this.state, 'check');
   }
 
   componentDidMount() {

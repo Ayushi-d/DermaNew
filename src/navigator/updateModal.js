@@ -13,11 +13,13 @@ import {getScale} from '../helpers/scale';
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
 const UpdateModal = ({visible, url}) => {
+  console.log(url);
   const updateApp = () => {
     if (Platform.OS === 'android') {
       Linking.canOpenURL(url)
         .then((supported) => {
           if (!supported) {
+            console.log('not supported');
           } else {
             return Linking.openURL(url);
           }

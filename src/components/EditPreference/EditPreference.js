@@ -15,7 +15,7 @@ class EditPPJSX extends React.Component {
   constructor(props) {
     super(props);
     this.data = this.props.route.params.data;
-    console.log(this.data);
+    // console.log(this.data);
 
     if (this.data === 'Religion') {
       this.items = [
