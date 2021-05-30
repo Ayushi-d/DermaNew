@@ -97,9 +97,7 @@ class Cards extends React.Component {
           }}>
           <Text style={[style.text, style.name]}>{this.props.data['sn']}</Text>
           <Text style={[style.text]}>
-            {`${DateHelpers.getAge(this.props.data.dob)}   ${
-              this.props.data.ht
-            }`}
+            {`${DateHelpers.getAge(this.props.data.dob)}`}
           </Text>
         </View>
         <Text style={[style.text]}>

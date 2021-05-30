@@ -5,7 +5,6 @@ const UserConfig = {
   Name: 'nm',
   'Privacy Setting For Name': 'pnm',
   'Date of Birth': 'dob',
-  Height: 'ht',
   'Skin Condition': 'sc',
   'Marital Status': 'ms',
   City: 'ct',

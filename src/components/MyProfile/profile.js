@@ -45,7 +45,7 @@ const myProfile = [
       'Name',
       'Privacy Setting For Name',
       'Date of Birth',
-      'Height',
+      // 'Height',
       'Skin Condition',
       'Marital Status',
       'Children',
@@ -252,9 +252,7 @@ class MyProfileJSX extends React.Component {
           </Text>
           <Text style={profile.age}>
             {this.props.context.user
-              ? `${DateHelpers.getAge(this.props.context.user['dob'])} Yrs, ${
-                  this.props.context.user['ht']
-                }`
+              ? `${DateHelpers.getAge(this.props.context.user['dob'])} Yrs`
               : ''}
           </Text>
         </View>

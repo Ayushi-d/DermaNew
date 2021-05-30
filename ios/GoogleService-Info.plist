@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>613215646162-80ii1upg3qpd57ueagqmkci820v1todf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.613215646162-80ii1upg3qpd57ueagqmkci820v1todf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>613215646162-1lpe4e9ihb9iuq15ec59hsgveibi6mbp.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCCj4wnhdMyOzdJhWJbRvxuNlhoAUMSLXk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>613215646162</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dermacupid</string>
+	<key>PROJECT_ID</key>
+	<string>derma-cupid-94d0a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>derma-cupid-94d0a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:613215646162:ios:805e3c6217af1a6ba0980b</string>
+	<key>DATABASE_URL</key>
+	<string>https://derma-cupid-94d0a.firebaseio.com</string>
+</dict>
+</plist>

@@ -76,7 +76,7 @@ We use your key personal information such as email address, mobile
 phone number, and name to create a unique profile.
 
 
-The basic information (such as gender, date of birth, height,
+The basic information (such as gender, date of birth,
 location, marital status, etc.) and extended information (such as
 interests, religion, lifestyle, etc.) are used to provide you the
 recommended matching profiles.
