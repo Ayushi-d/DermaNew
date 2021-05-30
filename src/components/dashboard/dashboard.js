@@ -245,17 +245,21 @@ class Dashboard extends React.Component {
               <View
                 style={{
                   position: 'absolute',
-                  width: 20,
-                  height: 15,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  top: 2,
-                  right: -10,
+                  top: -10,
+                  right: -18,
                   backgroundColor: THEME.GRADIENT_BG.END_COLOR,
-                  borderRadius: 10,
+                  width: 30,
+                  height: 24,
+                  borderRadius: 15,
                 }}>
-                <Text style={{fontSize: 12, color: THEME.WHITE, padding: 5}}>
-                  {likesCount}
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: THEME.WHITE,
+                  }}>
+                  {likesCount >= 100 ? '99+' : likesCount}
                 </Text>
               </View>
             ) : null}
@@ -277,17 +281,21 @@ class Dashboard extends React.Component {
               <View
                 style={{
                   position: 'absolute',
-                  width: 24,
-                  height: 23,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  top: -4,
-                  right: -10,
+                  top: -10,
+                  right: -18,
                   backgroundColor: THEME.GRADIENT_BG.END_COLOR,
-                  borderRadius: 20,
+                  width: 30,
+                  height: 24,
+                  borderRadius: 15,
                 }}>
-                <Text style={{fontSize: 12, color: THEME.WHITE, padding: 5}}>
-                  {msgsCount}
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: THEME.WHITE,
+                  }}>
+                  {msgsCount >= 100 ? '99+' : msgsCount}
                 </Text>
               </View>
             ) : null}
@@ -312,17 +320,21 @@ class Dashboard extends React.Component {
               <View
                 style={{
                   position: 'absolute',
-                  width: 20,
-                  height: 15,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  top: 2,
-                  right: 0,
+                  top: -10,
+                  right: -5,
                   backgroundColor: THEME.GRADIENT_BG.END_COLOR,
-                  borderRadius: 10,
+                  width: 30,
+                  height: 24,
+                  borderRadius: 15,
                 }}>
-                <Text style={{fontSize: 12, color: THEME.WHITE, padding: 5}}>
-                  {chatRequestCount}
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: THEME.WHITE,
+                  }}>
+                  {chatRequestCount >= 100 ? '99+' : chatRequestCount}
                 </Text>
               </View>
             ) : null}
