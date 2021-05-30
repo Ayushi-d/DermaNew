@@ -9,15 +9,15 @@ import DermaBackground from '../general/background';
 import {GradientText} from '../general/gradientText';
 import countryData from '../../assets/data/countryCodes.json';
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
+let countryCodes = [{name: 'ISD', value: 'ISD', code: 'ISD'}, ...countryData];
 
-const PhoneJSX = props => (
+const PhoneJSX = (props) => (
   <DermaBackground style={{padding: 20}}>
     <Loader isVisible={props.loading} />
     <View
       style={style.phoneLogin}
       onStartShouldSetResponder={() => Keyboard.dismiss()}
-      behavior="padding"
-    >
+      behavior="padding">
       <View>
         <GradientText text={'MOBILE NUMBER'} />
       </View>
@@ -26,7 +26,7 @@ const PhoneJSX = props => (
         <View style={style.inputs} onStartShouldSetResponder={() => true}>
           <CountryDrop
             style={{width: '20%', height: 40}}
-            data={countryData}
+            data={countryCodes}
             defaultValue={props.defaultCode}
             pushChange={props.codeChange}
           />
@@ -42,8 +42,7 @@ const PhoneJSX = props => (
           colors={GRCOLOR}
           style={style.button}
           start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-        >
+          end={{x: 1, y: 0}}>
           <TouchableOpacity
             onPress={props._onPress}
             style={{
@@ -51,8 +50,7 @@ const PhoneJSX = props => (
               justifyContent: 'center',
               width: '100%',
               alignItems: 'center',
-            }}
-          >
+            }}>
             <Text style={{color: THEME.WHITE}}>CONTINUE</Text>
           </TouchableOpacity>
         </LinearGradient>

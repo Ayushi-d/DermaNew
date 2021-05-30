@@ -24,6 +24,7 @@ const reasons = [
   {value: 'Photos are fake or obscene'},
   {value: 'Has Sent abusive/ offensive messages'},
   {value: 'Using multiple profile'},
+  {value: 'Already Married'},
   {value: 'Asking for money / scammer'},
   {value: 'Other Misuse reason'},
 ];

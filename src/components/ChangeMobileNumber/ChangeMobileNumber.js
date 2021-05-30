@@ -21,6 +21,7 @@ import style from './style';
 import PhoneJSX from './PhoneJSX';
 import database from '@react-native-firebase/database';
 import SettingsHeader from '../Headers/SettingsHeader';
+import {Alert} from 'react-native';
 
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
@@ -54,7 +55,11 @@ class ChangeMobileNumberJSX extends React.Component {
     this.setState({code: text});
   };
 
-  loginWithOtp = () => {
+  loginWithOtp = async () => {
+    if (this.state.code === 'ISD') {
+      alert('Please Select Your Country Code');
+      return;
+    }
     if (this.state.phoneNumber == '') {
       alert('Please Enter Phone Number');
       return;
@@ -62,6 +67,23 @@ class ChangeMobileNumberJSX extends React.Component {
     this.setState({loading: true, otp: new Array(6).fill('')});
 
     let phone = this.state.code + this.state.phoneNumber;
+
+    let check = await database()
+      .ref(`Users`)
+      .orderByChild('cn')
+      .equalTo(phone)
+      .once('value')
+      .catch((err) => {
+        console.log('ChangeMobileNumber.js: loginWithOtp: err: ', err);
+        this.setState({loading: false});
+        Alert.alert('Something Went Wrong!');
+      });
+    if (check.exists()) {
+      Alert.alert('Phone Number already linked to another account!');
+      this.setState({loading: false});
+
+      return;
+    }
 
     auth()
       .verifyPhoneNumber(phone)
