@@ -41,12 +41,14 @@ the user remains in full control of the account.
 
 **Q: How Derma Cupid keeps spammers and fraud people away?**
 
-A: Email verification is mandatory for all the users. Also, at the time
-of sign up, user has to verify either mobile number or Facebook. The
-dedicated team of moderators screens each and every user and monitor
-their activities constantly and remove profiles which do not comply with
-our _terms of use_ and _community guidelines_. In short, we do hate spammers
-as much as you do.
+A: At the time of sign up, the user has to either link the mobile number or 
+Facebook account. Also, we encourage users to verify their email address and 
+upload any of the credible photo ID. The dedicated team of moderators screens 
+each and every user and monitors their activities constantly and removes 
+profiles which do not comply with our _terms of use_ and _community guidelines_ here. 
+Also, the app users got the option to report a profile for any sort of misuse 
+and alert us. In short, we do hate spammers as much as you do.
+
 
 **Q: How to get the right match?**
 
@@ -99,18 +101,6 @@ to your mobile phone number. This verification process helps to create a
 verified profile. Most importantly, we will never share your mobile
 phone number with other users.
 
-**Q: is Email address verification mandatory?**
-
-A: Yes. At the time of sign up, you are asked to enter a valid email
-address and before you can start using our platform, it is mandatory to
-verify that email address. It helps us to ensure that the email address
-belongs to you. This email address is linked to your account as a unique
-identity and it is not allowed to create another account with the same
-email address. Moreover, we will use it to communicate with you
-regarding your account activity and troubleshooting.
-
-Don't worry, we will never share your email address with other users.
-
 **Q: Is my private information (Email, Phone number, Facebook details)
 safe?**
 
@@ -128,6 +118,15 @@ of other users is free of cost.
 However, to avail certain value-added features such as initiating a personalized chat message
 with other users would require a premium membership. To know more about the benefits of
 premium membership, please visit the ‘Membership’ page in the navigation menu.
+
+**Q: After taking premium membership, if I send a chat message to another user, will that 
+user be able to reply to me as a free member?
+
+A: Yes, that user will be able to reply back to your chat message as a free member because 
+premium membership is required only to initiate a chat. To reply back to a chat request, 
+premium membership is not required. Also, chatting between two users requires one of them 
+to be a premium member. 
+
 
 **Q: What are the different premium membership subscription plans?**
 
@@ -297,6 +296,13 @@ only after viewing their full profile details.
 
 A: Likes and Chat requests from users who do NOT fit into your partner
 preference criteria would be shown in the 'Filtered Out' folder.
+
+**Q: I have declined a chat request. How to reply back to that chat request? 
+
+A: In the navigation menu, click on the ‘Declined users’ option to open the 
+‘Declined by me’ page. Select the entry that you are looking for and click on 
+the ‘Reply’ button to respond back. 
+
 
 **Q: I have sent many Likes and Chat requests, but not getting
 responses. Why so?**

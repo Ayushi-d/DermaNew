@@ -9,7 +9,6 @@ import SettingsHeader from '../Headers/SettingsHeader';
 
 class FAQ extends React.Component {
   navigateTo = (screen) => {
-    console.log(screen);
     this.props.navigation.navigate(screen);
   };
 
