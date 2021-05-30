@@ -92,13 +92,13 @@ const data = [
       this.navigateTo('TermsofUse');
     },
   ],
-  [
-    'Delete',
-    del,
-    function () {
-      this.props.navigation.navigate('Delete');
-    },
-  ],
+  // [
+  //   'Delete',
+  //   del,
+  //   function () {
+  //     this.props.navigation.navigate('Delete');
+  //   },
+  // ],
   // [
   //   'Check for updates',
   //   update,
@@ -170,11 +170,32 @@ class SettingsJSX extends React.Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 50}}
           ListFooterComponent={
-            <DEFAULT_BUTTON
-              text={'LOG OUT'}
-              style={{alignSelf: 'center', marginTop: 20}}
-              _onPress={this.logout}
-            />
+            <>
+              <DEFAULT_BUTTON
+                text={'LOG OUT'}
+                style={{alignSelf: 'center', marginTop: 20}}
+                _onPress={this.logout}
+              />
+              <TouchableOpacity
+                style={{
+                  marginTop: 45,
+                  padding: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => this.props.navigation.navigate('Delete')}>
+                <Text
+                  style={{
+                    textDecorationStyle: 'solid',
+                    textDecorationLine: 'underline',
+                    textDecorationColor: '#0066cc',
+                    color: '#0066cc',
+                    fontSize: 17,
+                  }}>
+                  DELETE PROFILE
+                </Text>
+              </TouchableOpacity>
+            </>
           }
         />
         {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}

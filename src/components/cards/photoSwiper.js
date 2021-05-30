@@ -19,8 +19,12 @@ import THEME from '../../config/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageFullScreen from '../modals/ImageFullScreen';
 // import {withNavigation} from 'react-navigation';
-
+import FastImage from 'react-native-fast-image';
 import ViewPager from '@react-native-community/viewpager';
+
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 const DUMMY_DP =
   'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
@@ -242,7 +246,7 @@ class PhotoSwiper extends React.Component {
               onPress={() => {
                 if (this.state.dragging == 'idle') this.showImageFullScreen();
               }}>
-              <Image
+              {/* <Image
                 source={{uri: url}}
                 style={{
                   width: width * 0.8,
@@ -250,7 +254,8 @@ class PhotoSwiper extends React.Component {
                   aspectRatio: 3 / 2,
                   borderRadius: 3,
                 }}
-              />
+              /> */}
+              <CardImage source={{uri: url}} />
             </TouchableWithoutFeedback>
           ))}
         </ViewPager>
@@ -270,6 +275,68 @@ class PhotoSwiper extends React.Component {
             index={this.state.index}
           />
         ) : null}
+      </View>
+    );
+  }
+}
+
+class CardImage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+    this._isMounted = false;
+  }
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  render() {
+    return (
+      <View
+        style={{
+          width: width * 0.8,
+          height: width,
+          borderRadius: 5,
+          // overflow: 'hidden',
+        }}>
+        {!this.state.loaded ? (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 200,
+            }}>
+            <ShimmerPlaceholder
+              style={{
+                width: width * 0.8,
+                height: width,
+              }}
+            />
+          </View>
+        ) : null}
+
+        <FastImage
+          source={{uri: this.props.source.uri}}
+          style={{
+            width: width * 0.8,
+            height: width,
+            // aspectRatio: 3 / 2,
+            borderRadius: 5,
+            backgroundColor: '#000',
+          }}
+          resizeMode={FastImage.resizeMode.contain}
+          onLoadStart={() => this._isMounted && this.setState({loaded: false})}
+          onLoadEnd={() => this._isMounted && this.setState({loaded: true})}
+        />
       </View>
     );
   }
