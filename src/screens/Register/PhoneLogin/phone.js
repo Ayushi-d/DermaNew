@@ -185,6 +185,8 @@ export default class Phone extends React.Component {
     let {otp} = this.state;
     if (otp.length != 6) {
       alert('OTP SHOULD BE OF 6 DIGIT');
+      this.setState({loading: false});
+
       return 0;
     }
 

@@ -19,19 +19,18 @@ import THEME from '../../config/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageFullScreen from '../modals/ImageFullScreen';
 // import {withNavigation} from 'react-navigation';
-import FastImage from 'react-native-fast-image';
+
 import ViewPager from '@react-native-community/viewpager';
-
-import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
-
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 
 const DUMMY_DP =
   'https://firebasestorage.googleapis.com/v0/b/derma-cupid.appspot.com/o/images%2FNew%20User%2FProfile-ICon.png?alt=media&token=3a84752a-9c6e-4dcd-b31a-aec8675d55c1';
 
+import FastImage from 'react-native-fast-image';
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+
+const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
 class PhotoSwiper extends React.Component {
   scrollX = new Animated.Value(0);
 
@@ -255,7 +254,22 @@ class PhotoSwiper extends React.Component {
                   borderRadius: 3,
                 }}
               /> */}
-              <CardImage source={{uri: url}} />
+              <View style={{width: width * 0.8}}>
+                {/* <FastImage
+                  source={{uri: url}}
+                  style={{
+                    width: '100%',
+                    height: width * 0.8,
+                    resizeMode: 'contain',
+                    aspectRatio: 3 / 2,
+                    borderRadius: 3,
+                    backgroundColor: '#fff',
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                /> */}
+
+                <CardImage source={{uri: url}} />
+              </View>
             </TouchableWithoutFeedback>
           ))}
         </ViewPager>
@@ -313,7 +327,6 @@ class CardImage extends React.PureComponent {
               left: 0,
               right: 0,
               bottom: 0,
-              zIndex: 200,
             }}>
             <ShimmerPlaceholder
               style={{
@@ -328,12 +341,11 @@ class CardImage extends React.PureComponent {
           source={{uri: this.props.source.uri}}
           style={{
             width: width * 0.8,
-            height: width,
+            height: width * 0.8,
             // aspectRatio: 3 / 2,
             borderRadius: 5,
-            backgroundColor: '#000',
           }}
-          resizeMode={FastImage.resizeMode.contain}
+          resizeMode={FastImage.resizeMode.cover}
           onLoadStart={() => this._isMounted && this.setState({loaded: false})}
           onLoadEnd={() => this._isMounted && this.setState({loaded: true})}
         />

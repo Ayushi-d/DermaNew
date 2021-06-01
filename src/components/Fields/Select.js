@@ -9,7 +9,7 @@ class Select extends React.Component {
     super(props);
   }
 
-  parseValue = value => {
+  parseValue = (value) => {
     if (value === 1) {
       return 'Show my name';
     }
@@ -48,8 +48,7 @@ class Select extends React.Component {
                   ? 'transparent'
                   : THEME.WHITE,
               },
-            ]}
-          >
+            ]}>
             {this.props.label}
           </Text>
         ) : null}
@@ -62,7 +61,7 @@ class Select extends React.Component {
     );
   };
 
-  _handleChange = val => {
+  _handleChange = (val) => {
     let value = val;
     if (this.props.parseData) {
       value = this.props.parseData[val];
@@ -87,7 +86,7 @@ class Select extends React.Component {
           onChangeText={this._handleChange}
           disabled={this.props.disabled ? true : false}
           pickerStyle={{
-            maxHeight: 200,
+            maxHeight: 500,
           }}
         />
       </View>

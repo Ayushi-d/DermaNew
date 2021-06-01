@@ -1,16 +1,12 @@
 import React from 'react';
 import {
-  ScrollView,
   View,
   Text,
   StyleSheet,
-  Image,
   TextInput,
   TouchableOpacity,
   Keyboard,
-  Picker,
-  KeyboardAvoidingView,
-  Modal,
+  Alert,
 } from 'react-native';
 import DermaBackground from '../general/background';
 import THEME from '../../config/theme';
@@ -25,6 +21,10 @@ import Snackbar from 'react-native-snackbar';
 import {Loader} from '../modals';
 import LinkAccount from '../../helpers/linkAccount';
 import Header from '../Headers/SettingsHeader';
+
+import database from '@react-native-firebase/database';
+
+let countryCodes = [{name: 'ISD', value: 'ISD', code: 'ISD'}, ...countryData];
 
 const GRCOLOR = [...THEME.GRADIENT_BG.PAIR].reverse();
 
@@ -58,14 +58,35 @@ class VerifyPhoneJSX extends React.Component {
     this.setState({code: text});
   };
 
-  loginWithOtp = () => {
-    this.setState({loading: true, otp: new Array(6).fill('')});
+  loginWithOtp = async () => {
+    if (this.state.code === 'ISD') {
+      alert('Please Select Your Country Code');
+      return;
+    }
     if (this.state.phoneNumber == '') {
       alert('Please Enter Phone Number');
       return;
     }
+    this.setState({loading: true, otp: new Array(6).fill('')});
 
     let phone = this.state.code + this.state.phoneNumber;
+
+    let check = await database()
+      .ref(`Users`)
+      .orderByChild('cn')
+      .equalTo(phone)
+      .once('value')
+      .catch((err) => {
+        console.log('ChangeMobileNumber.js: loginWithOtp: err: ', err);
+        this.setState({loading: false});
+        Alert.alert('Something Went Wrong!');
+      });
+    if (check.exists()) {
+      Alert.alert('Phone Number already linked to another account!');
+      this.setState({loading: false});
+
+      return;
+    }
 
     auth()
       .verifyPhoneNumber(phone)
@@ -92,6 +113,7 @@ class VerifyPhoneJSX extends React.Component {
     let otp = [...this.state.otp].join('');
     if (otp.length != 6) {
       alert('OTP SHOULD BE OF 6 DIGIT');
+      this.setState({loading: false});
       return 0;
     }
 
@@ -237,7 +259,7 @@ const PhoneJSX = (props) => (
         <View style={style.inputs} onStartShouldSetResponder={() => true}>
           <CountryDrop
             style={{width: '20%', height: 40}}
-            data={countryData}
+            data={countryCodes}
             defaultValue={props.defaultCode}
             pushChange={props.codeChange}
           />

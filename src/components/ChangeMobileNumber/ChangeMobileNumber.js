@@ -179,6 +179,7 @@ class ChangeMobileNumberJSX extends React.Component {
     let otp = [...this.state.otp].join('');
     if (otp.length != 6) {
       alert('OTP SHOULD BE OF 6 DIGIT');
+      this.setState({loading: false});
       return 0;
     }
 

@@ -236,7 +236,11 @@ function DefaultItem(props) {
           ]}>
           {text}
         </Text>
-        {msgsCount ? <Text style={style.notification}>{msgsCount}</Text> : null}
+        {msgsCount ? (
+          <Text style={style.notification}>
+            {msgsCount >= 100 ? '99+' : msgsCount}
+          </Text>
+        ) : null}
       </TouchableOpacity>
     </View>
   );
@@ -366,7 +370,9 @@ function RenderExpanded(props) {
                       {data}
                     </Text>
                     {cNoti ? (
-                      <Text style={style.notification}>{cNoti}</Text>
+                      <Text style={style.notification}>
+                        {cNoti >= 100 ? '99+' : cNoti}
+                      </Text>
                     ) : null}
                   </TouchableOpacity>
                 </View>
@@ -438,9 +444,9 @@ const style = StyleSheet.create({
   notification: {
     color: THEME.WHITE,
     backgroundColor: THEME.GRADIENT_BG.END_COLOR,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 30,
+    height: 22,
+    borderRadius: 15,
     fontSize: 10,
     textAlign: 'center',
     textAlignVertical: 'center',
