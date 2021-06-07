@@ -95,7 +95,7 @@ class RootNav extends React.Component {
     this._isMounted = false;
     this._msgListeners = [];
     this.appState = AppState.currentState;
-    this.appversion = '1.5.1';
+    this.appversion = '1.5.2';
   }
 
   componentDidMount() {
@@ -259,7 +259,8 @@ class RootNav extends React.Component {
       if (dt.getTime() <= cDt.getTime()) {
         console.log('membership over!');
         database()
-          .ref(`Users/${user.uid}/prem/`)
+          .ref(`Users/${user.uid}`)
+          .child('prem')
           .child('up')
           .set(false)
           .catch((err) => console.log('rootNav.js err _checkPrem: ', err));
@@ -705,7 +706,6 @@ class RootNav extends React.Component {
 
   render() {
     let {loginCheck, isLoggedIn, user, updatedversion, url} = this.state;
-    console.log(updatedversion);
     if (!updatedversion) {
       return <UpdateModal visible={!updatedversion} url={url} />;
     }

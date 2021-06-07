@@ -319,7 +319,7 @@ class CardImage extends React.PureComponent {
           borderRadius: 5,
           // overflow: 'hidden',
         }}>
-        {!this.state.loaded ? (
+        {/* {!this.state.loaded ? (
           <View
             style={{
               position: 'absolute',
@@ -335,7 +335,7 @@ class CardImage extends React.PureComponent {
               }}
             />
           </View>
-        ) : null}
+        ) : null} */}
 
         <FastImage
           source={{uri: this.props.source.uri}}

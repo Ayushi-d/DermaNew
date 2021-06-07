@@ -17,7 +17,7 @@ class PP {
       console.log('fistCall');
       let snap = await this.users
         .orderByChild('cat')
-        .limitToLast(200)
+        .limitToLast(700)
         .once('value');
 
       let dat = snap.val();
@@ -38,7 +38,7 @@ class PP {
       let snap = await this.users
         .orderByChild('cat')
         .endAt(lastItem)
-        .limitToLast(200)
+        .limitToLast(700)
         .once('value');
 
       let dat = snap.val();
