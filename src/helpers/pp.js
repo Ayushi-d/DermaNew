@@ -13,9 +13,8 @@ class PP {
     this.userRet = {};
   }
 
-  _getUsers = async (lastItem, fromSearch) => {
+  callUsers = async (lastItem, fromSearch) => {
     if (!lastItem) {
-      console.log('fistCall');
       let snap = await this.users
         .orderByChild('cat')
         .limitToLast(50)
@@ -32,16 +31,7 @@ class PP {
         let it = dat[ks[ks.length - 1]];
         lItem = it ? it.cat : '';
       }
-
-      let gUserC = Object.keys(new_data).length;
-      if (gUserC >= 10) {
-        this.userRet = {};
-        return {users: new_data, lItem};
-      } else {
-        this.userRet = new_data;
-        console.log('firstCall moreData');
-        return this._getUsers(lItem, true);
-      }
+      return {new_data, lItem};
     } else {
       let snap = await this.users
         .orderByChild('cat')
@@ -60,25 +50,34 @@ class PP {
         let it = dat[ks[ks.length - 1]];
         lItem = it ? it.cat : '';
       }
+      let finished = Object.keys(dat).length < 50;
 
-      let all_users = {...this.userRet, ...new_data};
+      return {new_data, lItem, finished};
+    }
+  };
 
-      let gUserC = Object.keys(all_users).length;
+  _getUsers = async (lastItem, fromSearch) => {
+    let userRet = {};
+    let lItem = lastItem;
+    let searchLoopCount = 0;
+    while (searchLoopCount <= 30) {
+      let data = await this.callUsers(lItem);
+      let new_data = data.new_data;
+      lItem = data.lItem;
 
-      if (Object.keys(dat).length < 50) {
-        this.userRet = {};
-        return {users: all_users, lItem};
-      }
+      userRet = {...userRet, ...new_data};
+
+      let gUserC = Object.keys(userRet).length;
 
       if (gUserC >= 10) {
-        this.userRet = {};
-        return {users: all_users, lItem};
-      } else {
-        this.userRet = new_data;
-        console.log('lItem: more data: ');
-        return this._getUsers(lItem, true);
+        break;
+      } else if (data.finished) {
+        break;
       }
+      searchLoopCount++;
     }
+
+    return {users: userRet, lItem};
   };
 
   getUsers = async () => {
