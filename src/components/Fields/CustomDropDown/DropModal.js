@@ -29,6 +29,14 @@ class DropModal extends React.Component {
     }
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(nextProps) === JSON.stringify(this.props)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   render() {
     return (
       <ReactNativeModal

@@ -10,6 +10,7 @@ class PP {
     this.users = database().ref('Users');
     this.numOfItem = numOfItem;
     this.user = user;
+    this.userRet = {};
   }
 
   _getUsers = async (lastItem, fromSearch) => {
@@ -17,7 +18,7 @@ class PP {
       console.log('fistCall');
       let snap = await this.users
         .orderByChild('cat')
-        .limitToLast(700)
+        .limitToLast(50)
         .once('value');
 
       let dat = snap.val();
@@ -32,13 +33,20 @@ class PP {
         lItem = it ? it.cat : '';
       }
 
-      return {users: new_data, lItem};
+      let gUserC = Object.keys(new_data).length;
+      if (gUserC >= 10) {
+        this.userRet = {};
+        return {users: new_data, lItem};
+      } else {
+        this.userRet = new_data;
+        console.log('firstCall moreData');
+        return this._getUsers(lItem, true);
+      }
     } else {
-      console.log('newCall: ', lastItem);
       let snap = await this.users
         .orderByChild('cat')
         .endAt(lastItem)
-        .limitToLast(700)
+        .limitToLast(50)
         .once('value');
 
       let dat = snap.val();
@@ -53,8 +61,23 @@ class PP {
         lItem = it ? it.cat : '';
       }
 
-      // console.log('newcCall: ', snap.val());
-      return {users: new_data, lItem};
+      let all_users = {...this.userRet, ...new_data};
+
+      let gUserC = Object.keys(all_users).length;
+
+      if (Object.keys(dat).length < 50) {
+        this.userRet = {};
+        return {users: all_users, lItem};
+      }
+
+      if (gUserC >= 10) {
+        this.userRet = {};
+        return {users: all_users, lItem};
+      } else {
+        this.userRet = new_data;
+        console.log('lItem: more data: ');
+        return this._getUsers(lItem, true);
+      }
     }
   };
 
@@ -195,7 +218,6 @@ class PP {
     if (user.g == data.g) {
       return false;
     }
-    console.log(data.rl, rl);
 
     if (!sc.includes(data.sc) && preference.sc != "Doesn't matter") {
       return false;
