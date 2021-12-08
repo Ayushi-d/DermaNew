@@ -429,12 +429,15 @@ export default class ChatRqsts extends React.Component {
       data = rqsts.filter((r) => r.type === 'filtered');
     }
 
+    console.log('my chat data is', data)
+
     return (
       <View style={styles.container}>
         <Header title={'Chat Requests'} type {...this.props} />
         {this._renderTab()}
         <FlatList
           data={data}
+          extraData={data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderCard}
           style={{flex: 1}}

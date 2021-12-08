@@ -34,7 +34,7 @@ class UserInterectionProvider extends React.Component {
       this.uid = auth().currentUser.uid;
       // console.log(this.uid);
       this.currentUserRef = database().ref('Users/' + this.uid);
-      this.userBase = database().ref('Users');
+      this.userBase = database().ref('Users')
       this.getUserLikeData();
       this.childRemoved();
     }
@@ -121,6 +121,7 @@ class UserInterectionProvider extends React.Component {
             let userData = await this.userBase.child(res.key).once('value');
 
             let oUser = userData.val();
+            console.log('o value', oUser);
 
             let lt = {...this.state.lt};
             if (this.state.lbu_data) {

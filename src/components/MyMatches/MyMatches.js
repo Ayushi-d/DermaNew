@@ -185,6 +185,7 @@ class MyMatchesJSX extends React.Component {
   };
 
   refreshList = async () => {
+    console.log('helooo')
     let {user} = this.props.context;
     this.setState({refreshing: true, data: {}}, async () => {
       this.pp = new PP(2, this.props.context.user || {});
@@ -252,6 +253,7 @@ class MyMatchesJSX extends React.Component {
     return (
       <FlatList
         data={sortedKeys}
+        extraData={sortedKeys}
         renderItem={({item}) => (
           <Cards
             data={data[item]}
@@ -266,7 +268,7 @@ class MyMatchesJSX extends React.Component {
         )}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={this.loadMore}
-        onEndReachedThreshold={0.03}
+        onEndReachedThreshold={0.02}
         refreshing={this.state.refreshing}
         ListFooterComponent={this.renderFooter}
         showsVerticalScrollIndicator={false}
@@ -310,6 +312,7 @@ class MyMatchesJSX extends React.Component {
   };
 
   render() {
+    console.log('render');
     return (
       <View style={{flex: 1}}>
         <HeaderMain routeName="My Matches" {...this.props} />

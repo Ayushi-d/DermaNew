@@ -228,14 +228,14 @@ function RenderChat(props) {
               style={{...styles.name, fontWeight: unRead ? 'bold' : 'normal'}}>
               {cUser.sn}
             </Text>
-            <View style={styles.tScore}>
-              <Text style={styles.tScoreTxt}>Trust Score</Text>
-              <LinearGradient
-                colors={THEME.GRADIENT_BG.PAIR}
-                style={styles.tScoreCount}>
-                <Text style={styles.tScoreCountTxt}>{cUser.ts.ts}%</Text>
-              </LinearGradient>
-            </View>
+            {/*<View style={styles.tScore}>*/}
+            {/*  <Text style={styles.tScoreTxt}>Trust Score</Text>*/}
+            {/*  <LinearGradient*/}
+            {/*    colors={THEME.GRADIENT_BG.PAIR}*/}
+            {/*    style={styles.tScoreCount}>*/}
+            {/*    <Text style={styles.tScoreCountTxt}>{cUser.ts.ts}%</Text>*/}
+            {/*  </LinearGradient>*/}
+            {/*</View>*/}
             <Text style={styles.cTime}>
               {moment(new Date(lm.tp * 1000)).calendar()}
             </Text>

@@ -82,6 +82,7 @@ class Phone extends React.Component {
       .on(
         'state_changed',
         (phoneAuthSnapshot) => {
+          console.log('phoneAuthSnapshot: ', phoneAuthSnapshot);
           console.log('state: ', phoneAuthSnapshot.state);
           switch (phoneAuthSnapshot.state) {
             // ------------------------
@@ -174,6 +175,7 @@ class Phone extends React.Component {
   };
 
   confirmOtp = () => {
+    console.log('call otp')
     this.setState({loading: true});
     let otp = [...this.state.otp].join('');
     if (otp.length != 6) {
@@ -185,10 +187,13 @@ class Phone extends React.Component {
       this.state.verificationId,
       otp,
     );
+
+    console.log('credential', credential)
     firebase
       .auth()
       .signInWithCredential(credential)
       .then((res) => {
+        console.log('res from firebase', res)
         let {displayName, email, uid, providerId} = res.user;
         let phone = res.user.phoneNumber;
 
@@ -196,12 +201,14 @@ class Phone extends React.Component {
           .setData({providerId, displayName, email, uid, phone})
           .then((result) => {
             this.setState({loading: false});
+            console.log('result', result);
 
             if (result.isDeleted) {
               alert('Your profile has been under deletion process.');
               auth()
                 .signOut()
                 .then((res) => {
+                  console.log('pop', res)
                   this.props.navigation.pop();
                 });
               return;
@@ -213,9 +220,12 @@ class Phone extends React.Component {
                 phoneNumber: phone,
               });
             }
-          });
+          }).catch((error) => {
+            console.log('props context', error)
+        })
       })
       .catch((err) => {
+        console.log('error in call', err)
         this.setState({loading: false});
         if (err.code == 'auth/invalid-verification-code') {
           alert('Incorrect verification code.');

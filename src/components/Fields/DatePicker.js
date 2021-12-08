@@ -106,6 +106,7 @@ class DatePick extends React.Component {
         <TouchableOpacity
           style={style.inputContainer}
           onPress={this._showModal}
+          disabled={this.props.disabled}
         >
           <TextInput
             style={[
@@ -114,13 +115,16 @@ class DatePick extends React.Component {
                 backgroundColor: this.props.disabled
                   ? THEME.DISABLED
                   : THEME.WHITE,
+                color: THEME.PARAGRAPH,
               },
             ]}
             value={this.state.value}
             editable={false}
             placeholder={'Select'}
           />
-          <Image source={Drop} style={style.drop} />
+          {!this.props.notShowDrop &&
+             <Image source={Drop} style={style.drop} />
+          }
           <Text
             style={[
               style.label,

@@ -121,10 +121,12 @@ class Chat extends React.Component {
     if (!data) return null;
 
     if (Object.keys(data).length == 0) return null;
+    console.log('chat req', Object.keys(data))
 
     return (
       <FlatList
         data={Object.keys(data)}
+        extraData={Object.keys(data)}
         renderItem={({item}) => {
           let likesMe = likes.indexOf(data[item].user_data.uid);
           if (likesMe > -1) {

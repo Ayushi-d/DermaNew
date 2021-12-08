@@ -20,13 +20,13 @@ class EditProfileJSX extends React.Component {
     let state = {};
 
     this.items.map(
-      (item) =>
-        (state[item.name] = getData(
-          this.props.context.user,
-          item.label,
-          false,
-          true,
-        )),
+        (item) =>
+            (state[item.name] = getData(
+                this.props.context.user,
+                item.label,
+                false,
+                true,
+            )),
     );
 
     this.state = {values: {...state}, error: {}, s: [], ct: [], loading: false};
@@ -42,7 +42,7 @@ class EditProfileJSX extends React.Component {
   alertAboutMe = () => {
     if (this.data == 'About Me') {
       alert(
-        'Profile bio has been updated successfully.\nIt will go live after admin approval.',
+          'Profile bio has been updated successfully.\nIt will go live after admin approval.',
       );
     } else {
       return;
@@ -70,18 +70,18 @@ class EditProfileJSX extends React.Component {
 
   stateData = (data) => {
     Country.getStates(data)
-      .then((res) => {
-        this.setState({s: res, loading: false});
-      })
-      .catch((err) => {});
+        .then((res) => {
+          this.setState({s: res, loading: false});
+        })
+        .catch((err) => {});
   };
 
   cityData = (data) => {
     Country.getCities(data)
-      .then((res) => {
-        this.setState({ct: res, loading: false});
-      })
-      .catch((err) => {});
+        .then((res) => {
+          this.setState({ct: res, loading: false});
+        })
+        .catch((err) => {});
   };
 
   formatData = (data) => {
@@ -119,13 +119,13 @@ class EditProfileJSX extends React.Component {
     this.setState({error}, () => {
       if (Object.keys(error).length == 0) {
         this.props.context
-          .saveToFirebase({...this.state.values})
-          .then((res) => {
-            this.setState({loading: true}, () => {
-              this.alertAboutMe();
-              this.goback();
+            .saveToFirebase({...this.state.values})
+            .then((res) => {
+              this.setState({loading: true}, () => {
+                this.alertAboutMe();
+                this.goback();
+              });
             });
-          });
       } else {
         this.setState({loading: false});
       }
@@ -133,54 +133,60 @@ class EditProfileJSX extends React.Component {
   };
 
   renderItems = () => {
-    return this.items.map((item) =>
-      item.name == 'rl' ? (
-        this.props.context.user && this.props.context.user.rle == 1 ? (
-          <item.DISABLED_COMPONENT
-            label={item.label}
-            data={this.formatData(
-              item.fetchFromServer ? this.state[item.name] : item.data,
-            )}
-            key={item.name}
-            name={item.name}
-            error={this.state.error[item.name]}
-            pushChange={this._pushChange}
-            value={this.state.values[item.name]}
-            dropDownPosition={item.dropDownPosition}
-            disabled={true}
-          />
-        ) : (
-          <item.component
-            label={item.label}
-            data={this.formatData(
-              item.fetchFromServer ? this.state[item.name] : item.data,
-            )}
-            key={item.name}
-            name={item.name}
-            error={this.state.error[item.name]}
-            pushChange={this._pushChange}
-            value={this.state.values[item.name]}
-            dropDownPosition={item.dropDownPosition}
-            disabled={item.disabled}
-            parseData={item.parseData}
-          />
-        )
-      ) : (
-        <item.component
-          label={item.label}
-          data={this.formatData(
-            item.fetchFromServer ? this.state[item.name] : item.data,
-          )}
-          key={item.name}
-          name={item.name}
-          error={this.state.error[item.name]}
-          pushChange={this._pushChange}
-          value={this.state.values[item.name]}
-          dropDownPosition={item.dropDownPosition}
-          disabled={item.disabled}
-          parseData={item.parseData}
-        />
-      ),
+    return this.items.map((item) => {
+          console.log('item.name', item)
+          return (
+              item.name == 'rl' ? (
+                  this.props.context.user && this.props.context.user.rle == 1 ? (
+                      <item.DISABLED_COMPONENT
+                          label={item.label}
+                          data={this.formatData(
+                              item.fetchFromServer ? this.state[item.name] : item.data,
+                          )}
+                          key={item.name}
+                          name={item.name}
+                          error={this.state.error[item.name]}
+                          pushChange={this._pushChange}
+                          value={this.state.values[item.name]}
+                          dropDownPosition={item.dropDownPosition}
+                          disabled={true}
+                      />
+                  ) : (
+                      <item.component
+                          label={item.label}
+                          data={this.formatData(
+                              item.fetchFromServer ? this.state[item.name] : item.data,
+                          )}
+                          key={item.name}
+                          name={item.name}
+                          error={this.state.error[item.name]}
+                          pushChange={this._pushChange}
+                          value={this.state.values[item.name]}
+                          dropDownPosition={item.dropDownPosition}
+                          disabled={item.disabled}
+                          parseData={item.parseData}
+                      />
+                  )
+              ) : (
+                  <item.component
+                      label={item.label}
+                      data={this.formatData(
+                          item.fetchFromServer ? this.state[item.name] : item.data,
+                      )}
+                      key={item.name}
+                      name={item.name}
+                      error={this.state.error[item.name]}
+                      pushChange={this._pushChange}
+                      value={this.state.values[item.name]}
+                      dropDownPosition={item.dropDownPosition}
+                      disabled={item.disabled}
+                      parseData={item.parseData}
+                      notShowDrop={true}
+                      notShowDropImage={item.name === 'sc' || item.name === 'ms'}
+                  />
+              )
+          )
+        }
     );
   };
 
@@ -190,47 +196,47 @@ class EditProfileJSX extends React.Component {
 
   renderTopText = () => {
     return !topText[this.data] ? null : (
-      <View style={style.top}>
-        <Text style={[style.topText, {color: THEME.ERROR_REG}]}>
-          {topText[this.data]}
-        </Text>
-      </View>
+        <View style={style.top}>
+          <Text style={[style.topText, {color: THEME.ERROR_REG}]}>
+            {topText[this.data]}
+          </Text>
+        </View>
     );
   };
 
   render() {
     return (
-      <>
-        <Header title={'Edit Profile'} {...this.props} />
-        <View
-          style={{flex: 1, padding: 20}}
-          showsVerticalScrollIndicator={false}>
-          <ScrollView
-            style={style.shadowBox}
-            keyboardShouldPersistTaps={'always'}>
-            {this.renderItems()}
-            <View
-              style={{
-                justifyContent: 'space-around',
-                flexDirection: 'row',
-                marginTop: 20,
-              }}>
-              <DEFAULT_BUTTON
-                text={'SAVE'}
-                style={{width: '40%'}}
-                _onPress={this.saveChanges}
-              />
-              <BUTTON_WITH_PARAM
-                text={'CANCEL'}
-                style={{width: '40%'}}
-                _onPress={this.goback}
-              />
-            </View>
-            <Loader isVisible={this.state.loading} />
-            {this.renderTopText()}
-          </ScrollView>
-        </View>
-      </>
+        <>
+          <Header title={'Edit Profile'} {...this.props} />
+          <View
+              style={{flex: 1, padding: 20}}
+              showsVerticalScrollIndicator={false}>
+            <ScrollView
+                style={style.shadowBox}
+                keyboardShouldPersistTaps={'always'}>
+              {this.renderItems()}
+              <View
+                  style={{
+                    justifyContent: 'space-around',
+                    flexDirection: 'row',
+                    marginTop: 20,
+                  }}>
+                <DEFAULT_BUTTON
+                    text={'SAVE'}
+                    style={{width: '40%'}}
+                    _onPress={this.saveChanges}
+                />
+                <BUTTON_WITH_PARAM
+                    text={'CANCEL'}
+                    style={{width: '40%'}}
+                    _onPress={this.goback}
+                />
+              </View>
+              <Loader isVisible={this.state.loading} />
+              {this.renderTopText()}
+            </ScrollView>
+          </View>
+        </>
     );
   }
 }

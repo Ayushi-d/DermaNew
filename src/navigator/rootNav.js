@@ -46,6 +46,7 @@ import Help from '../components/Setting/help';
 import FAQs from '../components/Setting/faqs';
 import About from '../components/Setting/About';
 import BetterMatches from '../components/Setting/BetterMatches';
+import MultiChoicePickerDisplayScreen from "../screens/MultiplePickerDisplayScreen";
 
 // MemberShip
 import MemberShip from '../components/Membership';
@@ -95,7 +96,7 @@ class RootNav extends React.Component {
     this._isMounted = false;
     this._msgListeners = [];
     this.appState = AppState.currentState;
-    this.appversion = '1.5.2';
+    this.appversion = '1.5.3';
   }
 
   componentDidMount() {
@@ -234,11 +235,17 @@ class RootNav extends React.Component {
       if (p.providerId === 'facebook.com') {
         if (!user.FBurl) {
           console.log('no FB url yet!');
+          console.log('no userr!', user);
+          // database()
+          //   .ref(`Users/${user.uid}`)
+          //   .child('FBurl')
+          //   .set(`https://www.facebook.com/${p.uid}`)
+          //   .catch((err) => console.log('error updating fb profile!: ', err));
           database()
-            .ref(`Users/${user.uid}`)
-            .child('FBurl')
-            .set(`https://www.facebook.com/${p.uid}`)
-            .catch((err) => console.log('error updating fb profile!: ', err));
+              .ref(`Users/${user.uid}`)
+              .child('FBname')
+              .set(p?.displayName)
+              .catch((err) => console.log('error updating fb profile!: ', err));
         }
       }
     });
@@ -813,6 +820,11 @@ function DrawerScreeen(rootProps) {
             <Search root={rootProps} context={rootProps.context} {...props} />
           )}
         </Stack.Screen>
+        <Stack.Screen name="SearchMultiple">
+          {(props) => (
+              <MultiChoicePickerDisplayScreen root={rootProps} context={rootProps.context} {...props} />
+          )}
+        </Stack.Screen>
         <Drawer.Screen name={'Likes'}>
           {(props) => (
             <LikesScreen
@@ -878,16 +890,16 @@ function DrawerScreeen(rootProps) {
           )}
         </Stack.Screen>
 
-        <Stack.Screen name="Help">
-          {(props) => (
-            <Help
-              root={rootProps}
-              context={rootProps.context}
-              type
-              {...props}
-            />
-          )}
-        </Stack.Screen>
+        {/*<Stack.Screen name="Help">*/}
+        {/*  {(props) => (*/}
+        {/*    <Help*/}
+        {/*      root={rootProps}*/}
+        {/*      context={rootProps.context}*/}
+        {/*      type*/}
+        {/*      {...props}*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*</Stack.Screen>*/}
       </Drawer.Navigator>
     </>
   );

@@ -33,10 +33,18 @@ class MultiSelect extends React.Component {
   };
 
   showModal = () => {
+    // this.props.navigation.navigate('SearchMultiple', {
+    //   data: this.props.data,
+    //   title: this.props.label,
+    //   onCancelled: () => this.hideModal,
+    //   value: this.state.value,
+    //   saveChanges: this.pushChange,
+    // })
     this.setState({show: true});
   };
 
   hideModal = () => {
+    // this.props.navigation.goBack();
     this.setState({show: false});
   };
 

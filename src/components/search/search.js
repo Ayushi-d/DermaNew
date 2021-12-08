@@ -53,6 +53,8 @@ class SearchJSX extends React.Component {
   };
 
   _pushChange = (name, value) => {
+    console.log('name * values', name, value)
+    console.log('this.state.values', this.state.values)
     let values = {...this.state.values};
     values[name] = value;
     this.setState({values});
@@ -89,6 +91,7 @@ class SearchJSX extends React.Component {
         dropDownPosition={item.dropDownPosition}
         disabled={item.disabled}
         data={item.data}
+        navigation={this.props.navigation}
       />
     ));
   };

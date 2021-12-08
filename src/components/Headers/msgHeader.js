@@ -184,7 +184,7 @@ export default class MsgHeader extends React.Component {
         {/* <StatusBar barStyle={'light-content'} /> */}
         <BlockModal
           isVisible={blockOpen}
-          userToBlock={oUser.uid}
+          userToBlock={oUser?.uid}
           blockToggle={this._toggleBlockModal}
           {...this.props}
         />

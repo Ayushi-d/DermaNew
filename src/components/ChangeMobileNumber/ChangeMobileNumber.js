@@ -71,6 +71,8 @@ class ChangeMobileNumberJSX extends React.Component {
     let check = await database()
       .ref(`Users`)
       .orderByChild('cn')
+        .limitToFirst(1)
+        .limitToLast(20)
       .equalTo(phone)
       .once('value')
       .catch((err) => {
@@ -280,17 +282,20 @@ class ChangeMobileNumberJSX extends React.Component {
   };
 
   render() {
+    console.log('this.props is', this.props);
     return (
       <>
-        <SettingsHeader title={'Change Mobile Number'} {...this.props} />
+        <SettingsHeader title={'Your Contact Details'} {...this.props} />
         {!this.state.otpsent ? (
           <PhoneJSX
             _onPress={this.loginWithOtp}
             codeChange={this.codeChange}
+            navigation={this.props.navigation}
             onPhoneChange={this.onPhoneChange}
             phoneValue={this.state.phoneNumber}
             defaultCode={this.state.code}
             loading={this.state.loading}
+            mobileNumber={this.props.context.user.cn}
           />
         ) : (
           <DermaBackground style={{padding: 20}}>

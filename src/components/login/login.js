@@ -60,6 +60,7 @@ class Login extends React.Component {
       LoginManager.setLoginBehavior('NATIVE_ONLY');
       result = await LoginManager.logInWithPermissions([
         'public_profile',
+        'user_birthday',
         'email',
       ]);
     } catch (nativeError) {
@@ -67,8 +68,10 @@ class Login extends React.Component {
         LoginManager.setLoginBehavior('WEB_ONLY');
         result = await LoginManager.logInWithPermissions([
           'public_profile',
+          'user_birthday',
           'email',
         ]);
+        console.log('result is', result)
       } catch (webError) {}
     }
     // handle the case that users clicks cancel button in Login view
@@ -79,9 +82,42 @@ class Login extends React.Component {
       });
     } else {
       const accessData = await AccessToken.getCurrentAccessToken();
-      this.firebaseFbAuthentication(accessData.accessToken);
+      // this.firebaseFbAuthentication(accessData.accessToken);
+      this.getInfoFromToken(accessData.accessToken);
     }
   };
+
+  getInfoFromToken = async (token) => {
+    const PROFILE_REQUEST_PARAMS = {
+      fields: {
+        string: 'id, name, first_name, last_name, birthday, email, picture.type(large), link',
+      },
+    };
+    const profileRequest = new GraphRequest(
+        '/me',
+        {token, parameters: PROFILE_REQUEST_PARAMS},
+        async (error, result) => {
+          console.log('result is', result);
+          console.log('error is', error);
+          if (error) {
+            console.log('Login Info has an error:', error);
+          } else {
+            if (result.isCancelled) {
+              console.log('Login cancelled');
+            }
+            console.log('result of fb', result, token);
+            if (result) {
+              const facebookCredential = auth.FacebookAuthProvider.credential(
+                  token,
+              );
+              console.log('facebook credential is', facebookCredential);
+              this.firebaseFbAuthentication(facebookCredential.token)
+            }
+          }
+        },
+    );
+    new GraphRequestManager().addRequest(profileRequest).start();
+  }
 
   firebaseFbAuthentication = (accessToken) => {
     console.log('test!');

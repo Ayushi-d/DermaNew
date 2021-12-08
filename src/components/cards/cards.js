@@ -141,7 +141,8 @@ class Cards extends React.Component {
     return (
       <UNBLOCK_BUTTON
         text={'UNBLOCK'}
-        style={{alignSelf: 'center', marginBottom: 10}}
+        style={{marginBottom: 10, width: 100}}
+        // style={{alignSelf: 'center', marginBottom: 10}}
         _onPress={() => this.props.unblock(this.props.data.uid)}
       />
     );
@@ -265,6 +266,7 @@ class Cards extends React.Component {
   };
 
   navigateToMember = (data) => {
+      console.log('call new data')
     if (!this.props.navigation) {
       return null;
     }
@@ -279,43 +281,45 @@ class Cards extends React.Component {
     });
   };
 
+
+
   render() {
     return this.props.data ? (
-      <TouchableNativeFeedback
-        onPress={() =>
-          this.navigateToMember({
-            data: this.props.data,
-            likesMe: this.props.likesMe,
-            fromPage: this.props.fromPage,
-          })
-        }>
-        <View style={style.cardsContainer}>
-          <PhotoSwiper
-            data={this.props.data}
-            hideBottomRight={this.props.fromLike || this.props.hideButton}
-            hideTopLeft={this.props.hideTrust}
-            hideTopRight={this.props.hideDOB}
-            dateToShow={this.props.dateToShow || null}
-            hideBottomLeft={this.props.hideLike || this.props.fromBlock}
-            likesMe={this.props.likesMe}
-            _navigateToMember={() =>
-              this.navigateToMember({
-                data: this.props.data,
-                likesMe: this.props.likesMe,
-              })
+        <TouchableNativeFeedback
+            onPress={() =>
+                this.navigateToMember({
+                    data: this.props.data,
+                    likesMe: this.props.likesMe,
+                    fromPage: this.props.fromPage,
+                })
             }
-            fromMember={this.props.fromMember}
-            {...this.props}
-          />
-          {this.renderAbout()}
-          {this.props.fromLike ? this.renderLikeAndMessage() : null}
-          {this.props.fromBlock ? this.renderUnblock() : null}
-          {this.props.fromChat || this.props.fromDeclined
-            ? this.renderMessage()
-            : null}
-          <CardBG />
-        </View>
-      </TouchableNativeFeedback>
+        >
+            <View style={style.cardsContainer}>
+                <PhotoSwiper
+                    data={this.props.data}
+                    hideBottomRight={this.props.fromLike || this.props.hideButton}
+                    hideTopLeft={this.props.hideTrust}
+                    hideTopRight={this.props.hideDOB}
+                    dateToShow={this.props.dateToShow || null}
+                    hideBottomLeft={this.props.hideLike || this.props.fromBlock}
+                    likesMe={this.props.likesMe}
+                    _navigateToMember={() =>
+                        this.navigateToMember({
+                            data: this.props.data,
+                            likesMe: this.props.likesMe,
+                        })
+                    }
+                    fromMember={this.props.fromMember}
+                />
+                {this.renderAbout()}
+                {this.props.fromLike ? this.renderLikeAndMessage() : null}
+                {this.props.fromBlock ? this.renderUnblock() : null}
+                {this.props.fromChat || this.props.fromDeclined
+                    ? this.renderMessage()
+                    : null}
+                <CardBG />
+            </View>
+        </TouchableNativeFeedback>
     ) : null;
   }
 }
@@ -338,9 +342,11 @@ const CardBG = () => (
 
 const style = StyleSheet.create({
   cardsContainer: {
+    // flex:1,
     width: '90%',
     alignSelf: 'center',
-    marginTop: 20,
+      marginTop: 5,
+      borderBottomWidth: 1,
   },
   text: {
     color: THEME.WHITE,
@@ -380,6 +386,28 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
   },
+    border: {
+        borderBottomWidth: 1,
+        borderColor: 'red',
+    },
+    milk: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        marginBottom: 10,
+        resizeMode: 'cover',
+    },
+    productname: {
+        fontSize: 14,
+        color: 'black',
+    },
+    margin_style: {
+        marginHorizontal: 10,
+        marginVertical: 10,
+    },
+    image_view: {
+        marginTop: 10, flexDirection: 'row', alignItems:'center'
+    }
 });
 
 export default Cards;

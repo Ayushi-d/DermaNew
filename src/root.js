@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import RootNav from './navigators/rootNav';
+import RootNav from './navigator/rootNav';
 
 
 export default class Root extends React.Component {
@@ -18,9 +18,9 @@ export default class Root extends React.Component {
         return(
             <View style={styles.container}>
                 {loginCheck ? (
-                   <RootNav isLoggedIn={isLoggedIn} /> 
+                   <RootNav isLoggedIn={isLoggedIn} />
                 ) : <Splash />}
-                
+
             </View>
         );
     }

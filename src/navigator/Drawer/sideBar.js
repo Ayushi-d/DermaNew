@@ -66,10 +66,10 @@ const routes = [
       from: 'ref',
     },
   },
-  {
-    name: 'Help',
-    route: 'Help',
-  },
+  // {
+  //   name: 'Help',
+  //   route: 'Help',
+  // },
 ];
 const EXPANDED_NAVS = ['Chat Requests', 'Likes'];
 

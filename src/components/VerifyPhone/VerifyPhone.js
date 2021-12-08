@@ -103,11 +103,13 @@ class VerifyPhoneJSX extends React.Component {
         });
       })
       .catch((err) => {
+        console.log('error in', err);
         this.setState({loading: false});
       });
   };
 
   confirmOtp = () => {
+    console.log('confirm otp call')
     let phone = this.state.code + this.state.phoneNumber;
     this.setState({loading: true});
     let otp = [...this.state.otp].join('');
@@ -119,14 +121,17 @@ class VerifyPhoneJSX extends React.Component {
 
     LinkAccount.withPhone(this.state.verificationId, otp)
       .then((res) => {
+        console.log('link account with my phone', res);
         // update ts
         // update mobile score
 
         this.props.context.verifyPhone(phone).then((res) => {
           if (res) {
             this.props.context.updateTSBy20().then((res) => {
+              console.log('response entetw', res);
               if (res) {
                 this.setState({loading: false}, () => {
+                  console.log('back back')
                   this.props.navigation.goBack();
                 });
               }
@@ -135,6 +140,7 @@ class VerifyPhoneJSX extends React.Component {
         });
       })
       .catch((err) => {
+        console.log('error in confirm otp', err)
         this.setState({loading: false});
       });
   };

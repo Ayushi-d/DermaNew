@@ -110,7 +110,8 @@ class CustomDropDown extends React.Component {
             this.props.inputStyle,
             this.props.disabled
               ? {
-                  backgroundColor: 'rgba(240, 240, 240, 1)',
+                  // backgroundColor: 'rgba(240, 240, 240, 1)',
+                  backgroundColor: THEME.DISABLED,
                 }
               : {},
           ]}
@@ -119,8 +120,8 @@ class CustomDropDown extends React.Component {
           {this.props.label ? (
             <Text style={style.label}>{this.props.label}</Text>
           ) : null}
-          <Image style={style.drop} source={Drop} />
-          <Text style={style.value}>
+          {!this.props.notShowDropImage && <Image style={style.drop} source={Drop} />}
+          <Text style={this.props.disabled ? style.value : {}}>
             {this.parseValue(this.props.value) || 'Select'}
           </Text>
         </TouchableOpacity>
@@ -171,10 +172,10 @@ const style = StyleSheet.create({
     fontSize: 12,
     height: 20,
     textAlign: 'center',
-    lineHeight: 20,
+    // lineHeight: 20,
     top: -10,
     left: 10,
-    backgroundColor: THEME.WHITE,
+    // backgroundColor: THEME.WHITE,
     paddingHorizontal: 5,
   },
   drop: {
@@ -187,7 +188,9 @@ const style = StyleSheet.create({
     transform: [{translateY: -7.5}],
   },
 
-  value: {},
+  value: {
+    color: THEME.PARAGRAPH
+  },
 });
 
 export default CustomDropDown;

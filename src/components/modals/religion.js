@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+    TextInput,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,12 +18,16 @@ import check from '../../assets/general/ic_checkbox.png';
 import DEFAULT_BUTTON, {BUTTON_WITH_PARAM} from '../general/button';
 import {OptimizedFlatList} from 'react-native-optimized-flatlist';
 import {Chip} from 'react-native-paper';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import {TextIn} from "../Fields";
 
 class MultiChoicePicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: (this.props.value && this.props.value.split(',')) || [],
+      searchData: this.props.data,
+      search: ''
     };
 
     const simpleSort = this.state.data.sort((a, b) => {
@@ -38,6 +43,31 @@ class MultiChoicePicker extends React.Component {
     if (props.value) {
       let dat = props.value.split(',');
       this.setState({data: dat});
+    }
+  }
+
+  searchText = (e) => {
+    this.setState({search: e})
+    let text = e?.toLowerCase()
+    let trucks = this.props.data;
+    let filteredName = trucks.filter((item) => {
+      console.log('item are', item)
+      return item?.toLowerCase()?.match(text)
+    })
+    if (!text || text === '') {
+      this.setState({
+        searchData: this.props.data
+      })
+    } else if (!Array.isArray(filteredName) && !filteredName.length) {
+      // set no data flag to true so as to render flatlist conditionally
+      this.setState({
+        noData: true
+      })
+    } else if (Array.isArray(filteredName)) {
+      this.setState({
+        noData: false,
+        searchData: filteredName
+      })
     }
   }
 
@@ -76,7 +106,7 @@ class MultiChoicePicker extends React.Component {
   };
 
   handleClearAll = () => {
-    this.setState({data: ["Doesn't matter"]});
+    this.setState({data: ["Doesn't matter"], searchData: this.props.data, search: ''});
   };
 
   saveChanges = () => {
@@ -88,6 +118,7 @@ class MultiChoicePicker extends React.Component {
     let pushData = this.state.data.join(',');
 
     this.props.saveChanges(pushData);
+    this.setState({search: '', searchData: this.props.data})
   };
 
   onLayout = () => {
@@ -95,9 +126,9 @@ class MultiChoicePicker extends React.Component {
       let dat = this.props.value.split(',');
       let data = this.props.data;
       let initIdx = data.indexOf(dat[0]);
-      if (initIdx > -1) {
-        this.flatListRef.scrollToIndex({animated: true, index: initIdx});
-      }
+      // if (initIdx > -1) {
+      //   this.flatListRef.scrollToIndex({animated: true, index: initIdx});
+      // }
     }
   };
 
@@ -116,20 +147,26 @@ class MultiChoicePicker extends React.Component {
         <Chip
           style={style.chipStyle}
           key={d}
-          onClose={() => this.handlePress(d)}
+          onClose={d === 'Doesn\'t matter' ? () => {} : () => this.handlePress(d)}
           selected>
           {d}
         </Chip>
       );
     });
     return (
-      <>
+      <View style={{borderBottomWidth: 0.3, borderColor: THEME.BORDERCOLOR}}>
         <COUNTNRY_HEADER
           title={this.props.title}
           handleClearAll={this.handleClearAll}
         />
         <View style={style.selectedCon}>{chips.length ? chips : null}</View>
-      </>
+        {this.props.title === 'Country' &&
+          <View style={{flexDirection: 'row', alignItems:'center', marginVertical: 5, marginHorizontal: 10}}>
+            <TextInput onChangeText={(txt) => this.searchText(txt)} value={this.state.search} style={{width: '90%'}} placeholder={'Search'} />
+            <Icon name={'magnify'} color={THEME.BORDERCOLOR} style={{marginLeft: 'auto'}} size={25}/>
+          </View>
+        }
+      </View>
     );
   };
 
@@ -139,26 +176,42 @@ class MultiChoicePicker extends React.Component {
       <Modal
         isVisible={props.isVisible}
         backdropOpacity={0.5}
+        animationType={'none'}
+        backdropColor={'rgba(0,0,0,0.9)'}
+        transparent={true}
+        coverScreen={true}
+        onModalWillHide={this.props.onCancelled}
+        useNativeDriver={true}
+        hideModalContentWhileAnimating={true}
+        backdropTransitionInTiming={200}
+        animationInTiming={200}
+        backdropTransitionOutTiming={10}
+        animationOutTiming={10}
         onBackButtonPress={this.props.onCancelled}
         onBackdropPress={this.props.onCancelled}>
         <View style={style.container}>
+          <View style={[style.religions, {marginBottom: 0}]}>
+            {this._renderHeader()}
+          </View>
           <FlatList
             style={style.religions}
             ref={(ref) => (this.flatListRef = ref)}
-            data={props.data}
+            // data={props.data}
+            data={this.state.searchData}
             keyExtractor={(item, index) => item}
             showsVerticalScrollIndicator={false}
-            getItemLayout={this.getItemLayout}
+            // getItemLayout={this.getItemLayout}
             initialScrollIndex={this.initialIndex}
-            renderItem={({item}) => (
+            renderItem={({item}) => {
+              return (
               <COUNTRY_ROW
                 item={item}
                 handlePress={this.handlePress}
                 isChecked={this.state.data.includes(item)}
               />
-            )}
-            ListHeaderComponent={this._renderHeader}
-            onLayout={this.onLayout}
+            )}}
+            // ListHeaderComponent={this._renderHeader}
+            // onLayout={this.onLayout}
           />
 
           <View
@@ -184,7 +237,10 @@ class MultiChoicePicker extends React.Component {
             <BUTTON_WITH_PARAM
               text={'Cancel'}
               style={{width: '40%'}}
-              _onPress={() => this.props.onCancelled()}
+              _onPress={() => {
+                this.props.onCancelled()
+                this.setState({searchData: this.props.data, search: ''})
+              }}
             />
             <DEFAULT_BUTTON
               text={'Save'}
@@ -321,7 +377,9 @@ const style = StyleSheet.create({
     flexWrap: 'wrap',
   },
   chipStyle: {
-    margin: 1,
+    height: 40,
+    margin:1,
+    borderWidth: 1
   },
 });
 

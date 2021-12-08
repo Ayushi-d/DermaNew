@@ -231,14 +231,15 @@ class PhotoSwiper extends React.Component {
         <ViewPager
           ref={(ref) => (this.ref = ref)}
           initialPage={0}
-          style={{flex: 1, width: width * 0.8, borderWidth: 1}}
-          showPageIndicator={true}
+          style={{width: width * 0.8, borderWidth: 1}}
+          showPageIndicator={false}
           onPageScroll={(evt) => {
             this.setState({index: evt.nativeEvent.position});
           }}
           onPageScrollStateChanged={(evt) =>
             this.setState({dragging: evt.nativeEvent.pageScrollState})
-          }>
+          }
+        >
           {this.state.urls.map((url, i) => (
             <TouchableWithoutFeedback
               key={i}
@@ -319,7 +320,7 @@ class CardImage extends React.PureComponent {
           borderRadius: 5,
           // overflow: 'hidden',
         }}>
-        {/* {!this.state.loaded ? (
+        {!this.state?.loaded ? (
           <View
             style={{
               position: 'absolute',
@@ -335,7 +336,7 @@ class CardImage extends React.PureComponent {
               }}
             />
           </View>
-        ) : null} */}
+        ) : null}
 
         <FastImage
           source={{uri: this.props.source.uri}}

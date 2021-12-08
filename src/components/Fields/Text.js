@@ -25,7 +25,8 @@ class TextIn extends React.Component {
 						style.input,
 						{
 							borderColor: this.state.focused ? THEME.GRADIENT_BG.START_COLOR : THEME.BORDERCOLOR,
-							backgroundColor: this.props.disabled ? THEME.DISABLED : THEME.WHITE
+							backgroundColor: this.props.disabled ? THEME.DISABLED : THEME.WHITE,
+							color: THEME.PARAGRAPH,
 						}
 					]}
 					value={this.props.value}

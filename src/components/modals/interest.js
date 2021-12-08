@@ -64,22 +64,39 @@ class Interest extends React.Component {
 
 	handlePress = (item) => {
 		let included = this.state.data.includes(item);
-		let data = [ ...this.state.data ];
+		let data = [...this.state.data ];
+				if(!included) {
+					if(data.length < 10) {
+						data.push(item);
+						this.setState({ data: data });
+					} else {
+						alert('You can select upto 10 interest.')
+					}
+				} else {
+					data.splice(data.indexOf(item), 1);
+					this.setState({ data: data });
+				}
 
-		if (!included) {
-			data.push(item);
-			this.setState({ data: data });
-			return;
-		}
-
-		data.splice(data.indexOf(item), 1);
-
-		this.setState({ data: data });
+			// if (!included && data.length < 10) {
+			// 	data.push(item);
+			// 	this.setState({ data: data });
+			// 	return;
+			// } else {
+			// 	alert('You can select upto 10 interest.')
+			// }
+			// data.splice(data.indexOf(item), 1);
+			// this.setState({ data: data });
+		// }
 	};
 
 	saveChanges = () => {
 		let data = this.state.data.join(',');
-		this.props.saveChanges({ in: data });
+		console.log('data lenght', this.state.data)
+		if(this.state.data.length > 10) {
+			alert('You can select upto 10 interest.')
+		} else {
+			this.props.saveChanges({in: data});
+		}
 	};
 
 	render() {

@@ -25,12 +25,13 @@ import THEME from '../../config/theme';
 import auth from '@react-native-firebase/auth';
 import {Loader} from '../modals';
 import DEFAULT_BUTTON from '../general/button';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import SettingsHeader from '../Headers/SettingsHeader';
 
 const data = [
   [
-    'Change Mobile',
+    'Your Contact Details',
     edit_mobile,
     function () {
       this.props.navigation.navigate('Change Mobile Number');
@@ -123,7 +124,11 @@ class SettingsJSX extends React.Component {
   renderItems = (item) => {
     return (
       <TouchableOpacity style={style.items} onPress={() => item[2].call(this)}>
-        <Image source={item[1]} style={style.image} />
+        {item[0] === 'Your Contact Details' ?
+            <Icon name={'cellphone'} color={THEME.GRADIENT_BG.END_COLOR} size={25} />
+            :
+            <Image source={item[1]} style={style.image} />
+        }
         <Text style={style.text}>{item[0]}</Text>
       </TouchableOpacity>
     );

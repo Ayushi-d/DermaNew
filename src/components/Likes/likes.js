@@ -24,34 +24,35 @@ class Likes extends React.Component {
   UNSAFE_componentWillReceiveProps(props) {
     let id = props.route.params.id;
     if (id == 'Regular' || id == 'default') {
-      this.setState({tab: 0}, () => {
-        this.flatListref &&
-          this.flatListref.scrollToOffset({
-            offset: this.state.scrollPosition[0],
-            animated: false,
-          });
-      });
+      // this.setState({tab: 0}, () => {
+      //   this.flatListref &&
+      //     this.flatListref.scrollToOffset({
+      //       offset: this.state.scrollPosition[0],
+      //       animated: false,
+      //     });
+      // });
     }
 
     if (id == 'Filtered Out') {
-      this.setState({tab: 1}, () => {
-        this.flatListref &&
-          this.flatListref.scrollToOffset({
-            offset: this.state.scrollPosition[1],
-            animated: false,
-          });
-      });
+      // this.setState({tab: 1}, () => {
+      //   this.flatListref &&
+      //     this.flatListref.scrollToOffset({
+      //       offset: this.state.scrollPosition[1],
+      //       animated: false,
+      //     });
+      // });
     }
   }
 
   componentDidMount() {
+    console.log('component did mount call')
     let id = this.props.route.params.id;
     if (id == 'Regular' || id == 'default') {
-      this.setState({tab: 0});
+      // this.setState({tab: 0});
     }
 
     if (id == 'Filtered Out') {
-      this.setState({tab: 1});
+      // this.setState({tab: 1});
     }
 
     this.didFocusSubscription = this.props.navigation.addListener(
@@ -88,23 +89,23 @@ class Likes extends React.Component {
     let prevId = prevProps.route.params.id;
     if (id !== prevId) {
       if (id == 'Regular' || id == 'default') {
-        this.setState({tab: 0}, () => {
-          this.flatListref &&
-            this.flatListref.scrollToOffset({
-              offset: this.state.scrollPosition[0],
-              animated: false,
-            });
-        });
+        // this.setState({tab: 0}, () => {
+        //   this.flatListref &&
+        //     this.flatListref.scrollToOffset({
+        //       offset: this.state.scrollPosition[0],
+        //       animated: false,
+        //     });
+        // });
       }
 
       if (id == 'Filtered Out') {
-        this.setState({tab: 1}, () => {
-          this.flatListref &&
-            this.flatListref.scrollToOffset({
-              offset: this.state.scrollPosition[1],
-              animated: false,
-            });
-        });
+        // this.setState({tab: 1}, () => {
+        //   this.flatListref &&
+        //     this.flatListref.scrollToOffset({
+        //       offset: this.state.scrollPosition[1],
+        //       animated: false,
+        //     });
+        // });
       }
     }
   }
@@ -212,8 +213,9 @@ class Likes extends React.Component {
     if (data) {
       return (
         <FlatList
-          ref={(ref) => (this.flatListref = ref)}
+          // ref={(ref) => (this.flatListref = ref)}
           data={sortedKeys}
+          extraData={sortedKeys}
           renderItem={({item}) => {
             let likeOther = this.likeOther(data[item]);
             // console.log('likeOther: ', likeOther);
