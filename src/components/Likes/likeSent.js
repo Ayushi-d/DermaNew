@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 import {CommonActions} from '@react-navigation/native';
 import moment from 'moment';
 import Loader from '../modals/loaders';
+import CardShimmer from '../cards/cardShimmer';
 
 class LikeSent extends React.Component {
   constructor(props) {
@@ -48,8 +49,7 @@ class LikeSent extends React.Component {
     let {user} = this.props.appContext;
     if (!data) return;
     let sortedKeys = Object.keys(data).sort(
-      (a, b) =>
-      user.lt[data[b].uid].tp - user.lt[data[a].uid].tp,
+      (a, b) => user.lt[data[b].uid].tp - user.lt[data[a].uid].tp,
     );
     return (
       <FlatList
@@ -90,9 +90,7 @@ class LikeSent extends React.Component {
       <View style={{flex: 1}}>
         <HeaderMain routeName="Like Sent" {...this.props} />
 
-        {this.renderCards()}
-
-        {loading && focused ? <Loader isVisible={loading} /> : null}
+        {loading && focused ? <CardShimmer /> : this.renderCards()}
       </View>
     );
   }

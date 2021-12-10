@@ -8,6 +8,7 @@ import PP from '../../helpers/pp';
 import {Loader} from '../modals';
 // import {NavigationActions} from 'react-navigation';
 import Header from '../Headers/SettingsHeader';
+import CardShimmer from '../cards/cardShimmer';
 
 class SearchResult extends React.Component {
   constructor(props) {
@@ -281,8 +282,7 @@ class SearchResult extends React.Component {
     return (
       <View style={{flex: 1}}>
         <Header title={'Search Results'} {...this.props} />
-        {this.renderCards()}
-        {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
+        {this.state.loading ? <CardShimmer /> : this.renderCards()}
       </View>
     );
   }

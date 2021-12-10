@@ -102,7 +102,7 @@ class RootNav extends React.Component {
     this._isMounted = true;
     PushNotification.cancelAllLocalNotifications();
     AppState.addEventListener('change', this._handleAppStateChange);
-    this._checkUpdate();
+    // this._checkUpdate();
     let user = auth().currentUser;
     if (user) {
       // console.log(user);
