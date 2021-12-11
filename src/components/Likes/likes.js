@@ -12,6 +12,7 @@ import {CommonActions} from '@react-navigation/native';
 import Loader from '../modals/loaders';
 import CardShimmer from '../cards/cardShimmer';
 import {ShimmerLoader} from '../ShimmerLoader/ShimmerLoader';
+import { ActivityIndicator } from 'react-native';
 
 class Likes extends React.Component {
   constructor(props) {
@@ -19,6 +20,10 @@ class Likes extends React.Component {
     this.state = {
       tab: 0,
       focused: false,
+      endReached: false,
+      loadMore: false,
+      lastItem: '',
+      onEndReachedCalledDuringMomentum: true,
     };
   }
 
@@ -26,6 +31,9 @@ class Likes extends React.Component {
     let id = props.route.params.id;
     if (id == 'Regular' || id == 'default') {
       this.setState({tab: 0}, () => {
+        this.setState({onEndReachedCalledDuringMomentum: false});
+        this.loadMore();
+        //console.log('calling for more!', lItem);
         // this.flatListref &&
         //   this.flatListref.scrollToOffset({
         //     offset: this.state.scrollPosition[0],
@@ -198,6 +206,72 @@ class Likes extends React.Component {
   //   this.setState({scrollPosition});
   // };
 
+  loadMore = async () => {
+    let {user} = this.props.context;
+    if (this.state.onEndReachedCalledDuringMomentum) return null;
+    this.setState({loadMore: true});
+
+    let {lastItem, data} = this.state;
+    // let dKeys = Object.keys(data);
+    // let lastItem = data[dKeys[dKeys.length - 1]].cat;
+
+    let {users, lItem} = await this.pp._getUsers(lastItem);
+    this.setState({lastItem: lItem});
+
+    if (users && Object.keys(users).length != 0) {
+      let uKeys = Object.keys(users);
+      let newUsers = {};
+      for (let uk of uKeys) {
+        let ouser = users[uk];
+        let uid = user.uid;
+        let ouid = ouser.uid;
+
+        let uid1 = uid < ouid ? uid : ouid;
+        let uid2 = uid > ouid ? uid : ouid;
+        let refKey = uid1 + uid2;
+
+        if (user.g === ouser.g) {
+          continue;
+        }
+
+        if (ouser.con && ouser.con[refKey] && ouser.con[refKey].isAcc === -1) {
+          continue;
+        }
+        if (user.bb && user.bb[ouid]) {
+          continue;
+        }
+        // check if blocked by user!
+        if (user.bt && user.bt[ouid]) {
+          continue;
+        }
+        newUsers[uk] = users[uk];
+      }
+      this.setData(newUsers);
+    } else {
+      // Snackbar.show({
+      //   title: 'You have reached to the end of the matched users list.',
+      //   duration: Snackbar.LENGTH_SHORT,
+      // });
+    }
+    this.setState({loadMore: false, onEndReachedCalledDuringMomentum: true});
+  };
+
+  setData = (obj) => {
+    let keys = Object.keys(obj);
+
+    let data = {...this.state.data};
+
+    let list = Object.keys(data); // 0
+
+    keys.map((item) => {
+      data[item] = obj[item];
+    });
+
+    this.setState({data, loading: false, refreshing: false}); // if got minimum items then set it
+  };
+
+
+
   renderTab = () => {
     return (
       <View
@@ -223,6 +297,9 @@ class Likes extends React.Component {
       </View>
     );
   };
+
+  _onMomentumScrollBegin = () =>
+  this.setState({onEndReachedCalledDuringMomentum: false});
 
   renderCards = () => {
     let data =
@@ -263,6 +340,10 @@ class Likes extends React.Component {
             );
           }}
           keyExtractor={(item, index) => index.toString()}
+          onEndReached={this.loadMore}
+          onEndReachedThreshold={0.03}
+          ListFooterComponent={this.renderFooter}
+          onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
           style={{flexGrow: 1}}
           // onScroll={this.handleScroll}
         />
@@ -279,6 +360,16 @@ class Likes extends React.Component {
     }
 
     return false;
+  };
+
+  renderFooter = () => {
+    return this.state.loadMore ? (
+      <ActivityIndicator
+        size={'large'}
+        color={THEME.GRADIENT_BG.END_COLOR}
+        animating
+      />
+    ) : null;
   };
 
   render() {
