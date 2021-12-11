@@ -145,33 +145,33 @@ class Likes extends React.Component {
   };
   _getLikesRemoved = () => {};
 
-  _changeCount(page) {
-    // update like notifications
-    let uid = auth().currentUser.uid;
-    // database().ref(`Users/${uid}`).child('lf').child('c').set(0);
-    database()
-      .ref(`Users/${uid}`)
-      .child('lf')
-      .once('value')
-      .then((lf) => {
-        if (lf.exists() && lf.val()) {
-          lf = lf.val();
-          let lObj = Object.keys(lf);
-          lObj.forEach((l) => {
-            if (l !== 'c') {
-              if (!lf[l].sn) {
-                database()
-                  .ref(`Users/${uid}`)
-                  .child('lf')
-                  .child(l)
-                  .child('sn')
-                  .set(1);
-              }
-            }
-          });
-        }
-      });
-  }
+  // _changeCount(page) {
+  //   // update like notifications
+  //   let uid = auth().currentUser.uid;
+  //   // database().ref(`Users/${uid}`).child('lf').child('c').set(0);
+  //   database()
+  //     .ref(`Users/${uid}`)
+  //     .child('lf')
+  //     .once('value')
+  //     .then((lf) => {
+  //       if (lf.exists() && lf.val()) {
+  //         lf = lf.val();
+  //         let lObj = Object.keys(lf)
+  //         lObj.forEach((l) => {
+  //           if (l !== 'c') {
+  //             if (!lf[l].sn) {
+  //               database()
+  //                 .ref(`Users/${uid}`)
+  //                 .child('lf')
+  //                 .child(l)
+  //                 .child('sn')
+  //                 .set(1);
+  //             }
+  //           }
+  //         });
+  //       }
+  //     });
+  // }
 
   _onTabPress = (tabValue) => {
     this.setState({tab: tabValue}, () => {

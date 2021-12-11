@@ -279,10 +279,14 @@ class UserInterectionProvider extends React.Component {
 
   _changeCount = (page) => {
     let {user} = this.props.mainContext;
-    let lf = user.lf;
-    let lfKeys = Object.keys(lf);
-    let rC = 0;
 
+
+    let lf = user.lf;
+    if(lf == undefined){
+      return
+    }
+    let lfKeys =  Object.keys(lf);
+    let rC = 0;
     if (page === 'Regular' || page === 'default') {
       lfKeys.forEach((k) => {
         let l = lf[k];
@@ -318,6 +322,7 @@ class UserInterectionProvider extends React.Component {
         }
       });
     }
+  
     let newC = user.lf.c - rC;
     if (newC < 0) {
       newC = 0;
