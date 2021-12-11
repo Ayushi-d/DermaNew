@@ -8,6 +8,7 @@ import Cards from '../cards/cards';
 import THEME from '../../config/theme';
 import {Loader} from '../modals';
 import SettingsHeader from '../Headers/SettingsHeader';
+import CardShimmer from '../cards/cardShimmer';
 
 class BlockedUsersJSX extends React.Component {
   state = {
@@ -32,6 +33,7 @@ class BlockedUsersJSX extends React.Component {
     this.setState({data, loading: false});
   };
   getData = () => {
+    this.setState({loading : true})
     let data = this.props.context.user;
 
     data = data && data.bt;
@@ -49,6 +51,7 @@ class BlockedUsersJSX extends React.Component {
         .child(item)
         .once('value')
         .then((snap) => {
+          this.setState({loading : false})
           let data = {...this.state.data};
           data[snap.key] = snap.val();
           this.setState({data});
@@ -80,12 +83,15 @@ class BlockedUsersJSX extends React.Component {
     return (
       <View style={{flex: 1}}>
         <SettingsHeader title={'Blocked'} {...this.props} />
+        {this.state.loading ? <CardShimmer blocked = {true} /> :
+        <>
         <Text
           style={{color: THEME.PARAGRAPH, marginTop: 20, alignSelf: 'center'}}>
           You had blocked these users
         </Text>
         {this.renderBlockedCards()}
-        {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
+        </>
+        }
       </View>
     );
   }

@@ -5,7 +5,7 @@ import {styles} from 'react-native-markdown-renderer';
 import THEME from '../../config/theme';
 import {ShimmerLoader} from '../ShimmerLoader/ShimmerLoader';
 
-const CardShimmer = ({request = false}) => {
+const CardShimmer = ({request = false, blocked = false}) => {
   renderAbout = () => {
     return (
       <View
@@ -52,7 +52,19 @@ const CardShimmer = ({request = false}) => {
   };
 
   const renderLikeComment = () => {
-    return (
+    return blocked ? (
+      <View
+        style={{height: 50, flexDirection: 'row', justifyContent: 'center'}}>
+        <ShimmerLoader
+          styles={{
+            height: 40,
+            width: 130,
+            marginHorizontal: 20,
+            borderRadius: 20,
+          }}
+        />
+      </View>
+    ) : (
       <View
         style={{height: 50, flexDirection: 'row', justifyContent: 'center'}}>
         <ShimmerLoader
@@ -77,7 +89,7 @@ const CardShimmer = ({request = false}) => {
 
   return (
     <FlatList
-    showsVerticalScrollIndicator = {false}
+      showsVerticalScrollIndicator={false}
       data={['', '', '', '', '', '', '', '']}
       renderItem={(item) => {
         return (
