@@ -15,6 +15,8 @@ import {CommonActions} from '@react-navigation/native';
 import DateHelpers from "../../helpers/datehelpers";
 import THEME from "../../config/theme";
 import {STYLE} from "../commonStyle";
+import {ShimmerLoader} from '../ShimmerLoader/ShimmerLoader';
+import CardShimmer from '../cards/cardShimmer';
 class DeclinedProfileJSX extends React.Component {
   state = {
     declinedUsers: [],
@@ -24,6 +26,35 @@ class DeclinedProfileJSX extends React.Component {
 
   _onTabPress = (tabValue) => {
     this.setState({tab: tabValue});
+  };
+
+  filterShimmer = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 80,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <ShimmerLoader
+          styles={{
+            height: 55,
+            width: '35%',
+            borderRadius: 30,
+            marginHorizontal: 20,
+          }}
+        />
+        <ShimmerLoader
+          styles={{
+            height: 55,
+            width: '35%',
+            borderRadius: 30,
+            marginHorizontal: 20,
+          }}
+        />
+      </View>
+    );
   };
 
   componentDidMount() {
@@ -258,12 +289,26 @@ class DeclinedProfileJSX extends React.Component {
   render() {
     let {loading} = this.state;
     return (
-        <View style={{flex: 1}}>
-          <Header title="Declined Profile" type {...this.props} />
-          {this.renderTab()}
-          {this.renderMessageReq()}
-          {loading ? <Loader isVisible={loading} /> : null}
-        </View>
+        // <View style={{flex: 1}}>
+        //   <Header title="Declined Profile" type {...this.props} />
+        //   {this.renderTab()}
+        //   {this.renderMessageReq()}
+        //   {loading ? <Loader isVisible={loading} /> : null}
+        // </View>
+      <View style={{flex: 1}}>
+        <Header title="Declined Profile" type {...this.props} />
+        {loading ? (
+          <>
+            {this.filterShimmer()}
+            <CardShimmer request={true} blocked={true} />
+          </>
+        ) : (
+          <>
+            {this.renderTab()}
+            {this.renderMessageReq()}
+          </>
+        )}
+      </View>
     );
   }
 }

@@ -12,6 +12,7 @@ import {STYLE} from "../commonStyle";
 import DateHelpers from "../../helpers/datehelpers";
 import moment from "moment";
 import {UNBLOCK_BUTTON} from "../general/button";
+import CardShimmer from '../cards/cardShimmer';
 
 class BlockedUsersJSX extends React.Component {
   state = {
@@ -36,6 +37,7 @@ class BlockedUsersJSX extends React.Component {
     this.setState({data, loading: false});
   };
   getData = () => {
+    this.setState({loading : true})
     let data = this.props.context.user;
 
     data = data && data.bt;
@@ -50,13 +52,21 @@ class BlockedUsersJSX extends React.Component {
 
     keys.map((item) => {
       ref
-          .child(item)
-          .once('value')
-          .then((snap) => {
-            let data = {...this.state.data};
-            data[snap.key] = snap.val();
-            this.setState({data});
-          });
+          // .child(item)
+          // .once('value')
+          // .then((snap) => {
+          //   let data = {...this.state.data};
+          //   data[snap.key] = snap.val();
+          //   this.setState({data});
+          // });
+        .child(item)
+        .once('value')
+        .then((snap) => {
+          this.setState({loading : false})
+          let data = {...this.state.data};
+          data[snap.key] = snap.val();
+          this.setState({data});
+        });
     });
   };
 
@@ -139,15 +149,27 @@ class BlockedUsersJSX extends React.Component {
 
   render() {
     return (
-        <View style={{flex: 1}}>
-          <SettingsHeader title={'Blocked'} {...this.props} />
-          <Text
-              style={{color: THEME.PARAGRAPH, marginTop: 20, alignSelf: 'center'}}>
-            You had blocked these users
-          </Text>
-          {this.renderBlockedCards()}
-          {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
-        </View>
+        // <View style={{flex: 1}}>
+        //   <SettingsHeader title={'Blocked'} {...this.props} />
+        //   <Text
+        //       style={{color: THEME.PARAGRAPH, marginTop: 20, alignSelf: 'center'}}>
+        //     You had blocked these users
+        //   </Text>
+        //   {this.renderBlockedCards()}
+        //   {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
+        // </View>
+      <View style={{flex: 1}}>
+        <SettingsHeader title={'Blocked'} {...this.props} />
+        {this.state.loading ? <CardShimmer blocked = {true} /> :
+        <>
+        <Text
+          style={{color: THEME.PARAGRAPH, marginTop: 20, alignSelf: 'center'}}>
+          You had blocked these users
+        </Text>
+        {this.renderBlockedCards()}
+        </>
+        }
+      </View>
     );
   }
 }
