@@ -318,9 +318,9 @@ class CardImage extends React.PureComponent {
           width: width * 0.8,
           height: width,
           borderRadius: 5,
-          // overflow: 'hidden',
         }}>
-        {!this.state?.loaded ? (
+        {/*{!this.state?.loaded ? (*/}
+        {!this.state.loaded ? (
           <View
             style={{
               position: 'absolute',
@@ -372,7 +372,7 @@ const style = StyleSheet.create({
     position: 'absolute',
     height: '100%',
     bottom: 20,
-    height: 20,
+    // height: 20,
     width: '50%',
     alignSelf: 'center',
     flexDirection: 'row',

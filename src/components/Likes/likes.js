@@ -10,13 +10,14 @@ import database from '@react-native-firebase/database';
 import moment from 'moment';
 import {CommonActions} from '@react-navigation/native';
 import Loader from '../modals/loaders';
+import CardShimmer from '../cards/cardShimmer';
+import {ShimmerLoader} from '../ShimmerLoader/ShimmerLoader';
 
 class Likes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tab: 0,
-      scrollPosition: [0, 0],
       focused: false,
     };
   }
@@ -41,8 +42,54 @@ class Likes extends React.Component {
       //       animated: false,
       //     });
       // });
+      this.setState({tab: 0}, () => {
+        // this.flatListref &&
+        //   this.flatListref.scrollToOffset({
+        //     offset: this.state.scrollPosition[0],
+        //     animated: false,
+        //   });
+      });
+    }
+
+    if (id == 'Filtered Out') {
+      this.setState({tab: 1}, () => {
+        // this.flatListref &&
+        //   this.flatListref.scrollToOffset({
+        //     offset: this.state.scrollPosition[1],
+        //     animated: false,
+        //   });
+      });
     }
   }
+
+  filterShimmer = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 80,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <ShimmerLoader
+          styles={{
+            height: 55,
+            width: '35%',
+            borderRadius: 30,
+            marginHorizontal: 20,
+          }}
+        />
+        <ShimmerLoader
+          styles={{
+            height: 55,
+            width: '35%',
+            borderRadius: 30,
+            marginHorizontal: 20,
+          }}
+        />
+      </View>
+    );
+  };
 
   componentDidMount() {
     console.log('component did mount call')
@@ -109,6 +156,31 @@ class Likes extends React.Component {
       }
     }
   }
+  // componentDidUpdate(prevProps, prevState) {
+  //   let id = this.props.route.params.id;
+  //   let prevId = prevProps.route.params.id;
+  //   if (id !== prevId) {
+  //     if (id == 'Regular' || id == 'default') {
+  //       this.setState({tab: 0}, () => {
+  //         // this.flatListref &&
+  //         //   this.flatListref.scrollToOffset({
+  //         //     offset: this.state.scrollPosition[0],
+  //         //     animated: false,
+  //         //   });
+  //       });
+  //     }
+
+  //     if (id == 'Filtered Out') {
+  //       this.setState({tab: 1}, () => {
+  //         // this.flatListref &&
+  //         //   this.flatListref.scrollToOffset({
+  //         //     offset: this.state.scrollPosition[1],
+  //         //     animated: false,
+  //         //   });
+  //       });
+  //     }
+  //   }
+  // }
 
   _getLikes = () => {
     let {user} = this.props.context;
@@ -146,15 +218,15 @@ class Likes extends React.Component {
 
   _onTabPress = (tabValue) => {
     this.setState({tab: tabValue}, () => {
-      setTimeout(
-        () =>
-          this.flatListref &&
-          this.flatListref.scrollToOffset({
-            offset: this.state.scrollPosition[tabValue],
-            animated: false,
-          }),
-        1,
-      );
+      // setTimeout(
+      //   () =>
+      //     this.flatListref &&
+      //     this.flatListref.scrollToOffset({
+      //       offset: this.state.scrollPosition[tabValue],
+      //       animated: false,
+      //     }),
+      //   1,
+      // );
 
       this.props.navigation.setParams({
         id: this.state.tab == 0 ? 'Regular' : 'Filtered Out',
@@ -162,12 +234,12 @@ class Likes extends React.Component {
     });
   };
 
-  handleScroll = (event) => {
-    let scrollPosition = [...this.state.scrollPosition];
-    let tab = this.state.tab;
-    scrollPosition[tab] = event.nativeEvent.contentOffset.y;
-    this.setState({scrollPosition});
-  };
+  // handleScroll = (event) => {
+  //   let scrollPosition = [...this.state.scrollPosition];
+  //   let tab = this.state.tab;
+  //   scrollPosition[tab] = event.nativeEvent.contentOffset.y;
+  //   this.setState({scrollPosition});
+  // };
 
   renderTab = () => {
     return (
@@ -236,7 +308,7 @@ class Likes extends React.Component {
           }}
           keyExtractor={(item, index) => index.toString()}
           style={{flexGrow: 1}}
-          onScroll={this.handleScroll}
+          // onScroll={this.handleScroll}
         />
       );
     } else {
@@ -260,9 +332,17 @@ class Likes extends React.Component {
       <View style={{flex: 1}}>
         <HeaderMain routeName="Likes Received" {...this.props} />
 
-        {this.renderTab()}
-        {this.renderCards()}
-        {loading && focused ? <Loader isVisible={loading} /> : null}
+        {loading && focused ? (
+          <>
+            {this.filterShimmer()}
+            <CardShimmer />
+          </>
+        ) : (
+          <>
+            {this.renderTab()}
+            {this.renderCards()}
+          </>
+        )}
       </View>
     );
   }

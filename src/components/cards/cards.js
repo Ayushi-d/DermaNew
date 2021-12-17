@@ -24,6 +24,7 @@ import DEFAULT_BUTTON, {
 } from '../general/button';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import {ShimmerLoader} from '../ShimmerLoader/ShimmerLoader';
 
 class Cards extends React.Component {
   constructor(props) {
@@ -34,9 +35,7 @@ class Cards extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // console.log('this.props.likeOther', this.props.likeOther);
-  }
+  componentDidMount() {}
 
   onPressLike = () => {
     let likesMe = this.state.likedMe;

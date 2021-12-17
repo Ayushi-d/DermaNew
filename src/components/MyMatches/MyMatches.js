@@ -8,6 +8,7 @@ import Cards from '../cards/cards';
 import THEME from '../../config/theme';
 import PP from '../../helpers/pp';
 import {Loader} from '../modals';
+import CardShimmer from '../cards/cardShimmer';
 
 class MyMatchesJSX extends React.Component {
   constructor(props) {
@@ -316,8 +317,7 @@ class MyMatchesJSX extends React.Component {
     return (
       <View style={{flex: 1}}>
         <HeaderMain routeName="My Matches" {...this.props} />
-        {this.renderCards()}
-        {this.state.loading ? <Loader isVisible={this.state.loading} /> : null}
+        {this.state.loading ? <CardShimmer /> : this.renderCards()}
       </View>
     );
   }

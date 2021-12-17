@@ -1,4 +1,4 @@
-import React from 'react';
+import  React from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,8 @@ import THEME from '../../config/theme';
 import Loader from '../modals/loaders';
 
 import {CommonActions} from '@react-navigation/native';
+import CardShimmer from '../cards/cardShimmer';
+import { ShimmerLoader } from '../ShimmerLoader/ShimmerLoader';
 
 export default class ChatRqsts extends React.Component {
   constructor(props) {
@@ -87,6 +89,35 @@ export default class ChatRqsts extends React.Component {
     this.didFocusSubscription && this.didFocusSubscription();
     this.didBlurSubscription && this.didBlurSubscription();
   }
+
+  filterShimmer = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 80,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <ShimmerLoader
+          styles={{
+            height: 55,
+            width: '35%',
+            borderRadius: 30,
+            marginHorizontal: 20,
+          }}
+        />
+        <ShimmerLoader
+          styles={{
+            height: 55,
+            width: '35%',
+            borderRadius: 30,
+            marginHorizontal: 20,
+          }}
+        />
+      </View>
+    );
+  };
 
   componentDidUpdate(prevProps, prevState) {
     let tab = this.props.route.params.tab;
@@ -434,15 +465,31 @@ export default class ChatRqsts extends React.Component {
     return (
       <View style={styles.container}>
         <Header title={'Chat Requests'} type {...this.props} />
-        {this._renderTab()}
-        <FlatList
-          data={data}
-          extraData={data}
-          keyExtractor={this._keyExtractor}
-          renderItem={this._renderCard}
-          style={{flex: 1}}
-        />
-        {loading ? <Loader isVisible={loading} /> : null}
+        {/*{this._renderTab()}*/}
+        {/*<FlatList*/}
+        {/*  data={data}*/}
+        {/*  extraData={data}*/}
+        {/*  keyExtractor={this._keyExtractor}*/}
+        {/*  renderItem={this._renderCard}*/}
+        {/*  style={{flex: 1}}*/}
+        {/*/>*/}
+        {/*{loading ? <Loader isVisible={loading} /> : null}*/}
+        {loading ? (
+          <>
+       { this.filterShimmer()}
+          <CardShimmer request = {true} />
+          </>
+        ) : (
+          <>
+            {this._renderTab()}
+            <FlatList
+              data={data}
+              keyExtractor={this._keyExtractor}
+              renderItem={this._renderCard}
+              style={{flex: 1}}
+            />
+          </>
+        )}
       </View>
     );
   }
