@@ -387,6 +387,7 @@ class Likes extends React.Component {
           onEndReached={this.loadMore}
           onEndReachedThreshold={0.03}
           ListFooterComponent={this.renderFooter}
+          
           onMomentumScrollBegin={() => this._onMomentumScrollBegin()}
           style={{flexGrow: 1}}
           // onScroll={this.handleScroll}
@@ -423,7 +424,7 @@ class Likes extends React.Component {
       <View style={{flex: 1}}>
         <HeaderMain routeName="Likes Received" {...this.props} />
 
-        {loading && focused ? (
+        {this.state.loading && focused ? (
           <>
             {this.filterShimmer()}
             <CardShimmer />
