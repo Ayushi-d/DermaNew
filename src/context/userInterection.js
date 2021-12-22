@@ -121,7 +121,7 @@ class UserInterectionProvider extends React.Component {
             let userData = await this.userBase.child(res.key).once('value');
 
             let oUser = userData.val();
-            console.log('o value', oUser);
+            // console.log('o value', oUser);
 
             let lt = {...this.state.lt};
             if (this.state.lbu_data) {
@@ -381,12 +381,26 @@ class UserInterectionProvider extends React.Component {
   }
 
   render() {
+    let {user} = this.props.mainContext;
+    const {lu_filtered_data, lu_data} = this.state;
+    let sortedFilteredOut = lu_data;
+    let sortedRegular = lu_filtered_data;
+    if(lu_data !== null){
+      sortedFilteredOut = Object.keys(lu_data).sort((a, b) => {
+        return user.lf[lu_data[b].uid].tp - user.lf[lu_data[a].uid].tp;
+      });
+    }
+    if(lu_filtered_data !== null){
+      sortedRegular = Object.keys(lu_filtered_data).sort((a, b) => {
+        return user.lf[lu_filtered_data[b].uid].tp - user.lf[lu_filtered_data[a].uid].tp;
+      });
+    }
     return (
       <UserInterectionContext.Provider
         value={{
           sent: this.state.lbu_data,
-          regular: this.state.lu_data,
-          filteredOut: this.state.lu_filtered_data,
+          regular: lu_data,
+          filteredOut: lu_filtered_data,
           lt: this.state.lt,
           lf: this.state.lf,
           loadingT: this.state.loadingT,
