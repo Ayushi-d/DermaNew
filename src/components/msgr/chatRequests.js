@@ -51,6 +51,7 @@ export default class ChatRqsts extends React.Component {
     this.didFocusSubscription = this.props.navigation.addListener(
       'focus',
       (payload) => {
+        this.setState({loading : false})
         let {route} = this.props;
         if (route.params && route.params.from === 'ref') {
           this._getChatReqs();
@@ -62,6 +63,7 @@ export default class ChatRqsts extends React.Component {
     this.didBlurSubscription = this.props.navigation.addListener(
       'blur',
       (payload) => {
+        this.setState({loading : true})
         this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
       },
     );

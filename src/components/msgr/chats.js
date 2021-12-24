@@ -6,6 +6,7 @@ import THEME from '../../config/theme';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {CommonActions} from '@react-navigation/native';
+import ChatShimmer from '../chat/ChatShimmer';
 
 import moment from 'moment';
 
@@ -183,16 +184,19 @@ export default class Chats extends React.Component {
   render() {
     let {chats, loading} = this.state;
     return (
-      <View style={styles.container}>
-        <Header title={'Messages'} type {...this.props} />
-        <FlatList
-          data={chats}
-          keyExtractor={this._keyExtractor}
-          renderItem={this._renderChat}
-          style={{flex: 1}}
-        />
-        {loading ? <Loader isVisible={loading} /> : null}
-      </View>
+        <View style={styles.container}>
+          <Header title={'Messages'} type {...this.props} />
+          {loading ? (
+              <ChatShimmer chat={true} />
+          ) : (
+              <FlatList
+                  data={chats}
+                  keyExtractor={this._keyExtractor}
+                  renderItem={this._renderChat}
+                  style={{flex: 1}}
+              />
+          )}
+        </View>
     );
   }
 }

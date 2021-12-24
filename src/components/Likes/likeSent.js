@@ -18,6 +18,7 @@ import moment from 'moment';
 import Loader from '../modals/loaders';
 import THEME from "../../config/theme";
 import {STYLE} from "../commonStyle";
+import ChatShimmer from '../chat/ChatShimmer';
 import CardShimmer from '../cards/cardShimmer';
 
 class LikeSent extends React.Component {
@@ -165,13 +166,8 @@ class LikeSent extends React.Component {
     return (
         <View style={{flex: 1}}>
           <HeaderMain routeName="Like Sent" {...this.props} />
-
-          {/*{this.renderCards()}*/}
-
-          {/*{loading && focused ? <Loader isVisible={loading} /> : null}*/}
-        {/*</View>*/}
-        {loading && focused ? <CardShimmer /> : this.renderCards()}
-       </View>
+          {loading && focused ? <ChatShimmer /> : this.renderCards()}
+        </View>
     );
   }
 }

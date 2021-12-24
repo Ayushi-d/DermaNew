@@ -26,14 +26,17 @@ class MyMatchesJSX extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({loading: false});
     this.pp = new PP(20, this.props.context.user || {});
     this.fetchUser();
 
     this.didFocusSubscription = this.props.navigation.addListener(
       'focus',
       (payload) => {
+        this.setState({loading: false});
         let {route} = this.props;
         if (route.params.from === 'ref') {
+          this.setState({loading: true});
           this.refreshList();
         }
       },
@@ -43,6 +46,7 @@ class MyMatchesJSX extends React.Component {
       'blur',
       (payload) => {
         this.props.navigation.dispatch(CommonActions.setParams({from: ''}));
+        this.setState({loading: true});
       },
     );
   }
