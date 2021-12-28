@@ -354,7 +354,12 @@ class Likes extends React.Component {
     // sort by like recieved time
 
     if (!data) return;
-    let sortedKeys = Object.keys(data);
+    let sortedKeys = Object.keys(data).sort((a, b) => {
+      // console.log(data[a]);
+      return user.lf[data[b].uid].tp - user.lf[data[a].uid].tp;
+    });
+
+
 
     if (data) {
       return (
